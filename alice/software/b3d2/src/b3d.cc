@@ -5,7 +5,7 @@
 #include <unordered_set>
 #include <utility>
 
-#include <boost/functional/hash.hpp> // needed for hashing pairs
+//#include <boost/functional/hash.hpp> // needed for hashing pairs
 
 #include "b3d.h"
 #include "hist.h"
