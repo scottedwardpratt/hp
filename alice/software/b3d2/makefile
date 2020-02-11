@@ -582,33 +582,6 @@ src/balancearrays.cc.s:
 	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/balancearrays.cc.s
 .PHONY : src/balancearrays.cc.s
 
-src/bfdist.o: src/bfdist.cc.o
-
-.PHONY : src/bfdist.o
-
-# target to build an object file
-src/bfdist.cc.o:
-	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/bfdist.cc.o
-.PHONY : src/bfdist.cc.o
-
-src/bfdist.i: src/bfdist.cc.i
-
-.PHONY : src/bfdist.i
-
-# target to preprocess a source file
-src/bfdist.cc.i:
-	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/bfdist.cc.i
-.PHONY : src/bfdist.cc.i
-
-src/bfdist.s: src/bfdist.cc.s
-
-.PHONY : src/bfdist.s
-
-# target to generate assembly for a file
-src/bfdist.cc.s:
-	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/bfdist.cc.s
-.PHONY : src/bfdist.cc.s
-
 src/bfnumer.o: src/bfnumer.cc.o
 
 .PHONY : src/bfnumer.o
@@ -851,60 +824,6 @@ src/makepart.s: src/makepart.cc.s
 src/makepart.cc.s:
 	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/makepart.cc.s
 .PHONY : src/makepart.cc.s
-
-src/mucalc.o: src/mucalc.cc.o
-
-.PHONY : src/mucalc.o
-
-# target to build an object file
-src/mucalc.cc.o:
-	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/mucalc.cc.o
-.PHONY : src/mucalc.cc.o
-
-src/mucalc.i: src/mucalc.cc.i
-
-.PHONY : src/mucalc.i
-
-# target to preprocess a source file
-src/mucalc.cc.i:
-	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/mucalc.cc.i
-.PHONY : src/mucalc.cc.i
-
-src/mucalc.s: src/mucalc.cc.s
-
-.PHONY : src/mucalc.s
-
-# target to generate assembly for a file
-src/mucalc.cc.s:
-	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/mucalc.cc.s
-.PHONY : src/mucalc.cc.s
-
-src/mutinfo.o: src/mutinfo.cc.o
-
-.PHONY : src/mutinfo.o
-
-# target to build an object file
-src/mutinfo.cc.o:
-	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/mutinfo.cc.o
-.PHONY : src/mutinfo.cc.o
-
-src/mutinfo.i: src/mutinfo.cc.i
-
-.PHONY : src/mutinfo.i
-
-# target to preprocess a source file
-src/mutinfo.cc.i:
-	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/mutinfo.cc.i
-.PHONY : src/mutinfo.cc.i
-
-src/mutinfo.s: src/mutinfo.cc.s
-
-.PHONY : src/mutinfo.s
-
-# target to generate assembly for a file
-src/mutinfo.cc.s:
-	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/mutinfo.cc.s
-.PHONY : src/mutinfo.cc.s
 
 src/part.o: src/part.cc.o
 
@@ -1155,9 +1074,6 @@ help:
 	@echo "... src/balancearrays.o"
 	@echo "... src/balancearrays.i"
 	@echo "... src/balancearrays.s"
-	@echo "... src/bfdist.o"
-	@echo "... src/bfdist.i"
-	@echo "... src/bfdist.s"
 	@echo "... src/bfnumer.o"
 	@echo "... src/bfnumer.i"
 	@echo "... src/bfnumer.s"
@@ -1185,12 +1101,6 @@ help:
 	@echo "... src/makepart.o"
 	@echo "... src/makepart.i"
 	@echo "... src/makepart.s"
-	@echo "... src/mucalc.o"
-	@echo "... src/mucalc.i"
-	@echo "... src/mucalc.s"
-	@echo "... src/mutinfo.o"
-	@echo "... src/mutinfo.i"
-	@echo "... src/mutinfo.s"
 	@echo "... src/part.o"
 	@echo "... src/part.i"
 	@echo "... src/part.s"

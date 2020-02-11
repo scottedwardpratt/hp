@@ -53,7 +53,7 @@ public:
 	void GetDeadParts(CPart *&part1,CPart *&part2);
 	void GetDeadParts(array<CPart*,5> &product);
 	CAction *GetDeadAction();
-	vector<CLocalInfo *> localinfo;
+	//vector<CLocalInfo *> localinfo;
 	//
 	vector<long long int> phicount; // for testing purposes
 	void AnalyzeCharges(); // for testing purposes
