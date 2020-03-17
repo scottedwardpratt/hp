@@ -25,12 +25,22 @@ CAcceptance::CAcceptance(CparameterMap *parmapin){
 
 void CAcceptance::CalcAcceptance(bool &accept,double &efficiency,CPart *part){
 	printf("hmmmmmm, should not be here in dummy routine for CalcAcceptance\n");
-  accept=true;
-	efficiency=1.0;
+	if(part!=NULL){
+		accept=true;
+		efficiency=1.0;
+	}
+	else
+		printf("Calculating acceptance for null part\n");
 }
 
 void CAcceptance::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part){
 	printf("hmmmmmm, should not be here in dummy routing for CalcAcceptance\n");
   accept=true;
 	efficiency=1.0;
+	if(part!=NULL){
+		accept=true;
+		efficiency=1.0;
+	}
+	else
+		printf("Calculating acceptance for null part\n");
 }

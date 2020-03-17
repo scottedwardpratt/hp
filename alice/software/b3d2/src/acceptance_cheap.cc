@@ -4,25 +4,29 @@
 #include "acceptance.h"
 #include "part.h"
 #include "resonances.h"
+#include "parametermap.h"
 
 using namespace std;
 
 CAcceptance_CHEAP::CAcceptance_CHEAP(CparameterMap *parmapin) : CAcceptance(){
-	ETAMIN=-6;
-	ETAMAX=6;
+	ETAMAX=parmapin->getD("B3D_ETAMAX",6.0);
+	ETAMIN=-ETAMAX;
 	ptmin=0;
 	ptmax=20000000.0;
 }
 
 void CAcceptance_CHEAP::CalcAcceptance(bool &accept,double &efficiency,CPart *part){
-	double pt,y,*p=part->p;
-	int pid=part->resinfo->code;
-	double gammav,pmag,m;
-	double eta;
-	double ctau_kaon=3.7,ctau_pion=7.8,lmin=1.0;
-	double A0;
+	double pt,*p=part->p;
+	double eta,pmag;
 	
-	/* accept=false;
+	accept=false;
+	pt=sqrt(p[1]*p[1]+p[2]*p[2]);
+	//printf("pt=%g\n",pt);
+	pmag=sqrt(pt*pt+p[3]*p[3]);
+	eta=atanh(p[3]/pmag);
+	/*
+	int pid=part->resinfo->code;
+	double y,gammav,m,A0,ctau_kaon=3.7,ctau_pion=7.8,lmin=1.0;
 	if(dca[0]<1.5){
 	efficiency=0.0;
 	pt=sqrt(p[1]*p[1]+p[2]*p[2]);
@@ -80,26 +84,30 @@ void CAcceptance_CHEAP::CalcAcceptance(bool &accept,double &efficiency,CPart *pa
 	efficiency=0.8;
 	}
 	**/
-	
-	accept=true;
-	efficiency=1.0;
+	if(pt<10000000 && fabs(eta)<ETAMAX){
+		accept=true;
+		efficiency=1.0;
+	}
+	else{
+		accept=false;
+		efficiency=0.0;
+	}
 }
 
 void CAcceptance_CHEAP::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part){
-	double pt,y,*p=part->p;
-	int pid=part->resinfo->code;
-	double gammav,pmag,m;
-	double eta;
-	double ctau_kaon=3.7,ctau_pion=7.8,lmin=1.0;
-	double A0;
-	
-	/* accept=false;
-	if(dca[0]<1.5){
-	efficiency=0.0;
+	double pt,eta,pmag,*p=part->p;
+	accept=false;
 	pt=sqrt(p[1]*p[1]+p[2]*p[2]);
-	//printf("pt=%g\n",pt);
 	pmag=sqrt(pt*pt+p[3]*p[3]);
 	eta=atanh(p[3]/pmag);
+	/* accept=false;
+	int pid=part->resinfo->code;
+	double gammav,m;
+	double ctau_kaon=3.7,ctau_pion=7.8,lmin=1.0;
+	double A0;
+	if(dca[0]<1.5){
+	efficiency=0.0;
+	//printf("pt=%g\n",pt);
 	//y=atanh(p[3]/p[0]);
 	m=part->resinfo->mass;
 	 
@@ -152,8 +160,14 @@ void CAcceptance_CHEAP::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart
 	}
 	**/
 	
-	accept=true;
-	efficiency=1.0;
+	if(pt<10000000 && fabs(eta)<ETAMAX){
+		accept=true;
+		efficiency=1.0;
+	}
+	else{
+		accept=false;
+		efficiency=0.0;
+	}
 	
 	
 }

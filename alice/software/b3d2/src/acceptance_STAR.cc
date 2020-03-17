@@ -59,7 +59,7 @@ CAcceptance_STAR::CAcceptance_STAR(CparameterMap *parmapin) : CAcceptance(){
 }
 
 void CAcceptance_STAR::CalcAcceptance(bool &accept,double &efficiency,CPart *part){
-	double eta,pt,pmag,gammav,phi,*p=part->p,y=part->y;
+	double eta,pt,pmag,*p=part->p;
 	double dca[4];
 	int pid=part->resinfo->code,starpid;
 	if(abs(pid)==211) starpid=1;
@@ -84,28 +84,18 @@ void CAcceptance_STAR::CalcAcceptance(bool &accept,double &efficiency,CPart *par
 	if(eta>ETAMIN && eta<ETAMAX && dca[0]<2.0){
 		if(pt>PTMIN && pt<PTMAX){
 			accept=true;
-			phi=atan2(part->p[2],part->p[1]);
-			star_acc_eff(starpid,0.001*pt,eta,phi,accept,efficiency);
+			star_acc_eff(starpid,0.001*pt,eta,accept,efficiency);
 		}
 	}
 }
 
 void CAcceptance_STAR::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part){
-	double eta,pt,pmag,gammav,phi,*p=part->p,y=part->y;
+	double eta,pt,pmag,*p=part->p;
 	double dca[4];
-	int pid=part->resinfo->code,starpid;
-	if(abs(pid)==211) starpid=1;
-	else if(abs(pid)==321) starpid=2;
-	else if(pid==-2212) starpid=3;
-	else if(pid==2212) starpid=4;
-	else{
-		if(abs(pid)!=2112 && abs(pid)!=311 && abs(pid)!=111 && abs(pid)!=22){
-			printf("CAcceptance_STAR::CalcAcceptance, pid=%d isn't in STAR list\n",pid);
-			exit(1);
-		}
-		accept=false;
-		efficiency=0.0;
-		return;
+	int pid=part->resinfo->code;
+	if(abs(pid)!=2112 && abs(pid)!=311 && abs(pid)!=111 && abs(pid)!=22){
+		printf("CAcceptance_STAR::CalcAcceptance, pid=%d isn't in STAR list\n",pid);
+		exit(1);
 	}
 	part->CalcDCA(dca);
 	accept=false;
@@ -120,8 +110,7 @@ void CAcceptance_STAR::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart 
 }
 
 // slightly modified for 2013
-void CAcceptance_STAR::star_acc_eff(int pid,double pt,double eta,
-double phi,bool &accept,double &eff){
+void CAcceptance_STAR::star_acc_eff(int pid,double pt,double eta,bool &accept,double &eff){
 	int cen=CENTRALITY;
 	// Routine to return acceptance and efficiency
 	// Gary D. Westfall
@@ -150,9 +139,8 @@ double phi,bool &accept,double &eff){
 	//   full phi acceptance
 	//  pt dependence is calculated in detail
 
-	int i;
-	float f1,f2,f3,f4,f5;
-	float P0,P1,P2,P3,P4,P5,P6;
+	float f1;
+	float P0,P1,P2,P3;
 	float p,theta;
 	// Pion parameters
 	float P0_pion[9]={0.714,0.745,0.779,0.810,0.830,0.842,0.851,0.862,0.874};

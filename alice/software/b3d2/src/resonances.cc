@@ -4,8 +4,6 @@
 
 #include <cmath>
 #include <cstdlib>
-//#include <boost/math/special_functions/bessel.hpp>
-//#include <boost/math/special_functions.hpp>
 #include "resonances.h"
 #include "constants.h"
 #include "parametermap.h"

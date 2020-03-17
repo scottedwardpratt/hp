@@ -4,9 +4,6 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
-
-//#include <boost/functional/hash.hpp> // needed for hashing pairs
-
 #include "b3d.h"
 #include "hist.h"
 #include "pow.h"

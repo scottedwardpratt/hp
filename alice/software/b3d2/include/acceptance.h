@@ -34,7 +34,7 @@ public:
 	CAcceptance_STAR(CparameterMap *parmapin);
 	void CalcAcceptance(bool &accept,double &efficiency,CPart *part);
 	void CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part);
-	void star_acc_eff(int pid,double pt,double eta,double phi,bool &accept,double &eff);
+	void star_acc_eff(int pid,double pt,double eta,bool &accept,double &eff);
 	
 	// For efficiencies of non-Identified parts
   //double ManuelEff(double eta, double pt);

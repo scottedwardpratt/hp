@@ -50,8 +50,8 @@ void CAcceptance_ALICE::CalcAcceptance(bool &accept,double &efficiency,CPart *pa
 
 void CAcceptance_ALICE::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part){
 	double eta,pt,pmag,*p=part->p;
-	double dca[4],dcaxy;
-	int pid=part->resinfo->code;
+	//double dca[4],dcaxy;
+	//int pid=part->resinfo->code;
 	efficiency=0.0;
 	pt=sqrt(p[1]*p[1]+p[2]*p[2]);
 	pmag=sqrt(pt*pt+p[3]*p[3]);
