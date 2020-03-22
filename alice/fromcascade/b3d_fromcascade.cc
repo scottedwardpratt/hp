@@ -8,7 +8,7 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 	if (argc != 4) {
-		printf("Usage: b3d run_name ievent0 ieventf\n");
+		printf("Usage: b3d_fromcascade run_name ievent0 ieventf\n");
 		exit(-1);
   }
 	//CBalanceArrays *barray;
