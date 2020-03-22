@@ -10,12 +10,12 @@
 
 int CB3D::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<CPart*,5> &daughter){
 	CPart *dptr;
-	int netq,netb,nets,nK0bar,nK0,nKplus,nKminus,npi0,npiplus,npiminus,npions,nkaons,npaircheck,qpions;
-	FourVector *pa,*pb,pc,u,Ptot;
+	int netq,nets,nK0bar,nK0,nKplus,nKminus,npi0,npiplus,npiminus,npions,nkaons,npaircheck,qpions;
+	FourVector *pa,*pb,pc,u;
 	double ma,mb,q,cthet,sthet,phi;
 	bool bjtranslate=false;
 	int idaughter,iK,ipair,alpha;
-	double mt,Minv;
+	double Minv;
 	double MM,P[4]={0.0},PP[4],T;
 	const double g[4]={1.0,-1.0,-1.0,-1.0};
 	CPartMap::iterator ppos;
@@ -25,7 +25,6 @@ int CB3D::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<CPart*,5> &
 		bjtranslate=true;
 
 	netq = part1->resinfo->charge+part2->resinfo->charge;
-	netb = part1->resinfo->baryon+part2->resinfo->baryon;
 	nets = part1->resinfo->strange+part2->resinfo->strange;
 	nkaons=abs(nets);
 	RECHARGE:
@@ -235,9 +234,8 @@ int CB3D::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<CPart*,5> &
 }
 
 double CB3D::GetAnnihilationSigma(CPart *part1,CPart *part2,double &vrel){
-	double *p1=part1->p,*p2=part2->p;
 	const double g[4]={1,-1,-1,-1};
-	double Plab,sigma,p1dotp2,triangle,sigma_annihilation,rstrange;
+	double Plab,p1dotp2,triangle,sigma_annihilation,rstrange;
 	int alpha;
 	part1->SetMass(); part2->SetMass();
 	double m1squared=part1->msquared,m2squared=part2->msquared;
@@ -253,7 +251,7 @@ double CB3D::GetAnnihilationSigma(CPart *part1,CPart *part2,double &vrel){
 	rstrange=0.5*sqrt(sigma_annihilation);
 	rstrange*=pow(ANNIHILATION_SREDUCTION,abs(part1->resinfo->strange))+pow(ANNIHILATION_SREDUCTION,abs(part2->resinfo->strange));
 	sigma_annihilation=rstrange*rstrange;
-	//vrel=sqrt(triangle)/(p1[0]*p2[0]);
+	vrel=sqrt(triangle)/(part1->p[0]*part2->p[0]);
 	//printf("sigma=%g,vrel=%g, p1=(%g,%g,%g,%g), p2=(%g,%g,%g,%g)\n",sigma_annihilation,vrel,p1[0],p1[1],p1[2],p1[3],p2[0],p2[1],p2[2],p2[3]);
 	return sigma_annihilation;
 }

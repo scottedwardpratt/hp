@@ -18,7 +18,6 @@ CBalanceArrays::CBalanceArrays(CB3D *b3dset){
 
 void CBalanceArrays::InitArrays(){
 	CResInfoMap::iterator itr;
-	CResInfo *resinfo;
 	NSAMPLE_HYDRO2UDS=parmap->getD("NSAMPLE_HYDRO2UDS",1);
 	NSAMPLE_UDS2BAL=parmap->getD("NSAMPLE_UDS2BAL",1);
 	FROM_UDS=parmap->getB("BF_FROM_UDS",false);
@@ -158,7 +157,6 @@ void CBalanceArrays::CreateBFArrays(){
 }
 
 void CBalanceArrays::ConstructBFs(){
-	double Ntot;
 	bool NoQ=false;
 	ConstructBF(numer_pipi,denom_pi,bf_pipi,1.0,NoQ);
 	ConstructBF(numer_piK,denom_pi,bf_piK,0.5,NoQ);
@@ -171,8 +169,6 @@ void CBalanceArrays::ConstructBFs(){
 	ConstructBF(numer_allcharges_phi0,denom_allcharges_phi0,bf_allcharges_phi0,1.0,NoQ);
 	ConstructBF(numer_allcharges_phi45,denom_allcharges_phi45,bf_allcharges_phi45,1.0,NoQ);
 	ConstructBF(numer_allcharges_phi90,denom_allcharges_phi90,bf_allcharges_phi90,1.0,NoQ);
-	Ntot=denom_allcharges->Nplus+denom_allcharges->Nminus;
-	//printf("normtest=%g, Ntot=%g, gammap/normtest=%g\n",normtest,Ntot,gammap/normtest);
 	printf("v2=%g, v2prime=%g\n",v2/v2norm,v2prime/v2primenorm);
 }
 
@@ -301,8 +297,6 @@ void CBalanceArrays::ProcessBFPartMap(){
 	pair<CPartMap::iterator,CPartMap::iterator> itpair_even,itpair_odd;
 	CPartMap::iterator it,ita0,itaf,itb0,itbf,ita,itb;
 	CPart *parta,*partb,*part;
-	double meanpt=0.0;
-	int npt=0;
 	for(it=b3d->PartMap.begin();it!=b3d->PartMap.end();++it){
 		part=it->second;
 		if(part->balanceID>maxbid)
@@ -340,7 +334,7 @@ void CBalanceArrays::ProcessBFPartMap(){
 }
 
 void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from cascade
-	multimap<double,CPart *> partmap;
+	multimap<double,CPart *> ppartmap;
 	double ya,yb,dely,B3D_ETAMAX=b3d->ETAMAX;
 	CPartMap::iterator it;
 	multimap<double,CPart *>::iterator ita,itb;
@@ -365,11 +359,11 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 					ya+=2.0*B3D_ETAMAX;
 				while(ya>B3D_ETAMAX)
 					ya-=2.0*B3D_ETAMAX;
-				partmap.insert(pair<double,CPart* >(ya,parta));
+				ppartmap.insert(pair<double,CPart* >(ya,parta));
 			}
 		}
-		printf("partmap.size=%d\n",int(partmap.size()));
-		ita=partmap.begin();
+		printf("ppartmap.size=%d\n",int(ppartmap.size()));
+		ita=ppartmap.begin();
 		do{
 			parta=ita->second;
 			if(abs(parta->resinfo->charge)==1){
@@ -377,8 +371,8 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 				ya=ita->first;
 				itb=ita;
 				++itb;
-				if(itb==partmap.end())
-					itb=partmap.begin();
+				if(itb==ppartmap.end())
+					itb=ppartmap.begin();
 				do{
 					partb=itb->second;
 					yb=itb->first;
@@ -390,13 +384,13 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 						IncrementNumer(partb,parta);
 					}
 					++itb;
-					if(itb==partmap.end())
-						itb=partmap.begin();
+					if(itb==ppartmap.end())
+						itb=ppartmap.begin();
 				}while(dely<2.0*BF_YMAX);
 			}
 			++ita;
-		}while(ita!=partmap.end());
-		partmap.clear();
+		}while(ita!=ppartmap.end());
+		ppartmap.clear();
 	}
 }
 

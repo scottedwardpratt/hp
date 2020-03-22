@@ -7,7 +7,7 @@
 #include "resonances.h"
 
 void CAction::PerformDecay(){
-	CPart *mother,*dptr,*dptrb;
+	CPart *mother,*dptr;
 	CPartMap::iterator ppos;
 	int ibody,nbodies,alpha;
 	double mtot,mt,etamax=b3d->ETAMAX,mothermass;

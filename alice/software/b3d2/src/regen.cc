@@ -35,7 +35,6 @@ void CRegenerate::CalculateBDens(int iT){
 	double T=Tmin+delT*iT;
 	int S;
 	CResInfo *resinfo;
-	CResInfoMap *resmap=&(b3d->reslist->resmap);
 	CDensMap::iterator dpos;
 	CResInfoMap::iterator rpos;
 	for(S=0;S<=3;S++){
@@ -57,17 +56,6 @@ bool CRegenerate::CheckForRegeneration(CB3DCell *cell,CMuTInfo *muTinfo){
 	CResInfo *resinfo1,*resinfo2;
 	bool regencheck=false;
 	int nproducts,iproduct;
-	/*
-	double Tpi,mupi,TK,muK;
-	FourVector upi,uK;
-	FourVector p1,p2;
-	muTinfo->MuTCalc();
-	Tpi=muTinfo->Tpi;
-	mupi=muTinfo->mupi;
-	TK=muTinfo->TK;
-	muK=muTinfo->muK;
-	int itau=lrint(b3d->tau/CMuTInfo::DELTAU)-1;
-	*/
 	GetdNMax(muTinfo);
 	MC_Nbar+=dNMaxNet;
 	while(MC_Nbar>MC_Ntarget){
@@ -113,7 +101,7 @@ bool CRegenerate::CheckForRegeneration(CB3DCell *cell,CMuTInfo *muTinfo){
 }
 
 void CRegenerate::GetdNMax(CMuTInfo *muTinfo){
-	double xpi,xK,dNNet,T,Tpi,TK,mupi,muK,tau,volume,pidens,Kdens;
+	double xpi,xK,T,Tpi,TK,mupi,muK,tau,volume,pidens;
 	int smax,itau,norm;
 	tau=b3d->tau;
 	volume=tau*2.0*b3d->ETAMAX*b3d->DXY*b3d->DXY;
@@ -121,16 +109,15 @@ void CRegenerate::GetdNMax(CMuTInfo *muTinfo){
 	volume=volume;
 	itau=lrint(tau/CMuTInfo::DELTAU)-1;
 	pidens=muTinfo->Npi[itau]/(volume*norm);
-	Kdens=muTinfo->NK[itau]/(volume*norm);
 	if(pidens>0.025 && muTinfo->Npi[itau]>5){
 		muTinfo->MuTCalc();
-		int S1,S2,iT,smax;
+		int S1,S2,iT;
 		Tpi=muTinfo->Tpi;
 		TK=muTinfo->TK;
 		mupi=muTinfo->mupi;
 		muK=muTinfo->muK;
-		xpi=exp(muTinfo->mupi/muTinfo->Tpi);
-		xK=exp(muTinfo->muK/muTinfo->TK);
+		xpi=exp(mupi/muTinfo->Tpi);
+		xK=exp(muK/muTinfo->TK);
 		dNMaxNet=0.0;
 		smax=3;
 		if(muTinfo->NK[itau]<=5 || TK<Tmin)
@@ -158,9 +145,6 @@ void CRegenerate::GetdNMax(CMuTInfo *muTinfo){
 					}
 				}
 			}
-			//if(dNMaxNet>0.01)
-				//printf("dNMaxNet=%g, pidens=%g, xpi=%g, Tpi=%g, Kdens=%g, xK=%g, TK=%g, muK=%g, itau=%d\n",
-			//dNMaxNet,pidens,xpi,Tpi,Kdens,xK,TK,muK,itau);
 		}
 	}
 	else{
@@ -171,9 +155,8 @@ void CRegenerate::GetdNMax(CMuTInfo *muTinfo){
 
 bool CRegenerate::GetBBbarResInfo(CMuTInfo *muTinfo,CResInfo *&resinfo1,CResInfo *&resinfo2){
 	CDensMap::iterator dpos;
-	CResInfo *resinfo;
 	double key,wtot=0.0,wsum,w[16];
-	int S1,S2,iS,NK,iT,pid,itau=lrint(b3d->tau/CMuTInfo::DELTAU)-1;
+	int S1,S2,iS,iT,pid,itau=lrint(b3d->tau/CMuTInfo::DELTAU)-1;
 	double Tpi=muTinfo->Tpi,mupi=muTinfo->mupi,TK=muTinfo->TK,muK=muTinfo->muK;
 	double T;
 	if(muTinfo->NK[itau]>1){
@@ -238,7 +221,6 @@ void CRegenerate::FillOutPartPRInfo(CPart *part,CB3DCell *cell,CMuTInfo *muTinfo
 }
 
 void CRegenerate::GetP1P2SigmaV(CMuTInfo *muTinfo){
-	CRandy *randy=b3d->randy;
 	double T,vrel;
 	NK=abs(part1->resinfo->strange-part2->resinfo->strange);
 	T=0.2*(muTinfo->Tpi*(5-NK)+muTinfo->TK*NK);

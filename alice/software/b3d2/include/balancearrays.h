@@ -39,7 +39,7 @@ public:
 	int NSAMPLE_UDS2BAL,Nchi,NPHI,NEVENTS;
 	bool FROM_UDS,NoKsNoPhi;  // FROM_UDS=true means BF from uds charges, if false, then brute forcd
 	double BF_YMAX,BF_YMIN,DELY,BF_PHICUT;
-	CPartMap partmap,bfpartmap;
+	CPartMap bfpartmap;
 	CResList *reslist;
 	CparameterMap *parmap;
 	string qualifier;

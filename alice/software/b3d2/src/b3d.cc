@@ -5,7 +5,7 @@
 #include <unordered_set>
 #include <utility>
 #include "b3d.h"
-#include "hist.h"
+//#include "hist.h"
 #include "pow.h"
 #include "part.h"
 #include "resonances.h"
@@ -112,7 +112,7 @@ void CB3D::CopyParMapPars(){
 
 void CB3D::InitCascade(){
 	// First initialize cells
-	int ix,iy,ieta,jx,jy,jeta,itau,iarray,imax;
+	int ix,iy,ieta,jx,jy,jeta,iitau,imax;
 	double xmin,xmax,ymin,ymax,etamin,etamax;
 	CB3DCell *c;
 	CInelasticList::b3d=this;
@@ -188,8 +188,8 @@ void CB3D::InitCascade(){
 				for(ieta=0;ieta<2*NETA;ieta++){
 					c=cell[ix][iy][ieta];
 					c->dens.resize(DENSWRITE_NTAU);
-					for(itau=0;itau<DENSWRITE_NTAU;itau++){
-						c->dens[itau]=0.0;
+					for(iitau=0;iitau<DENSWRITE_NTAU;iitau++){
+						c->dens[iitau]=0.0;
 					}
 				}
 			}
@@ -241,19 +241,17 @@ void CB3D::SetQualifier(string qualifier_set){
 }
 
 void CB3D::Reset(){
-	int ix,iy,itau,ntau;
+	int ix,iy,iitau,ntau;
 	double taucalc;
-	CB3DCell *c;
 	KillAllParts();
 	KillAllActions();
 	tau=0.0;
 	nactions=0;
 	//npartstot=0;
 	if(MUTCALC){
-		itau=0;
 		ntau=lrint(TAUCOLLMAX/MUTCALC_DELTAU);
-		for(itau=0;itau<ntau;itau++){
-			taucalc=(1+itau)*MUTCALC_DELTAU;
+		for(iitau=0;iitau<ntau;iitau++){
+			taucalc=(1+iitau)*MUTCALC_DELTAU;
 			AddAction_MuTCalc(taucalc);
 			for(ix=0;ix<2*NXY;ix++){
 				for(iy=0;iy<2*NXY;iy++){
@@ -267,8 +265,8 @@ void CB3D::Reset(){
 	if(SECALC){
 		SEinfo->NETEVENTS+=NSAMPLE;
 		SEinfo->ETAOVERS=parmap.getD("SEINFO_ETAOVERS",0.3);
-		for(itau=0;itau<=SEinfo->NTAU;itau++){
-			AddAction_SECalc(SEinfo->TAU0+SEinfo->DELTAU*itau);
+		for(iitau=0;iitau<=SEinfo->NTAU;iitau++){
+			AddAction_SECalc(SEinfo->TAU0+SEinfo->DELTAU*iitau);
 		}
 	}
 }

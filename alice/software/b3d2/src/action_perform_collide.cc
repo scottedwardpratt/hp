@@ -5,8 +5,8 @@
 #include "part.h"
 
 void CAction::PerformCollide(){
-	int colltype,iproduct,nproducts,wproduct,nrealscatt=0,nfakescatt=0;
-	CPart *part1,*part2,*part,*splitpart;
+	int colltype,iproduct,nproducts;
+	CPart *part1,*part2,*part;
 	CPartMap::iterator ppos;
 	CB3DCell *cell;
 	ppos=partmap.begin();
@@ -35,7 +35,6 @@ void CAction::PerformCollide(){
 	if(colltype==4)
 		b3d->nannihilate+=1;
 	
-	wproduct=part1->weight*part2->weight;
 	if(colltype==-2){
 		if(part1->balanceID>=0 && part2->balanceID<0){
 			part1->CopyMomentumInfo(product[0]);

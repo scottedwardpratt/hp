@@ -825,6 +825,33 @@ src/makepart.cc.s:
 	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/makepart.cc.s
 .PHONY : src/makepart.cc.s
 
+src/mutinfo.o: src/mutinfo.cc.o
+
+.PHONY : src/mutinfo.o
+
+# target to build an object file
+src/mutinfo.cc.o:
+	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/mutinfo.cc.o
+.PHONY : src/mutinfo.cc.o
+
+src/mutinfo.i: src/mutinfo.cc.i
+
+.PHONY : src/mutinfo.i
+
+# target to preprocess a source file
+src/mutinfo.cc.i:
+	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/mutinfo.cc.i
+.PHONY : src/mutinfo.cc.i
+
+src/mutinfo.s: src/mutinfo.cc.s
+
+.PHONY : src/mutinfo.s
+
+# target to generate assembly for a file
+src/mutinfo.cc.s:
+	$(MAKE) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/mutinfo.cc.s
+.PHONY : src/mutinfo.cc.s
+
 src/part.o: src/part.cc.o
 
 .PHONY : src/part.o
@@ -1101,6 +1128,9 @@ help:
 	@echo "... src/makepart.o"
 	@echo "... src/makepart.i"
 	@echo "... src/makepart.s"
+	@echo "... src/mutinfo.o"
+	@echo "... src/mutinfo.i"
+	@echo "... src/mutinfo.s"
 	@echo "... src/part.o"
 	@echo "... src/part.i"
 	@echo "... src/part.s"

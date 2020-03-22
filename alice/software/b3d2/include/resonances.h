@@ -66,7 +66,7 @@ public:
 	void CalcEoSandChi(double T,double &P,double &epsilon,double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &chi);
 	void CalcConductivity(double T,double &P,double &epsilon,double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &chi,Eigen::Matrix3d &sigma);
 	void freegascalc_onespecies(double m,double T,double &e,double &p,double &dens,double &sigma2,double &dedt);
-	void freegascalc_onespecies_finitewidth(double m, double m1, double m2, double T,double width,double minmass,double &epsilon,double &P,double &dens,double &sigma2,double &dedt, double &maxweight);
+	void freegascalc_onespecies_finitewidth(double m, double m1, double m2, double T,double width,double &epsilon,double &P,double &dens,double &sigma2,double &dedt, double &maxweight);
 	double GetLambda(double T,double P,double epsilon);
 	void freegascalc_onespecies(double m,double T,double &e,double &p,double &dens,double &sigma2,double &dedt,double &Jtot);
 	CparameterMap *parmap;

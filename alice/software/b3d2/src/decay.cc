@@ -9,15 +9,14 @@
 #include "constants.h"
 
 void CB3D::Decay(CPart *mother,int &nbodies,array<CPart *,5> &daughter){
-	const double HBARC=197.326;
 	int ibody,jbody,alpha;
-	double mass[6],mtot,mprime,wmaxmass,wmass,mguess,kmass,kmaxmass,kguess;
+	double mass[6],mtot,mprime,wmaxmass,wmass,mguess,kmaxmass,kguess;
 	CPart *dptr;
 
-	FourVector *p[6],kprime,qprime,ptot,pprime,u12,pp,u;
+	FourVector *p[6],kprime,qprime,pprime,u12,pp,u;
 	double q,weight,wmax,sthet,cthet,phi;
 	double p3mag,kprimemax,p3max,ppmax,kprimemax2,kprimemag2,qprimemax,qprimemax2,qprimemag2,ppmag;
-	double e1prime,e2prime,e3prime,e4prime,e1max,e2max,e3max,e4max,e12;
+	double e1prime,e2prime,e3prime,e4prime,e1max,e2max,e3max,e4max;
 
 	mass[0]=mother->GetMass();
 	p[0]=&mother->p;
@@ -110,7 +109,6 @@ void CB3D::Decay(CPart *mother,int &nbodies,array<CPart *,5> &daughter){
 			(*p[3])[1]=p3mag*sthet*cos(phi);
 			(*p[3])[2]=p3mag*sthet*sin(phi);
 			(*p[3])[0]=sqrt(p3mag*p3mag+mass[3]*mass[3]);
-			e12=sqrt(pow(e1prime+e2prime,2)+p3mag*p3mag);
 			for(alpha=1;alpha<4;alpha++)
 				u12[alpha]=-(*p[3])[alpha]/(e1prime+e2prime);
 			u12[0]=sqrt(1.0+u12[1]*u12[1]+u12[2]*u12[2]+u12[3]*u12[3]);

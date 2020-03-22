@@ -241,16 +241,13 @@ void CPart::AddAction(CAction *action){
 }
 
 void CPart::Propagate(double tau){
-	double oldeta;
 	if(b3d->BJORKEN && fabs(eta)>b3d->ETAMAX){
 		printf("eta screwy before propagation\n");
 		printf("eta=%g\n",eta);
 	}
 	double t0;
-	CPartMap *pmap=currentmap;
 	CPartMap::iterator neighbor;
 	if(active==true){
-		oldeta=eta;
 		eta=GetEta(tau);//y-asinh((tau0/tau)*sinh(y-eta));
 		tau0=tau;
 		t0=r[0];
@@ -466,7 +463,6 @@ CB3DCell *CPart::FindCell(){
 }
 
 void CPart::FindDecay(){
-	CAction *action;
 	double t,gamma,vz,newt,newz;
 	t=HBARC/resinfo->width;
 	gamma=p[0]/sqrt(msquared);

@@ -11,7 +11,6 @@ using namespace std;
 
 double CB3D::WriteOSCAR(int ievent){
 	CB3DBinaryPartInfo bpart;
-	char dummy[100];
 	printf("writing to %s\n",oscarfilename.c_str());
 	if(oscarfile==NULL){
 		if(BINARY_RW)
@@ -31,10 +30,8 @@ double CB3D::WriteOSCAR(int ievent){
 	else
 		fprintf(oscarfile,"%7d %6d    %8.5f     %8.5f\n",ievent,nparts,parmap.getD("GLAUBER_B",0.0),
 	parmap.getD("GLAUBER_B",0.0));
-	double v,pperp,eperp,dnchdeta=0.0,dnchdy=0,t,twrite,tauwrite,etawrite,eta,deleta,y;
-	FourVector rwrite,pwrite;
-	double mass;
-	int ipart,nmesons=0,nch=0;
+	double dnchdy=0;
+	int ipart;
 	CPart *part;
 	CPartMap::iterator ppos;
 	printf("writing %d particles, nparts=%d\n",int(PartMap.size()),nparts);
@@ -88,10 +85,9 @@ int CB3D::ReadOSCAR(int ievent){
 	CResInfo *resinfo;
 	double p[4],r[4],mass,rapidity,eta,tau0;
 	int weight,ID;
-	int nparts,nparts_read,ipart=0;
+	int nparts_read,ipart=0;
 	int ievent_read;
 	double bmin,bmax; // impact parameter
-	double mtot,mothermass;
 	CPart *mother;
 	tau=0.0;
 	if(oscarfile==NULL){
@@ -150,78 +146,65 @@ void CB3D::ReadBalanceParts(){
 	CPartMap::iterator ppos;
 	vector<CPart *> newpart;
 	newpart.reserve(10);
+	newpart.clear();
 	CResInfo *resinfo;
 	char dummy[120];
 	fgets(dummy,120,fptr);
-	double x,y,z,t,E,px,py,pz,mt,tau,eta,eta0,rapidity,mass;
-	int ibalance,pid,intweight=1,ibalread,iibalread,ibalpair,oldibalpair=-1;
-	int ibp,nbalpairs=0,nparts=0;
-	bool paircheck,evencheck,oddcheck;
-	CPart *part;
-	ibalance=0;
-	paircheck=false;
+	double x,y,z,t,E,px,py,pz,mt,tau_read,eta,eta0,rapidity,mass;
+	int pid,intweight=1,ibalpair=-999999,oldibalpair=-999999;
+	int ibalread=0,iibalread;
+	int nbalpairs=0,nparts=0;
+	int nevencheck=0,noddcheck=0;
+	bool firstread=true;
 	do{
-		fscanf(fptr,"%d %d %lf %lf %lf %lf %lf %lf %lf %lf",&pid,&ibalread,&x,&y,&z,&tau,&E,&px,&py,&pz);
-		eta0=asinh(z/t);
-		resinfo=reslist->GetResInfoPtr(pid);
-		if(ibalread==netcharge.size())
-			netcharge.resize(netcharge.size()+5000);
-		for(iibalread=iibalread;iibalread<netcharge.size();iibalread++)
-			netcharge[iibalread]=0;
-		netcharge[ibalread]+=resinfo->charge;
-		mass=resinfo->mass;
-		mt=sqrt(mass*mass+px*px+py*py);
-		E=sqrt(mt*mt+pz*pz);
-		eta=1.0*randy->ran_gauss();
-		if(abs(pid)==211){
-			nsigma+=1;
-			sigma+=eta*eta;
-		}
-		z=tau*sinh(eta);
-		t=tau*cosh(eta);
-		rapidity=(eta-eta0)+0.5*log((E+pz)/(E-pz));
-		E=mt*cosh(rapidity);
-		pz=mt*sinh(rapidity);
-		//t=sqrt(tau*tau+z*z);
-		//eta=atanh(z/t);
-		if(abs(pid)==211 && ibalread!=-1)
-			nqgppions+=1;
-		if(!feof(fptr)){
-			ibalpair=lrint(floor(double(ibalread)/2.0));
-			if(ibalpair!=oldibalpair){
-				//if previous round of ibalpair didn't have any good pairs, kill all particles
-				if(paircheck==false){
-					for(nparts=0;nparts<newpart.size();nparts++){
-						newpart[nparts]->Kill();
-					}
-					newpart.clear();
-					nparts=0;
+		fscanf(fptr,"%d %d %lf %lf %lf %lf %lf %lf %lf %lf",&pid,&ibalread,&x,&y,&z,&tau_read,&E,&px,&py,&pz);
+		ibalpair=lrint(floor(double(ibalread)/2.0));
+		if((ibalpair!=oldibalpair || feof(fptr)) && firstread==false){
+			//if previous round of ibalpair didn't have any good pairs, kill all particles
+			if(feof(fptr) || newpart.size()!=0){
+				for(nparts=0;nparts<int(newpart.size());nparts++){
+					newpart[nparts]->Kill();
 				}
-				newpart.clear();
-				//printf("--------------------\n");
-				nparts=0;
-				paircheck=false;
-				evencheck=false;
-				oddcheck=false;
 			}
+			nbalpairs+=nevencheck*noddcheck;
+			newpart.clear();
+			nevencheck=0;
+			noddcheck=0;
+		}
+		firstread=false;
+		
+		if(!feof(fptr)){
+			resinfo=reslist->GetResInfoPtr(pid);
+			if(ibalread==int(netcharge.size())){
+				netcharge.resize(netcharge.size()+5000);
+				for(iibalread=ibalread;iibalread<int(netcharge.size());iibalread++)
+					netcharge[iibalread]=0;
+			}
+			netcharge[ibalread]+=resinfo->charge;
+			mass=resinfo->mass;
+			mt=sqrt(mass*mass+px*px+py*py);
+			E=sqrt(mt*mt+pz*pz);
+			eta=1.0*randy->ran_gauss();
+			if(abs(pid)==211){
+				nsigma+=1;
+				sigma+=eta*eta;
+			}
+			z=tau_read*sinh(eta);
+			t=tau_read*cosh(eta);
+			eta0=asinh(z/t);
+			rapidity=(eta-eta0)+0.5*log((E+pz)/(E-pz));
+			E=mt*cosh(rapidity);
+			pz=mt*sinh(rapidity);
+			if(abs(pid)==211 && ibalread!=-1)
+				nqgppions+=1;
+			
 			if(ibalread%2==0)
-				evencheck=true;
+				nevencheck+=1;
 			if(ibalread%2==1)
-				oddcheck=true;
-			if(evencheck && oddcheck){
-				if(!paircheck)
-					nbalpairs+=1;
-				paircheck=true;
-			}
-			//printf("ibalread=%d, eta=%g\n",ibalread,eta);
+				noddcheck+=1;
+			nparts=newpart.size();
 			newpart.push_back(GetDeadPart());
 			rapidity=0.5*log((E+pz)/(E-pz));
-			//tau=sqrt(t*t-z*z);
-			//eta=asinh(z/tau);
-			if(t<z){
-				printf("t<z???, tau=%g\n",tau);
-				exit(1);
-			}
 			resinfo=reslist->GetResInfoPtr(pid);
 			mass=resinfo->mass;
 			newpart[nparts]->InitBalance(pid,x,y,tau,eta,px,py,mass,rapidity,intweight,ibalread);
@@ -229,12 +212,11 @@ void CB3D::ReadBalanceParts(){
 				printf("why are we generating a neutral particle?\n");
 				exit(1);
 			}
-			nparts+=1;
 		}
 		oldibalpair=ibalpair;
 	}while(!feof(fptr));
 	int netbal=0;
-	for(ibalread=0;ibalread<netcharge.size();ibalread+=2){
+	for(ibalread=0;ibalread<int(netcharge.size());ibalread+=2){
 		netbal+=netcharge[ibalread]*netcharge[ibalread+1];
 	}
 	printf("netbal=%d\n",netbal);
@@ -246,7 +228,6 @@ double CB3D::WriteBalance(int ievent){
 	CB3DBinaryBalancePartInfo bpart;
 	double sigma=0;
 	int nsigma=0;
-	char dummy[100];
 	if(oscarfile==NULL){
 		if(BINARY_RW)
 			oscarfile=fopen(oscarfilename.c_str(),"wb");
@@ -265,10 +246,8 @@ double CB3D::WriteBalance(int ievent){
 	else
 		fprintf(oscarfile,"%7d %6d    %8.5f     %8.5f\n",ievent,nparts,parmap.getD("GLAUBER_B",0.0),
 	parmap.getD("GLAUBER_B",0.0));
-	double v,pperp,eperp,dnchdeta=0.0,dnchdy=0,t,twrite,tauwrite,etawrite,eta,deleta,y;
-	FourVector rwrite,pwrite;
-	double mass,rapidity;
-	int ipart,nmesons=0,nch=0;
+	double dnchdy=0,rapidity;
+	int ipart;
 	CPart *part;
 	CPartMap::iterator ppos;
 	ipart=0;
@@ -289,9 +268,6 @@ double CB3D::WriteBalance(int ievent){
 			bpart.rapidity=part->y;
 			sigma+=part->y*part->y;
 			nsigma+=1;
-			//if(bpart.balanceID!=-1)
-			//printf("final part in WriteBalance, eta=%g\n",eta);
-			//if(bpart.balanceID!=-1)
 			fwrite(&bpart,sizeof(bpart),1,oscarfile);
 		}
 		else{
@@ -313,12 +289,11 @@ int CB3D::ReadBalance(int ievent){
 	CResInfo *resinfo;
 	double p[4],r[4],mass,rapidity,eta,tau0;
 	int weight,ID,balanceID;
-	int nparts,nparts_read,ipart=0;
+	int nparts_read,ipart=0;
 	int ievent_read;
 	double sigma=0;
 	int nsigma=0;
 	double bmin,bmax; // impact parameter
-	double mtot,mothermass;
 	CPart *mother;
 	tau=0.0;
 	if(oscarfile==NULL){
@@ -376,14 +351,14 @@ void CB3D::WriteDens(){
 	FILE *densfile = fopen(densfilename.c_str(),"w");
 	fprintf(densfile,"#ix iy  dens[itau=0] dens[itau=1]...\n");
 	double dxy;
-	int ix,iy,ieta,itau;
+	int ix,iy,ieta,iitau;
 	for(ix=0;ix<2*NXY;ix++){
 		for(iy=0;iy<2*NXY;iy++){
 			fprintf(densfile,"%3d %3d",ix,iy);
-			for(itau=0;itau<DENSWRITE_NTAU;itau++){
+			for(iitau=0;iitau<DENSWRITE_NTAU;iitau++){
 				dxy=0.0;
 				for(ieta=0;ieta<2*NETA;ieta++){
-					dxy+=cell[ix][iy][ieta]->dens[itau];
+					dxy+=cell[ix][iy][ieta]->dens[iitau];
 				}
 				fprintf(densfile," %6.0f",dxy);
 			}

@@ -8,19 +8,16 @@
 
 using namespace std;
 
-void CHyperElement::GetP(CResInfo *resinfo,FourVector &p,double &mass,double maxweight){
+void CHyperElement::GetP(CResInfo *resinfo,FourVector &p,double &mass,double mw){
 	bool VISCOUSCORRECTIONS=true;
-	double weight;
 	CResList *reslist=resinfo->reslist;
-	bool success=false,reflect;
-	int nparts=0;
+	bool reflect;
 	CRandy *randy=(reslist->b3d)->randy;
-	double h=P+epsilon;
-	double pdotdOmega,eta,y,nhatnorm,nhatdotp,wreflect;
+	double pdotdOmega,nhatnorm,nhatdotp,wreflect;
 	double pitilde[4][4],dOmegaprime[4],dOmega[4];
-	int ispecies,alpha,beta,intweight,n,nsample;
+	int alpha,beta;
 	FourVector pnoviscous,u;
-	double m,delN,r[3],w[3],nhat[4]={0.0};
+	double m,nhat[4]={0.0};
 	pitilde[1][1]=pitildexx;
 	pitilde[1][2]=pitilde[2][1]=pitildexy;
 	pitilde[1][3]=pitilde[3][1]=0.0;
@@ -28,12 +25,12 @@ void CHyperElement::GetP(CResInfo *resinfo,FourVector &p,double &mass,double max
 	pitilde[2][3]=pitilde[3][2]=0.0;
 	pitilde[3][3]=-pitildexx-pitildeyy;
 	
-	if(maxweight<0.0 || resinfo->width<1.0){
+	if(mw<0.0 || resinfo->width<1.0){
 		m=resinfo->mass;
 		randy->generate_boltzmann(m,T,pnoviscous);
 	}
 	else{
-		m=resinfo->GenerateThermalMass(maxweight,T);
+		m=resinfo->GenerateThermalMass(mw,T);
 		randy->generate_boltzmann(m,T,pnoviscous);
 	}
 	mass=m;

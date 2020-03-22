@@ -11,19 +11,11 @@
 using namespace std;
 
 void CB3D::GenHadronsFromCharges(){
-	int maxbid,bid,newcount=0,dummy;
+	int maxbid,bid,newcount=0;
 	CCharge *chargea,*chargeb;
 	pair<CChargeMap::iterator,CChargeMap::iterator> icpair_even,icpair_odd;
-	// for testing
-	CPart *parta,*partb;
-	CResInfo *resinfoa,*resinfob;
-	CPartMap::iterator it,ita0,itaf,itb0,itbf,ita,itb;
-	pair<CPartMap::iterator,CPartMap::iterator> itpair_even,itpair_odd;
-	int a,b;
-	//
 	CChargeMap::iterator itc;
 	CPartMap::iterator itp;
-	CPart *part;
 	itc=chargemap.end(); itc--;
 	maxbid=itc->first;
 
@@ -48,7 +40,7 @@ void CB3D::GenHadronsFromCharges(){
 void CB3D::GenHadronsFromCharge(int balanceID,CCharge *charge){
 	int ires;
 	double delN,bweight;
-	double rapidity,delv,w,dNbar,mass;
+	double rapidity,mass;
 	CHyperElement *hyper=&(charge->hyper);
 	CPart *part;
 	FourVector p;
@@ -83,7 +75,7 @@ void CB3D::GenHadronsFromCharge(int balanceID,CCharge *charge){
 void CB3D::AnalyzeCharges(){
 	double phi1,phi2,delphi;
 	int nphi=18,iphi;
-	if(phicount.size()!=nphi)
+	if(int(phicount.size())!=nphi)
 		phicount.resize(nphi);
 	CChargeMap::iterator it;
 	CCharge *charge1,*charge2;
@@ -113,7 +105,6 @@ void CB3D::ReadCharges(int ichargefile){
 	//string filename=dirname+"/"+parmap.getS("CHARGESINFO_FILENAME","uds.dat");
 	string filename=dirname+"/"+"uds"+chargefile+".dat";
 	printf("reading charges from %s\n",filename.c_str());
-	FILE *input=fopen(filename.c_str(),"r");
 	CHyperElement *hyper;
 	double etaspread=0.0;
 	int neta=0,maxbid=0;
@@ -121,27 +112,24 @@ void CB3D::ReadCharges(int ichargefile){
 	vector<double> etaboost;
 	CChargeMap::iterator it;
 	CCharge *charge;
-	int ix,iy,balanceID,qu,qd,qs,bidcharge;
-	double u0,ux,uy,x,y,tau,eta,w,dOmega0,dOmegaX,dOmegaY,pitildexx;
-	double pitildexy,pitildeyy,dOmegaMax;
+	int balanceID,qu,qd,qs,bidcharge;
+	double u0,ux,uy,x,y,tau_read,eta,w,dOmega0,dOmegaX,dOmegaY,pitildexx;
+	double pitildexy,pitildeyy;
 	FILE *fptr=fopen(filename.c_str(),"r");
 	fgets(dummy,120,fptr);
 	chargemap.clear();
-	int oldbalanceID=-9999999;
-	
 	double norm=0.0,ux2bar=0.0,uy2bar=0.0,udotrbar=0.0,x2bar=0.0,y2bar=0.0;
 	do{
 		fscanf(fptr,"%d %d %d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&balanceID,&qu,&qd,&qs,&w,&tau,&eta,&x,&y,&ux,&uy,&dOmega0,&dOmegaX,&dOmegaY,&pitildexx,&pitildeyy,&pitildexy);
+		&balanceID,&qu,&qd,&qs,&w,&tau_read,&eta,&x,&y,&ux,&uy,&dOmega0,&dOmegaX,&dOmegaY,&pitildexx,&pitildeyy,&pitildexy);
 		if(!feof(fptr)){
-			oldbalanceID=balanceID;
 			charge=new CCharge();
 			hyper=&(charge->hyper);
 			charge->q[0]=qu;
 			charge->q[1]=qd;
 			charge->q[2]=qs;
 			charge->weight=w;
-			charge->tau=tau;
+			charge->tau=tau_read;
 			charge->eta=eta;
 			if(fabs(charge->q[2])==1){
 				etaspread+=eta*eta;
@@ -149,7 +137,7 @@ void CB3D::ReadCharges(int ichargefile){
 			}
 			charge->x=x;
 			charge->y=y;
-			hyper->tau=tau;
+			hyper->tau=tau_read;
 			hyper->x=x;
 			hyper->y=y;
 			hyper->dOmega0=dOmega0;
@@ -165,6 +153,7 @@ void CB3D::ReadCharges(int ichargefile){
 			hyper->T=sampler->Tf;
 			hyper->P=sampler->Pf;
 			hyper->epsilon=sampler->epsilonf;
+			hyper->h=hyper->P+hyper->epsilon;
 			hyper->lambda=sampler->lambdaf;
 			chargemap.insert(CChargePair(balanceID,charge));
 			norm+=1.0;
@@ -251,8 +240,6 @@ void CB3D::IncrementChiTotFromHadrons(){
 	pair<CPartMap::iterator,CPartMap::iterator> itpair_even,itpair_odd;
 	CPartMap::iterator it,ita0,itaf,itb0,itbf,ita,itb;
 	CPart *parta,*partb,*part;
-	double meanpt=0.0;
-	int npt=0;
 	for(it=PartMap.begin();it!=PartMap.end();++it){
 		part=it->second;
 		if(part->balanceID>maxbid)

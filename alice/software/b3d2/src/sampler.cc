@@ -62,7 +62,8 @@ int CSampler::GenHadronsFromHyperSurface(){
 int CSampler::GenHadronsFromHyperSurface(){
 	double Omega0Sum=0.0,udotdOmegaSum=0.0;
 	nevents+=1;
-	int ielement,nparts=0;
+	int ielement;
+	nparts=0;
 	for(ielement=0;ielement<nelements;ielement++){
 		Omega0Sum+=hyper[ielement].dOmega0;
 		udotdOmegaSum+=hyper[ielement].udotdOmega;
@@ -78,18 +79,18 @@ void CSampler::CalcPiFromParts(){
 	double pi[4][4]={0.0};
 	CPartMap::iterator ppos;
 	CPart *part;
-	double *p,pressure,Ptest=0.0,etest=0.0;
-	int ipart,alpha,beta;
+	double pressure,Ptest=0.0,etest=0.0;
+	int alpha,beta;
 	double volume=nelements*element[0].Omega[0];
 	for(ppos=b3d->DeadPartMap.begin();ppos!=b3d->PartMap.end();ppos++){
 		part=ppos->second;
 		pressure=(part->p[1]*part->p[1]+part->p[2]*part->p[2]+part->p[3]*part->p[3])/(3.0*part->p[0]);
 		Ptest+=pressure;
-		etest+=p[0];
+		etest+=part->p[0];
 		for(alpha=1;alpha<4;alpha++){
 			pi[alpha][alpha]-=pressure;
 			for(beta=1;beta<4;beta++){
-				pi[alpha][beta]+=p[alpha]*p[beta]/p[0];
+				pi[alpha][beta]+=part->p[alpha]*part->p[beta]/part->p[0];
 			}
 		}
 	}
@@ -132,11 +133,9 @@ void CSampler::ReadVolumeElements2D(){
 void CSampler::ReadVolumeElements2D_triangles(){
 	string filename;
 	CvolumeElement2D *elem;
-	double tau,deltau,H;
-	double pixx,pixy,pixz,piyy,piyz,pizz;
+	double H;
 	double dTxxoverH,dTxyoverH,dTxzoverH,dTyyoverH,dTyzoverH,dTzzoverH;
 	int ivertex,iv1,iv2,iv3,ielement,initarraysize=1000;
-	char dummy[300];
 	
 	vertex.clear();
 	filename="model_output/"+b3d->run_name+"/"+b3d->qualifier+"/vertices2D.dat";
@@ -144,7 +143,7 @@ void CSampler::ReadVolumeElements2D_triangles(){
 	
 	fscanf(fptr,"%d",&ivertex);
 	while(!feof(fptr)){
-		if(ivertex==vertex.size())
+		if(ivertex==int(vertex.size()))
 			vertex.resize(vertex.size()+initarraysize);
 		fscanf(fptr,"%lf %lf %lf %lf %lf",&vertex[ivertex].r[0],&vertex[ivertex].r[1],&vertex[ivertex].r[2],
 		&vertex[ivertex].ux,&vertex[ivertex].uy);
@@ -159,11 +158,10 @@ void CSampler::ReadVolumeElements2D_triangles(){
 	fptr=fopen(filename.c_str(),"r");
 	
 	ielement=0;
-	double e0,e1,e2;
 	fscanf(fptr,"%d %d %d",&iv1,&iv2,&iv3);
 	double pi33overPbar=0.0,pi33overPbarnorm=0.0;
 	while(!feof(fptr)){
-		if(element.size()==ielement)
+		if(int(element.size())==ielement)
 			element.resize(element.size()+initarraysize);
 		elem=&element[ielement];
 		fscanf(fptr,"%lf %lf %lf",
@@ -178,9 +176,10 @@ void CSampler::ReadVolumeElements2D_triangles(){
 		elem->epsilon=epsilonf;
 		elem->density=&densityf;
 		elem->P=Pf;
+		H=Pf+epsilonf;
+		elem->h=H;
 		elem->lambda=lambdaf;
 		elem->nhadrons=nhadronsf;
-		H=(epsilonf+Pf);
 		//elem->FillOutShearTensor(H*dTxxoverH,H*dTxyoverH,H*dTxzoverH,H*dTyyoverH,H*dTyzoverH,H*dTzzoverH);
 		elem->pitilde[1][1]=H*dTxxoverH;
 		elem->pitilde[1][2]=elem->pitilde[2][1]=H*dTxyoverH;
@@ -214,7 +213,7 @@ void CSampler::ReadVolumeElements3D(){
 	FILE *fptr=fopen(filename.c_str(),"r");
 
 	while(!feof(fptr)){
-		if(element.size()==ielement)
+		if(int(element.size())==ielement)
 			element.resize(element.size()+initarraysize);
 		elem=&element[ielement];
 
@@ -252,11 +251,12 @@ void CSampler::ReadVolumeElements3D(){
 }
 
 double CSampler::GetLambda(double T,double P,double epsilon){
-	int iQ,n,i;
+	int n,i;
 	const int nmax=70;
 	double G[nmax+5];
-	double m,degen,z,Ipp=0.0,Ipptest=0.0,dIpp,Ptest=0.0,J,nfact,sign,alpha;
-	double dIpptest=0.0,dp=4.0,p,e,lambdafact;
+	double m,degen,z,Ipp=0.0,dIpp,J,nfact,sign,alpha;
+	//double dIpptest=0.0,dp=4.0,p,e,Ipptest=0.0,Ptest=0.0;
+	double lambdafact;
 	CResInfo *resinfo;
 	CResInfoMap::iterator rpos;
 	for(rpos=reslist->resmap.begin();rpos!=reslist->resmap.end();rpos++){
@@ -268,7 +268,7 @@ double CSampler::GetLambda(double T,double P,double epsilon){
 			alpha=0.0;
 
 			G[0]=gsl_sf_gamma_inc(5,z)*pow(z,-5);
-			for(int i=1;i<nmax+5;i++){
+			for(i=1;i<nmax+5;i++){
 				n=5-2*i;
 				if(n!=-1)	G[i]=(-exp(-z)/n)+(G[i-1]*z*z-z*exp(-z))/((n+1.0)*n);
 				else G[i]=gsl_sf_gamma_inc(-1,z)*z;
@@ -309,29 +309,26 @@ double CSampler::GetLambda(double T,double P,double epsilon){
 void CSampler::ReadHyperElements2D_OSU(){
 	string filename;
 	CHyperElement *elem;
-	double dumbo,udotn,PIbulk;
-	double u0,ux,uy,x,y,udotdOmega,dOmega0,dOmegaX,dOmegaY,dOmegaMax,pitildexx,pitildeyy,pitildexy,tau;
-	int alpha,beta;
-	double sigma,PI;
+	//double PIbulk,dOmegaMax;
+	double u0,ux,uy,x,y,udotdOmega,dOmega0,dOmegaX,dOmegaY,pitildexx,pitildeyy,pitildexy,tau;
 	int ielement,initarraysize=1000;
 	char dummy[300];
 	hyper.clear();
 	nelements=0;
 	b3d->TotalVolume=0.0;
-	filename="udsdata/"+b3d->qualifier+"/hyper.dat";
+	filename="../hyperdata/"+b3d->qualifier+"/hyper.dat";
 	printf("opening %s\n",filename.c_str());
 	FILE *fptr=fopen(filename.c_str(),"r");
 	fgets(dummy,200,fptr);	fgets(dummy,200,fptr);
 	ielement=0;
-
 	while(!feof(fptr)){
-		if(hyper.size()==ielement)
+		if(int(hyper.size())==ielement)
 			hyper.resize(hyper.size()+initarraysize);
 		elem=&hyper[ielement];
 		elem->T=b3d->parmap.getD("FREEZEOUT_TEMP",0.155);
-		
 		fscanf(fptr,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&tau,&x,&y,&ux,&uy,&dOmega0,&dOmegaX,&dOmegaY,&pitildexx,&pitildeyy,&pitildexy);
+		//dOmegaX=-dOmegaX; dOmegaY=-dOmegaY;
 		if(!feof(fptr)){
 			u0=sqrt(1.0+ux*ux+uy*uy);
 			udotdOmega=u0*dOmega0-ux*dOmegaX-uy*dOmegaY;

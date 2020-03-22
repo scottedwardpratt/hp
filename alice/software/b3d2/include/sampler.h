@@ -27,7 +27,7 @@ public:
 	void CalcEquilibriumQuantities();
 	void CopyBulkQuantities(CvolumeElement2D *element);
 	void CopyEquilibriumQuantities(CvolumeElement2D *element);
-	double P,epsilon,lambda; // prefactor used for viscous corrections
+	double P,epsilon,h,lambda; // prefactor used for viscous corrections
 	void FillOutShearTensor(double &pixx,double &pixy,double &pixz,double &piyy,double &piyz,double &pizz);
 	void Print();
 	void CalcOmegaMax();

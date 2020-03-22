@@ -6,11 +6,10 @@
 #include "sampler.h"
 
 CSEInfo::CSEInfo(CB3D *b3dset){
-	int itau;
 	b3d=b3dset;
 	DELTAU=1.0;
 	RMAX=b3d->parmap.getD("B3D_XYMAX",12);
-	double TAUMAX=b3d->parmap.getD("B3D_TAUCOLLMAX",30);
+	TAUMAX=b3d->parmap.getD("B3D_TAUCOLLMAX",30);
 	TAU0=b3d->parmap.getD("SEINFO_TAU0",5);
 	NTAU=lrint(TAUMAX-TAU0);
 	ETAOVERS=0.0;
@@ -66,12 +65,9 @@ void CSEInfo::SECalc(){
 
 void CSEInfo::Print(){
 	int itau;
-	double etaf,eta;
-	double Pf=b3d->sampler->Pf,nf=b3d->sampler->nhadronsf,ef=b3d->sampler->epsilonf,Tf=b3d->sampler->Tf;
-	double sf=(Pf+ef)/Tf;
-	double alpha,dpizzoveralpha_dt,p0,p1,p2;
-	CResList *reslist=b3d->reslist;
-	double tau,volume,s;
+	double eta;
+	double alpha,dpizzoveralpha_dt,p0=0.0,p1=0.0,p2=0.0;
+	double tau,volume;
 	char filename[150];
 	sprintf(filename,"model_output/%s/%s/tij.dat",b3d->run_name.c_str(),b3d->qualifier.c_str());
 	FILE *fptr=fopen(filename,"w");

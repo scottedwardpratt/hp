@@ -17,17 +17,14 @@ elastically.
 */
 
 void CB3D::InelasticScatter(CPart *part1,CPart *part2,CPart *part3,CPart *part4,CInelasticInfo inelinfo){
-	double m0squared,m3squared,m4squared,m0,mtot,cthet,sthet,mt,phi,q,y1,y2;
+	double m0squared,m3squared,m4squared,m0,mtot,cthet,sthet,phi,q;
 	FourVector *p3=&part3->p,*p4=&part4->p;
 	FourVector p0tot,u,pprime;
 	const FourVector g={1,-1,-1,-1};
-	int ibody, alpha;
-	CPart * dptr;
+	int alpha;
 
 	part3->resinfo = inelinfo.resinfo_1;
 	part4->resinfo = inelinfo.resinfo_2;
-
-	CPart * daughter[2] = {part3, part4};
 
 	m0squared=0;
 	for(int b = 0; b< 4; b++){
@@ -74,13 +71,12 @@ Scatter: Elastically scatters two CPart objects with s-wave angular distribution
 */
 
 void CB3D::Scatter(CPart *part1,CPart *part2,CPart *part3,CPart *part4){
-	double roots=0.0,newroots,taucoll;
+	double roots=0.0;
 	double ctheta,stheta,phi,qmag,m1,m2;
 	FourVector ptot,u,q,qprime;
 	const FourVector g={1,-1,-1,-1};
 	FourVector *p1=&part1->p,*p2=&part2->p,*p3=&part3->p,*p4=&part4->p;
-	double y1,mt;
-	int nparts,ipart,alpha;
+	int alpha;
 	if(part3!=part1)
 		part3->resinfo=part1->resinfo;
 	if(part4!=part2)
@@ -124,8 +120,7 @@ If resonance can decay, A->B+C, then if B+C collide, this will merge B+C->A
 */
 bool CB3D::Merge(CPart *part1,CPart *part2,CPart *part3,CResInfo *resinfo){
 	int alpha;
-	double ptot[4],s,mt;
-	CPart *pswitch;
+	double ptot[4],s;
 	FourVector *p1=&part1->p,*p2=&part2->p;
 	bool success;
 

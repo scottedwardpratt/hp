@@ -13,24 +13,22 @@
 // If two particles pass one another, Collide will determine whether to scatter and how
 
 int CB3D::Collide(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &product,double pibsquared){
-	CPart *part3,*part4;
+	CPart *part3=NULL,*part4=NULL;
 	const double g[4]={1,-1,-1,-1};
-	double sigma=0.0,sigma_annihilation,sigma_inel,Gamma,G,G2,MR,M,b,q2,q3,q4,qR2;
+	double sigma=0.0,sigma_annihilation,Gamma,G,MR,M,b,q2=0.0,q3,q4,qR2;
 	double tan2delta;
-	double mt,P2,Pdotq,vrel;
+	double P2;
 	const int NWMAX=5000;
 	double inel_weight[NWMAX]={0.0};
 	double inel_d=0.0,q_prime;
-	int ir1,ir2,irflip,alpha,G_Value,L_merge, pmq=0, pmb=0, pms=0;
+	int ir1,ir2,irflip,alpha,G_Value,L_merge;
 	CMerge *merge;
 	list<CInelasticInfo>::iterator inel;
 	list<CInelasticInfo> inel_list;
 	bool G_Parity = false;
-	int netb=0,netq=0,nets=0,ndaughters;
-	int qpions,iK,ipair,npaircheck;
-	double Plab,p1dotp2;
-	int itau;
-	double jR,j1,j2,j1_i,j2_i,rstrange,Pcheck;
+	int netb=0,netq=0,nets=0;
+	double p1dotp2,vrel;
+	double jR,j1,j2,j1_i,j2_i;
 
 	ir1=part1->resinfo->ires; ir2=part2->resinfo->ires;
 	if(ir1>ir2){
@@ -90,8 +88,6 @@ int CB3D::Collide(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &prod
 		sigma_annihilation=GetAnnihilationSigma(part1,part2,vrel);
 		sigma+=sigma_annihilation;
 		if(pibsquared<sigma && tau<TAUCOLLMAX){
-			itau=lrint(floor(tau));
-			//annihilation_array[itau]+=1.0;
 			Annihilate(part1,part2,nproducts,product);
 			return 4;
 		}

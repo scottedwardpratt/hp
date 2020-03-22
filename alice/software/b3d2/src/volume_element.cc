@@ -64,25 +64,17 @@ void CvolumeElement2D::CopyEquilibriumQuantities(CvolumeElement2D *element){
 int CvolumeElement2D::MakeParts(){
 	int nparts=0;
 	CPart *part;
-	double h=P+epsilon;
 	FourVector g={1,-1,-1,-1};
-	double weight,pdotdOmega,mass,et,eta,y,ran1,ran2;
+	double weight,pdotdOmega,mass,ran1,ran2;
 	int ires,alpha,beta,intweight,n,nsample=sampler->b3d->NSAMPLE; 
-	bool idecay=0;
 	bool create_negparts=sampler->b3d->COOPERFRYE_CREATENEGPARTS;
 	FourVector p,plab,pnoviscous,u;
 	double delN,r[3],w[3];
-	double udotdOmega;
 	double delNtot=nhadrons*OmegaMax*Xscale*nsample;
-	//printf("------ delNtot=%g,OmegaMax=%g,Xscale=%g,nhadrons=%g,nsample=%d\n",delNtot,OmegaMax,Xscale,nhadrons,nsample);
 	CResInfoMap *resmap=&sampler->reslist->resmap;
 	CResInfoMap::iterator rpos;
 	CResInfo *resinfo;
 	CRandy *randy=sampler->randy;
-	//printf("In CvolumeElement2D::MakeParts, OmegaMax=%g,nhadrons=%g,Xscale=%g,delNtot=%g\n",OmegaMax,nhadrons,Xscale,delNtot);
-	//printf("Omega=(%g,%g,%g,%g)\n",Omega[0],Omega[1],Omega[2],Omega[3]);
-	//Misc::Pause();
-
 	if(sampler->cummulative_N+delNtot > sampler->cummulative_random){
 		for(rpos=resmap->begin();rpos!=resmap->end();rpos++){
 			resinfo=rpos->second;
@@ -182,7 +174,7 @@ int CvolumeElement2D::MakeParts(){
 }
 
 void CvolumeElement2D::CalcOmegaMax(){
-	double omax,Omega2,udotdOmega,u0;
+	double omax,Omega2,u0;
 	Omega2=Omega[0]*Omega[0]-Omega[1]*Omega[1]-Omega[2]*Omega[2];
 	if(sampler->TRIANGLE_FORMAT){
 		OmegaMax=0.0;
@@ -202,7 +194,7 @@ void CvolumeElement2D::CalcOmegaMax(){
 }
 
 void CvolumeElement2D::CalcOmegaMax3D(){
-	double Omega2,udotdOmega,u0;
+	double Omega2,u0;
 	Omega2=Omega[0]*Omega[0]-Omega[1]*Omega[1]-Omega[2]*Omega[2]-Omega[3]*Omega[3];
 	u0=sqrt(1.0+ux*ux+uy*uy+uz*uz);
 	udotdOmega=u0*Omega[0]-ux*Omega[1]-uy*Omega[2]-uz*Omega[3];

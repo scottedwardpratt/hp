@@ -19,7 +19,7 @@ bool CB3D::FindCollision(CPart *part1,CPart *part2,double &taucoll){
 	CB3DCell *cell2=part2->cell;
 	double p1dotp2=0.0,p1dotr=0.0,p2dotr=0.0,m1squared,m2squared,rsquared=0.0;
 	double tau1,tau2,eta1,y1,mt,t1,t2,z1,z2,x1,x2,y2;
-	FourVector u,p1,p2,r1,r2,q,P,r;
+	FourVector p1,p2,r1,r2,r;
 	double pibsquared;
 	const int g[4]={1,-1,-1,-1};
 	int alpha;
@@ -31,9 +31,7 @@ bool CB3D::FindCollision(CPart *part1,CPart *part2,double &taucoll){
 	}
 	m1squared=part1->msquared;
 	m2squared=part2->msquared;
-	bool flip=false; // check for collisions across cyclic boundary
 	if(BJORKEN && ((cell1->ieta==0 && cell2->ieta==2*NETA-1) || (cell1->ieta==2*NETA-1 && cell2->ieta==0))){
-		flip=true;
 		tau1=part1->tau0;
 		if(cell1->ieta==0){
 			eta1=part1->eta+2.0*ETAMAX; y1=part1->y+2.0*ETAMAX;

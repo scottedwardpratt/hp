@@ -160,7 +160,7 @@ double CResInfo::GenerateMass(){
 	if(decay){
 		double m1=branchlist[0]->resinfoptr[0]->mass;
 		double m2=0.0;
-		for(int n=1;n<(branchlist[0]->resinfoptr.size());n++){
+		for(int n=1;n<int(branchlist[0]->resinfoptr.size());n++){
 			m2+=branchlist[0]->resinfoptr[n]->mass;
 		}
 		double kr=sqrt(pow((mass*mass-m1*m1-m2*m2),2.0)-pow((2.0*m1*m2),2.0))/(2.0*mass);
@@ -188,7 +188,7 @@ double CResInfo::GenerateThermalMass(double maxweight, double T){
 	if(decay || maxweight<0.0){
 		m1=branchlist[0]->resinfoptr[0]->mass;
 		m2=0.0;
-		for(int n=1;n<(branchlist[0]->resinfoptr.size());n++){
+		for(int n=1;n<int(branchlist[0]->resinfoptr.size());n++){
 			m2+=branchlist[0]->resinfoptr[n]->mass;
 		}
 		k2mr = std::cyl_bessel_k(2,mass/T); // K2 for resmass
@@ -258,7 +258,7 @@ void CResList::freegascalc_onespecies(double m,double T,double &epsilon,double &
 }
 
 void CResList::freegascalc_onespecies_finitewidth(double resmass, double m1, double m2, double T, double width,
-double minmass,double &epsilon,double &P,double &dens,double &sigma2,
+double &epsilon,double &P,double &dens,double &sigma2,
 double &dedt,double &maxweight){
 
 	double kr,k,E,E0,dE,gamma,rho,percent,dp,closest;
@@ -314,13 +314,13 @@ double &dedt,double &maxweight){
 
 void CResList::ReadResInfo(){
 	CMerge *merge;
-	int mothercode,code,decay,strange,charge,baryon,NResonances;
-	double mass,mothermass,spin,width,bsum,netm,qR2,bmax;
-	int ires,jres,ires1,ires2,iresflip,ichannel,nchannels,ibody,nbodies,length, LDecay, i_inel;
-	int netq,netb,nets, netg, G_Parity;
+	int mothercode,code,decay,NResonances;
+	double mothermass,bsum,netm,qR2,bmax;
+	int ires,jres,ires1,ires2,iresflip,ichannel,nchannels,ibody,nbodies,LDecay;
+	int netq,netb,nets;
 	string name, filename;
-	CResInfo *resinfoptr=NULL,*oldresinfoptr=NULL, *resinfoptr_1 = NULL;
-	CBranchInfo *bptr=NULL,*oldbptr=NULL,*firstbptr=NULL;
+	CResInfo *resinfoptr=NULL;
+	CBranchInfo *bptr=NULL,*firstbptr=NULL;
 	FILE *resinfofile;
 	FILE * decayinfofile;
 	char dummy[200],cname[200];
@@ -470,11 +470,9 @@ CResInfo* CResList::GetResInfoPtr(int code){
 void CResList::CalcConductivity(double T,double &P,double &epsilon,double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &chi,Eigen::Matrix3d &sigma){
 	CResInfo *resinfoptr;
 	CResInfoMap::iterator rpos;
-	double m,m1,m2,degen,s;
+	double m,m1=0.0,m2=0.0,degen,s;
 	double width,minmass,maxweighti;
-	double Qu,Qd,Qs,Q,S,B;
-	double pi,epsiloni,densi,sigma2i,dedti,si,Ji;
-	char dummy[100];
+	double pi,epsiloni,densi,sigma2i,dedti,Ji;
 	Eigen::Matrix3d sigmai(3,3);
 	int a,b,n,ires;
 	chi.setZero();
@@ -496,13 +494,12 @@ void CResList::CalcConductivity(double T,double &P,double &epsilon,double &nh,ve
 				if(resinfoptr->decay){
 					m1=resinfoptr->branchlist[0]->resinfoptr[0]->mass;
 					m2=0.0;
-					for(n=1;n<(resinfoptr->branchlist[0]->resinfoptr.size());n++){
+					for(n=1;n<int(resinfoptr->branchlist[0]->resinfoptr.size());n++){
 						m2+=resinfoptr->branchlist[0]->resinfoptr[n]->mass;
 					}
 				}
 				if((minmass>0.0)&&(width>1.0E-3)){
-					freegascalc_onespecies_finitewidth(m,m1,m2,T,width,minmass,
-					epsiloni,pi,densi,sigma2i,dedti,maxweighti);
+					freegascalc_onespecies_finitewidth(m,m1,m2,T,width,epsiloni,pi,densi,sigma2i,dedti,maxweighti);
 				}
 				else{
 					freegascalc_onespecies(m,T,epsiloni,pi,densi,sigma2i,dedti,Ji);
@@ -515,9 +512,6 @@ void CResList::CalcConductivity(double T,double &P,double &epsilon,double &nh,ve
 			nh+=densi*degen;
 			density[ires]=densi*degen;
 			maxweight[ires]=maxweighti;
-			Q=resinfoptr->charge;
-			B=resinfoptr->baryon;
-			S=resinfoptr->strange;
 			for(a=0;a<3;a++){
 				for(b=0;b<3;b++){
 					chi(a,b)+=densi*degen*resinfoptr->q[a]*resinfoptr->q[b];
@@ -535,11 +529,9 @@ void CResList::CalcEoSandChi(double T,double &P,double &epsilon,
 double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &chi){
 	CResInfo *resinfoptr;
 	CResInfoMap::iterator rpos;
-	double m,m1,m2,degen,s;
+	double m,m1=0.0,m2=0.0,degen,s;
 	double width,minmass,maxweighti;
-	double Qu,Qd,Qs,Q,S,B;
-	double pi,epsiloni,densi,sigma2i,dedti,si;
-	char dummy[100];
+	double pi,epsiloni,densi,sigma2i,dedti;
 	double netchi=0.0,netchi0=0.0;
 	int a,b,n,ires;
 	chi.setZero();
@@ -560,12 +552,12 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 				if(resinfoptr->decay){
 					m1=resinfoptr->branchlist[0]->resinfoptr[0]->mass;
 					m2=0.0;
-					for(n=1;n<(resinfoptr->branchlist[0]->resinfoptr.size());n++){
+					for(n=1;n<int(resinfoptr->branchlist[0]->resinfoptr.size());n++){
 						m2+=resinfoptr->branchlist[0]->resinfoptr[n]->mass;
 					}
 				}
 				if((minmass>0.0)&&(width>1.0E-3)){
-					freegascalc_onespecies_finitewidth(m,m1,m2,T,width,minmass,
+					freegascalc_onespecies_finitewidth(m,m1,m2,T,width,
 					epsiloni,pi,densi,sigma2i,dedti,maxweighti);
 				}
 				else{
@@ -579,9 +571,6 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 			nh+=densi*degen;
 			density[ires]=densi*degen;
 			maxweight[ires]=maxweighti;
-			Q=resinfoptr->charge;
-			B=resinfoptr->baryon;
-			S=resinfoptr->strange;
 			for(a=0;a<3;a++){
 				for(b=0;b<3;b++){
 					chi(a,b)+=densi*degen*resinfoptr->q[a]*resinfoptr->q[b];
@@ -609,11 +598,13 @@ double CResList::triangle(double m0,double m1,double m2){
 }
 
 double CResList::GetLambda(double T,double P,double epsilon){
-	int iQ,n,i;
+	int i,n;
 	const int nmax=70;
 	double G[nmax+5];
-	double m,degen,z,Ipp=0.0,Ipptest=0.0,dIpp,Ptest=0.0,J,nfact,sign,alpha;
-	double dIpptest=0.0,dp=4.0,p,e,lambdafact;
+	double m,degen,z,Ipp=0.0,dIpp=0.0;
+	//double Ipptest=0.0,Ptest=0.0,dIpptest=0.0,dp=4.0,p,e;
+	double J,nfact,sign,alpha;
+	double lambdafact;
 	CResInfo *resinfo;
 	CResInfoMap::iterator rpos;
 	for(rpos=resmap.begin();rpos!=resmap.end();rpos++){
@@ -625,7 +616,7 @@ double CResList::GetLambda(double T,double P,double epsilon){
 			alpha=0.0;
 
 			G[0]=gsl_sf_gamma_inc(5,z)*pow(z,-5);
-			for(int i=1;i<nmax+5;i++){
+			for(i=1;i<nmax+5;i++){
 				n=5-2*i;
 				if(n!=-1)	G[i]=(-exp(-z)/n)+(G[i-1]*z*z-z*exp(-z))/((n+1.0)*n);
 				else G[i]=gsl_sf_gamma_inc(-1,z)*z;
@@ -639,7 +630,7 @@ double CResList::GetLambda(double T,double P,double epsilon){
 				nfact=nfact*0.5/(n+1.0);
 				if(n>0) nfact*=(2.0*n-1.0);
 			}
-			//dIpp=degen*exp(alpha)*pow(m,4)*(-z*J+15.0*gsl_sf_bessel_Kn(2,z)/(z*z));
+			dIpp=degen*exp(alpha)*pow(m,4)*(-z*J+15.0*gsl_sf_bessel_Kn(2,z)/(z*z));
 			dIpp=degen*exp(alpha)*pow(m,4)*(-z*J+15.0*std::cyl_bessel_k(2,z)/(z*z));
 			dIpp=dIpp/(60.0*PI*PI*HBARC*HBARC*HBARC);
 			/*

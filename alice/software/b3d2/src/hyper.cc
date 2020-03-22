@@ -49,13 +49,10 @@ void CHyperElement::Print(){
 int CHyperElement::MakeParts(){
 	int nparts=0;
 	CPart *part;
-	double h=P+epsilon;
-	FourVector g={1,-1,-1,-1};
-	double bweight,mass,et,eta,rapidity,ran1,ran2;
-	int ires,alpha,beta,n,nsample=sampler->NSAMPLE;
-	bool idecay=0;
-	FourVector p,plab,pnoviscous;
-	double delN,r[3],w[3];
+	double bweight,mass,eta,rapidity;
+	int ires,nsample=sampler->NSAMPLE;
+	FourVector plab;
+	double delN,r[3];
 	double delNtot=nhadrons*udotdOmega*nsample;
 	CResInfoMap *resmap=&(sampler->reslist->resmap);
 	CResInfoMap::iterator rpos;

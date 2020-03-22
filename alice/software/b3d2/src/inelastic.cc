@@ -11,7 +11,6 @@ bool CInelasticList::UseFile = false;
 bool CInelasticList::UseInelasticArray = false;
 
 CInelasticList::CInelasticList(){
-	string filename;
 	ifstream inelasticfile;
 	// UseFile = false;
 	// UseInelasticArray = true;
@@ -78,7 +77,7 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 	double foo = 0;
 	CResInfo *resinfoptr_1 = NULL,*resinfoptr_2 = NULL;
 	CResInfoMap::iterator rpos1,rpos2;
-	CInelasticInfo *temp, *temp2;
+	CInelasticInfo *temp;
 	list<CInelasticInfo>::iterator Th_iter;
 	CResList *reslist=b3d->reslist;
 	int nres=reslist->resmap.size();
@@ -196,9 +195,9 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 					inelasticfile << "#INELASTIC_ARRAY" << endl;
 					for(int i = 1; i <= nres; i++){
 						for(int j = 1; j <= nres; j++){
-							list<CInelasticInfo> temp = InelasticArray[i][j];
-							if(temp.size() > 0){
-								inelasticfile << i << "\t" << j << "\t" << temp.size() << endl;
+							list<CInelasticInfo> templist = InelasticArray[i][j];
+							if(templist.size() > 0){
+								inelasticfile << i << "\t" << j << "\t" << templist.size() << endl;
 								Th_iter = InelasticArray[i][j].begin();
 								while(Th_iter != InelasticArray[i][j].end()){
 									inelasticfile << "\t" << Th_iter->resinfo_1->ires << "\t" << Th_iter->resinfo_2->ires << endl;
