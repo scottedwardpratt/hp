@@ -8,14 +8,14 @@
 void CB3D::AddAction_Activate(CPart *part){
 	CActionMap::iterator epos;
 	part->active=false;
-	CAction *action=GetDeadAction();
+	CAction *action;
 	if(BJORKEN && fabs(part->eta)>ETAMAX){
 		printf("CB3D::AddAction_Activate, eta out of bounds, =%g\n",fabs(part->eta));
 		exit(1);
 	}
 	action=GetDeadAction();
 	if(action->currentmap==&ActionMap){
-		printf("don't even try, key=%d\n",int(action->key));
+		printf("don't even try, action wasn't dead, key=%d\n",int(action->key));
 		exit(1);
 	}
 	action->type=0;

@@ -6,12 +6,19 @@
 #include "resonances.h"
 #include "randy.h"
 #include "cell.h"
+#include "misc.h"
 
 using namespace std;
 
 double CB3D::WriteOSCAR(int ievent){
 	CB3DBinaryPartInfo bpart;
-	printf("writing to %s\n",oscarfilename.c_str());
+	double dnchdy=0;
+	int ipart;
+	CPart *part;
+	CPartMap::iterator ppos;
+	
+	int nparts=PartMap.size();
+	printf("writing %d particles to %s\n",nparts,oscarfilename.c_str());
 	if(oscarfile==NULL){
 		if(BINARY_RW)
 			oscarfile=fopen(oscarfilename.c_str(),"wb");
@@ -22,7 +29,6 @@ double CB3D::WriteOSCAR(int ievent){
 			fprintf(oscarfile,"b3d output\n");
 		}
 	}
-	int nparts=PartMap.size();
 	if(BINARY_RW){
 		fwrite(&ievent,sizeof(int),1,oscarfile);
 		fwrite(&nparts,sizeof(int),1,oscarfile);
@@ -30,11 +36,6 @@ double CB3D::WriteOSCAR(int ievent){
 	else
 		fprintf(oscarfile,"%7d %6d    %8.5f     %8.5f\n",ievent,nparts,parmap.getD("GLAUBER_B",0.0),
 	parmap.getD("GLAUBER_B",0.0));
-	double dnchdy=0;
-	int ipart;
-	CPart *part;
-	CPartMap::iterator ppos;
-	printf("writing %d particles, nparts=%d\n",int(PartMap.size()),nparts);
 	ppos=PartMap.begin();
 	for(ipart=0;ipart<nparts;ipart++){
 		part=ppos->second;

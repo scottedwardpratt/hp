@@ -70,8 +70,6 @@ int CSampler::GenHadronsFromHyperSurface(){
 		nparts+=hyper[ielement].MakeParts();
 	}
 	printf("Event %4d sampling: %d parts created from Hyper Surface\n",nevents-1,int(b3d->PartMap.size()));
-	printf("Omega0Sum=%g, udotdOmegaSum=%g\n",Omega0Sum,udotdOmegaSum);
-	//Misc::Pause();
 	return nparts;
 }
 
@@ -305,7 +303,6 @@ double CSampler::GetLambda(double T,double P,double epsilon){
 	return lambdafact;
 }
 
-
 void CSampler::ReadHyperElements2D_OSU(){
 	string filename;
 	CHyperElement *elem;
@@ -359,6 +356,7 @@ void CSampler::ReadHyperElements2D_OSU(){
 			elem->density=&densityf;
 			elem->T=Tf;
 			elem->P=Pf;
+			elem->h=elem->P+elem->epsilon;
 			elem->lambda=lambdaf;
 			elem->nhadrons=nhadronsf;
 			elem->maxweight=&maxweightf;

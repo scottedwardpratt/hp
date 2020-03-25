@@ -2,6 +2,7 @@
 #include "sampler.h"
 #include "part.h"
 #include "randy.h"
+#include "misc.h"
 
 //#define __XYREFLECT__
 

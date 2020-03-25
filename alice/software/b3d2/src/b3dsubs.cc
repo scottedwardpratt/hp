@@ -64,8 +64,8 @@ void CB3D::KillAllParts(){
 			part->Print();
 			printf("PartMap.size=%d, DeadPartMap.size=%d\n",int(PartMap.size()),int(DeadPartMap.size()));
 			part->currentmap=&PartMap;
-			//exit(1);
-			Misc::Pause();
+			exit(1);
+			//Misc::Pause();
 		}
 		part->Kill();
 		ppos=PartMap.begin();
@@ -396,8 +396,8 @@ void CB3D::GetDeadParts(array<CPart*,5> &product){
 CAction* CB3D::GetDeadAction(){
 	if(DeadActionMap.size()==0){
 		for(int iaction=0;iaction<DELNACTIONSTOT*NSAMPLE;iaction++)
-			new CAction(nactionstot);
-		printf("created new actions, nactionstot=%d\n",nactionstot);
+			new CAction(nactionstot);		
+		printf("created %d new actions, nactionstot=%d\n",DELNACTIONSTOT*NSAMPLE,nactionstot);
 	}
 	return DeadActionMap.begin()->second;
 }

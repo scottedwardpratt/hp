@@ -244,11 +244,23 @@ void CPart::Propagate(double tau){
 	if(b3d->BJORKEN && fabs(eta)>b3d->ETAMAX){
 		printf("eta screwy before propagation\n");
 		printf("eta=%g\n",eta);
+		exit(1);
 	}
-	double t0;
+	double t0,etai=eta;
 	CPartMap::iterator neighbor;
 	if(active==true){
 		eta=GetEta(tau);//y-asinh((tau0/tau)*sinh(y-eta));
+		if(currentmap==&(b3d->PartMap) && b3d->tau<b3d->TAUCOLLMAX && fabs(eta)>0.000001+b3d->ETAMAX && b3d->BJORKEN && b3d->COLLISIONS){
+			printf("eta out of bounds after propagation,correcting, etai=%g, etaf=%g, taui=%g, tauf=%g\n",etai,eta,tau0,tau);
+			Print();
+			if(eta>b3d->ETAMAX)
+				eta=b3d->ETAMAX;
+			if(eta<-b3d->ETAMAX)
+				eta=-b3d->ETAMAX;
+			r[0]=tau0*cosh(eta);
+			r[3]=tau0*sinh(eta);
+			Misc::Pause();
+		}
 		tau0=tau;
 		t0=r[0];
 		r[0]=tau0*cosh(eta);
@@ -260,17 +272,6 @@ void CPart::Propagate(double tau){
 		r[0]=tau*cosh(eta);
 		r[3]=tau*sinh(eta);
 		tau0=tau;
-	}
-	if(currentmap==&(b3d->PartMap) && tau<b3d->TAUCOLLMAX && fabs(eta)>0.000001+b3d->ETAMAX && b3d->BJORKEN && b3d->COLLISIONS){
-		printf("eta out of bounds after propagation,correcting\n");
-		Print();
-		if(eta>b3d->ETAMAX)
-			eta=b3d->ETAMAX;
-		if(eta<-b3d->ETAMAX)
-			eta=-b3d->ETAMAX;
-		r[0]=tau0*cosh(eta);
-		r[3]=tau0*sinh(eta);
-		//exit(1);
 	}
 }
 

@@ -32,6 +32,7 @@ CActionMap::iterator CAction::GetPos(CActionMap *emap){
 		++epos;
 	}
 	if(epos->second!=this){
+		printf("CAction::GetPos cannot find this action\n");
 		return emap->end();
 	}
 	else return epos;
@@ -51,7 +52,8 @@ void CAction::MoveToActionMap(){
 			partmap.clear();
 		}
 		else{
-			printf("can't find epos!!!\n");
+			printf("cannot find epos for action in DeadActionMap!!!\n");
+			printf("DeadActionMap.size=%d\n",int(b3d->DeadActionMap.size()));
 			exit(1);
 		}
 		key=tau;
@@ -79,7 +81,7 @@ void CAction::Kill(){
 		}
 		currentmap->erase(epos);
 		b3d->nactionkills+=1;
-		//key=0;
+		key=0;
 		AddToMap(b3d->DeadActionMap.end(),&b3d->DeadActionMap);
 		//AddToMap(&b3d->DeadActionMap);
 		ppos=partmap.begin();
@@ -134,7 +136,7 @@ void CAction::CheckPartList(){
 			printf("____________ CAction::CheckPartList FATAL, action type=%d ________________\n",type);
 			printf("iterator not in expected pmap\n");
 			part->Print();
-			//exit(1);
+			exit(1);
 		}
 		++ppos;
 	}
