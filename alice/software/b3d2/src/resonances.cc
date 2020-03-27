@@ -191,7 +191,7 @@ double CResInfo::GenerateThermalMass(double maxweight, double T){
 		for(int n=1;n<int(branchlist[0]->resinfoptr.size());n++){
 			m2+=branchlist[0]->resinfoptr[n]->mass;
 		}
-		k2mr = std::cyl_bessel_k(2,mass/T); // K2 for resmass
+		k2mr = gsl_sf_bessel_Kn(2,mass/T); // K2 for resmass
 		kr=pow(mass*mass-m1*m1-m2*m2,2) - (4*m1*m1*m2*m2);
 		kr = (1/(2*mass))*sqrt(kr); // k at resonant mass
 		int i = 0; // for use in while loop
@@ -205,7 +205,7 @@ double CResInfo::GenerateThermalMass(double maxweight, double T){
 			gamma=width*pow((2.0*k*k)/(k*k+kr*kr),alpha);
 			rho=(2.0/(width*PI))*(0.25*gamma*gamma)/((0.25*gamma*gamma)+(mass-m)*(mass-m));
 			lor = (width/(2*PI))/(pow(width/2,2.0) + pow(mass-m,2.0));
-			k2 = std::cyl_bessel_k(2,(m/T)); // K2 value
+			k2 = gsl_sf_bessel_Kn(2,(m/T)); // K2 value
 			weight = rho*k2*m*m/(lor*k2mr*mass*mass*maxweight);
 			if (r2 < weight) i = 1; // success
 		}
@@ -242,8 +242,8 @@ void CResList::freegascalc_onespecies(double m,double T,double &epsilon,double &
 			printf("___z=%g,m=%g,T=%g ___\n",z,m,T);
 			exit(1);
 		}
-		k0=std::cyl_bessel_k(0,z);
-		k1=std::cyl_bessel_k(1,z);
+		k0=gsl_sf_bessel_Kn(0,z);
+		k1=gsl_sf_bessel_Kn(1,z);
 		P=prefactor*(m2*t2*k0+2.0*m*t3*k1);
 		epsilon=prefactor*(3.0*m2*t2*k0+(m3*T+6.0*m*t3)*k1);
 		dens=P/T;
@@ -285,8 +285,8 @@ double &dedt,double &maxweight){
 		rho=(2.0/(width*PI))*0.25*gamma*gamma/((0.25*gamma*gamma)+(resmass-E)*(resmass-E));
 		sum+=rho*dE;
 
-		n0=std::cyl_bessel_k(2,E/T)*E*E*T/(2*PI*PI*pow(HBARC,3.0));
-		resn0=std::cyl_bessel_k(2,resmass/T)*resmass*resmass*T/(2*PI*PI*pow(HBARC,3.0));
+		n0=gsl_sf_bessel_Kn(2,E/T)*E*E*T/(2*PI*PI*pow(HBARC,3.0));
+		resn0=gsl_sf_bessel_Kn(2,resmass/T)*resmass*resmass*T/(2*PI*PI*pow(HBARC,3.0));
 		lor=(width/(2.0*PI))/(0.25*width*width+(resmass-E)*(resmass-E));
 		weight=n0*rho/(resn0*lor);
 
@@ -631,7 +631,6 @@ double CResList::GetLambda(double T,double P,double epsilon){
 				if(n>0) nfact*=(2.0*n-1.0);
 			}
 			dIpp=degen*exp(alpha)*pow(m,4)*(-z*J+15.0*gsl_sf_bessel_Kn(2,z)/(z*z));
-			dIpp=degen*exp(alpha)*pow(m,4)*(-z*J+15.0*std::cyl_bessel_k(2,z)/(z*z));
 			dIpp=dIpp/(60.0*PI*PI*HBARC*HBARC*HBARC);
 			/*
 			dIpptest=0.0;
