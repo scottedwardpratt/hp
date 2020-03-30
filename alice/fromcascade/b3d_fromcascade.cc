@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
 	int ievent,iqual,nevents;
 	string run_name=argv[1];
 	int ievent0=atoi(argv[2]),ieventf=atoi(argv[3]);
-	nevents=1+ieventf-ievent0;
+	nevents=ieventf-ievent0;
 	printf("ievent0=%d, ieventf=%d\n",ievent0,ieventf);
 	CB3D *b3d=new CB3D(run_name);
 	b3d->InitCascade();

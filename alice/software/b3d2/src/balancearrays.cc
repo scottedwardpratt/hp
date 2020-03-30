@@ -305,7 +305,7 @@ void CBalanceArrays::ProcessBFPartMap(){
 			bfpartmap.insert(CPartPair(part->balanceID,part));
 	}
 	printf("maxbid=%d, bfpartmap.size=%d\n",maxbid,int(bfpartmap.size()));
-
+	
 	for(balanceID=0;balanceID<maxbid;balanceID+=2){
 		itpair_even=bfpartmap.equal_range(balanceID);
 		itpair_odd=bfpartmap.equal_range(balanceID+1);
@@ -338,6 +338,7 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 	double ya,yb,dely,B3D_ETAMAX=b3d->ETAMAX;
 	CPartMap::iterator it;
 	multimap<double,CPart *>::iterator ita,itb;
+	int netN=0,netQ=0;
 	CPart *parta,*partb;
 	pair<CPartMap::iterator,CPartMap::iterator> itpair;
 	printf("processing %d parts in PartMap\n",int(b3d->PartMap.size()));
@@ -353,6 +354,11 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 	else{
 		for(it=b3d->PartMap.begin();it!=b3d->PartMap.end();++it){
 			parta=it->second;
+			if(abs(parta->resinfo->charge)==1){
+				netN+=1;
+				netQ+=parta->resinfo->charge;
+			}
+			
 			if(parta->balanceID<0){
 				ya=atanh(parta->p[3]/parta->p[0]);
 				while(ya<-B3D_ETAMAX)
@@ -362,6 +368,7 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 				ppartmap.insert(pair<double,CPart* >(ya,parta));
 			}
 		}
+		printf("ppartmap built\n");
 		ita=ppartmap.begin();
 		do{
 			parta=ita->second;
@@ -391,6 +398,7 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 		}while(ita!=ppartmap.end());
 		ppartmap.clear();
 	}
+	printf("netN=%d, netQ=%d\n",netN,netQ);
 }
 
 void CBalanceArrays::ProcessV2Perfect(){

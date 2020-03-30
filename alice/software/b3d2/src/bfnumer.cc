@@ -74,6 +74,7 @@ void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
 	QaQb=(parta->resinfo->charge*parta->bweight)*(partb->resinfo->charge*partb->bweight);
 	QaQb*=effa*effb;
 	CaCb=parta->bweight*partb->bweight*effa*effb;
+	//printf("QaQb=%g, CaCb=%g\n",QaQb,CaCb);
 	deletas=fabs(parta->eta-partb->eta);
 	npairs+=QaQb;
 	
