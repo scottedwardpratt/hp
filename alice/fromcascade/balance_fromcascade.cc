@@ -35,7 +35,8 @@ int main(int argc, char *argv[]){
 			printf("------ beginning, ievent=%d --------\n",ievent);
 			b3d->Reset();
 			b3d->randy->reset(-ievent);
-			b3d->ReadOSCAR(ievent);
+			//b3d->ReadOSCAR(ievent);
+			b3d->ReadBalanceParts(ievent);
 			//b3d->PerformAllActions();
 			printf("nparts=%d\n",int(b3d->PartMap.size()));
 			npartstot+=b3d->PartMap.size();

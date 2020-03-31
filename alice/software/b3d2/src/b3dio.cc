@@ -136,6 +136,7 @@ int CB3D::ReadOSCAR(int ievent){
 	return nparts_read;
 }
 
+/*
 void CB3D::ReadBalanceParts(){
 	vector<int> netcharge(50000,0);
 	string filename=parmap.getS("BALANCE_INPUT_FILENAME","vinzentdata/hadrons.csv");
@@ -223,8 +224,9 @@ void CB3D::ReadBalanceParts(){
 	printf("netbal=%d\n",netbal);
 	printf("--- nbalpairs=%d, nqgppions=%d, sigma=%g\n",nbalpairs,nqgppions,sqrt(sigma/double(nsigma)));
 }
+*/
 
-double CB3D::WriteBalance(int ievent){
+double CB3D::WriteBalanceParts(int ievent){
 	printf("In WriteBalance..... PartMap.size()=%d\n",int(PartMap.size()));
 	CB3DBinaryBalancePartInfo bpart;
 	double sigma=0;
@@ -285,15 +287,13 @@ double CB3D::WriteBalance(int ievent){
 	return dnchdy/(2.0*ETAMAX);
 }
 
-int CB3D::ReadBalance(int ievent){
+int CB3D::ReadBalanceParts(int ievent){
 	CB3DBinaryBalancePartInfo bpart;
 	CResInfo *resinfo;
 	double p[4],r[4],mass,rapidity,eta,tau0;
 	int weight,ID,balanceID;
 	int nparts_read,ipart=0;
 	int ievent_read;
-	double sigma=0;
-	int nsigma=0;
 	double bmin,bmax; // impact parameter
 	CPart *mother;
 	tau=0.0;
@@ -323,6 +323,7 @@ int CB3D::ReadBalance(int ievent){
 			p[2]=bpart.py;
 			rapidity=bpart.rapidity;
 			balanceID=bpart.balanceID;
+			//printf("ID=%d, p=(%g,%g), y=%g, bID=%d\n",ID,p[1],p[2],rapidity,balanceID);
 		}
 		else{
 			printf("should only work for binary rw\n");
@@ -333,17 +334,16 @@ int CB3D::ReadBalance(int ievent){
 		//ipart,ID,p[1],p[2],rapidity,nparts_read);
 		r[1]=r[2]=0.0;
 		eta=rapidity;
+		while(fabs(eta)>ETAMAX)
+			eta-=2.0*ETAMAX*fabs(eta)/eta;
 		tau0=10.0;
 		weight=1.0;
 		resinfo=reslist->GetResInfoPtr(ID);
 		mass=resinfo->mass;
 		if(resinfo->charge!=0 || resinfo->decay){
 			mother->InitBalance(ID,r[1],r[2],tau0,eta,p[1],p[2],mass,rapidity,weight,balanceID);
-			sigma+=rapidity*rapidity;
-			nsigma+=1;
 		}
 	}
-	printf("ReadBalance -- sigma=%g\n",sqrt(sigma/double(nsigma)));
 	return nparts_read;
 }
 

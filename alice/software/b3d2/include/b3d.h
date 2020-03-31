@@ -92,7 +92,11 @@ public:
 	void SetQualifier(string qualifier_set);
 	void MovePartsToFinalMap();
 	double WriteOSCAR(int ievent);  // returns dnch/deta
-	double WriteBalance(int ievent); // returns dnch/deta
+	void ReadOSCARHeader();
+	int ReadOSCAR(int ievent);
+	double WriteBalanceParts(int ievent); // returns dnch/deta
+	//void ReadBalanceParts();
+	int ReadBalanceParts(int ievent);
 	void WriteDens();
 	void WriteAnnihilationData();
 	
@@ -148,16 +152,12 @@ public:
 	
 	bool BALANCE_DECAY,BALANCE_CALC;
 	int ibalmax;
-	void ReadBalanceParts();
 	
 	// These are used for Analysis
 	CPart **partarray;
 	bool CALCGARRAYS;
 	bool STAR_ACCEPTANCE;
 	CRegenerate *regen;
-	int ReadOSCAR(int ievent);
-	int ReadBalance(int ievent);
-	void ReadOSCARHeader();
 	int DecayParts(int nparts);
 	double CalcSpectra_PHENIX();
 	void CalcSpectra_PHENIXppbar();

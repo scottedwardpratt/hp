@@ -47,7 +47,7 @@ int main(int argc, char *argv[]){
 			nannihilate+=b3d->nannihilate;
 			nregen+=b3d->nregenerate;
 			npartstot+=b3d->PartMap.size();
-			b3d->WriteOSCAR(ievent);
+			b3d->WriteBalanceParts(ievent);
 			//barray->ProcessPartMap();
 		}
 		norm=nevents*b3d->NSAMPLE;
