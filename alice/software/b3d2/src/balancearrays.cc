@@ -220,8 +220,9 @@ void CBalanceArrays::ConstructBF(CBFNumer *numer,CBFDenom *denom,CBFNumer *bf,do
 	}
 	int iy,iphi;
 	for(iy=0;iy<numer->Netabins;iy++){
-		for(iphi=0;iphi<numer->Nphibins;iphi++)
-			bf->Nyphi[iy][iphi]=numer->Cphi[ibin];
+		for(iphi=0;iphi<numer->Nphibins;iphi++){
+			bf->Nyphi[iy][iphi]=numer->Nyphi[iy][iphi];
+		}
 	}
 	printf("%7s: normalization=%g, npairs=%g\n",bf->name.c_str(),norm,bf->npairs);
 }

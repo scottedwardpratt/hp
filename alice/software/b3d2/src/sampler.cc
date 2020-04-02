@@ -74,14 +74,11 @@ int CSampler::GenHadronsFromHyperSurface(){
 }
 
 void CSampler::CalcPiFromParts(){
-	double pi[4][4];
+	double pi[4][4]={{0.0}};
 	CPartMap::iterator ppos;
 	CPart *part;
 	double pressure,Ptest=0.0,etest=0.0;
 	int alpha,beta;
-	for(alpha=0;alpha<4;alpha++)
-		for(beta=0;beta<4;beta++)
-			pi[alpha][beta]=0.0;
 	double volume=nelements*element[0].Omega[0];
 	for(ppos=b3d->DeadPartMap.begin();ppos!=b3d->PartMap.end();ppos++){
 		part=ppos->second;
