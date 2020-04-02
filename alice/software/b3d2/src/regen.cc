@@ -106,7 +106,6 @@ void CRegenerate::GetdNMax(CMuTInfo *muTinfo){
 	tau=b3d->tau;
 	volume=tau*2.0*b3d->ETAMAX*b3d->DXY*b3d->DXY;
 	norm=CMuTInfo::NETEVENTS*b3d->NSAMPLE;
-	volume=volume;
 	itau=lrint(tau/CMuTInfo::DELTAU)-1;
 	pidens=muTinfo->Npi[itau]/(volume*norm);
 	if(pidens>0.025 && muTinfo->Npi[itau]>5){

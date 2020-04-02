@@ -11,7 +11,7 @@ void CAction::PerformDecay(){
 	CPartMap::iterator ppos;
 	int ibody,nbodies,alpha;
 	double mtot,mt,etamax=b3d->ETAMAX,mothermass;
-	double deleta,Pcheck;
+	double deleta;
 	FourVector Ptot;
 	ppos=partmap.begin();
 	mother=ppos->second;
@@ -70,7 +70,6 @@ void CAction::PerformDecay(){
 		for(ibody=0;ibody<nbodies;ibody++){
 			Ptot[alpha]-=product[ibody]->p[alpha];
 		}
-		Pcheck+=fabs(Ptot[alpha]);
 	}
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

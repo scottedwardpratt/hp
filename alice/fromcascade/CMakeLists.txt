@@ -1,3 +1,6 @@
+
+set(CMAKE_C_COMPILER /usr/local/bin/gcc-9)
+set(CMAKE_CPP_COMPILER /usr/local/bin/g++-9)
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 project(b3d_fromcascade CXX)
 project(balance_fromcascade CXX)

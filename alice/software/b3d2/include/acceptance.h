@@ -40,8 +40,6 @@ public:
   //double ManuelEff(double eta, double pt);
 	double ScottEff(double eta, double pt);
 	
-private:
-	double ManuelData[20][30];
 };
 
 

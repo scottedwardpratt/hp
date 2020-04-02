@@ -31,6 +31,7 @@ void CBalanceArrays::InitArrays(){
 	CreateBFArrays();
 	acceptance_description=parmap->getS("BF_ACCEPTANCE","PERFECT");
 	NoKsNoPhi=parmap->getB("BF_NoKsNoPhi",false);
+	alice_acceptance=false;
 	if(acceptance_description=="PERFECT"){
 		acceptance=new CAcceptance_CHEAP(parmap);
 	}
@@ -38,6 +39,7 @@ void CBalanceArrays::InitArrays(){
 		acceptance=new CAcceptance_STAR(parmap);
 	}
 	else if(acceptance_description=="ALICE"){
+		alice_acceptance=true; // this used because ALICE acceptance varies depending on which pair of particle is analyzed
 		acceptance=new CAcceptance_ALICE(parmap);
 	}
 	else{
@@ -215,6 +217,11 @@ void CBalanceArrays::ConstructBF(CBFNumer *numer,CBFDenom *denom,CBFNumer *bf,do
 		bf->Bphi[ibin]=doublecount*numer->Bphi[ibin]/(N*numer->Dphi);
 		bf->Cphi[ibin]=doublecount*numer->Cphi[ibin]/(N*numer->Dphi);
 		norm+=numer->Dphi*bf->Bphi[ibin];
+	}
+	int iy,iphi;
+	for(iy=0;iy<numer->Netabins;iy++){
+		for(iphi=0;iphi<numer->Nphibins;iphi++)
+			bf->Nyphi[iy][iphi]=numer->Cphi[ibin];
 	}
 	printf("%7s: normalization=%g, npairs=%g\n",bf->name.c_str(),norm,bf->npairs);
 }
@@ -486,7 +493,7 @@ void CBalanceArrays::IncrementDenom(CPart *part){
 }
 
 void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
-	double effa,effb,effaNoID,effbNoID,ya,dely,phia,phib,delyb=0.0,Minv;
+	double effa,effb,effaNoID,effbNoID,ya,yb=0.0,dely,phia,phib,delyb=0.0,Minv;
 	bool accepta,acceptb,acceptaNoID,acceptbNoID;
 	double B3D_ETAMAX=b3d->ETAMAX;
 	int pida,pidb;
@@ -515,6 +522,8 @@ void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
 				delyb=2.0*B3D_ETAMAX;
 			partbb.Copy(partb);
 			partbb.BoostRap(dely+delyb);
+			if(alice_acceptance)
+				yb=partb->y;
 			acceptance->CalcAcceptance(acceptb,effb,&partbb);
 			acceptance->CalcAcceptanceNoID(acceptbNoID,effbNoID,&partbb);
 			if(NoKsNoPhi){
@@ -531,11 +540,23 @@ void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
 				}
 				if( (abs(pida)==211 && abs(pidb)==321)
 				|| (abs(pidb)==211 && abs(pida)==321) ){
-					numer_piK->Increment(&partaa,&partbb,effa,effb);
+					if(alice_acceptance){
+						if((abs(pida)==211 && fabs(ya)<0.7) || (abs(pidb)==211 && fabs(yb)<0.7) )
+							numer_piK->Increment(&partaa,&partbb,effa,effb);
+					}
+					else{
+						numer_piK->Increment(&partaa,&partbb,effa,effb);
+					}
 				}
 				if( (abs(pida)==211 && abs(pidb)==2212)
 				|| (abs(pidb)==211 && abs(pida)==2212) ){
-					numer_pip->Increment(&partaa,&partbb,effa,effb);
+					if(alice_acceptance){
+						if((abs(pida)==211 && fabs(ya)<0.7) || (abs(pidb)==211 && fabs(yb)<0.7) )
+							numer_pip->Increment(&partaa,&partbb,effa,effb);
+					}
+					else{
+						numer_pip->Increment(&partaa,&partbb,effa,effb);
+					}
 				}
 				if(abs(pida)==321 && abs(pidb)==321){
 					numer_KK->Increment(&partaa,&partbb,effa,effb);
@@ -545,7 +566,14 @@ void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
 					numer_Kp->Increment(&partaa,&partbb,effa,effb);
 				}
 				if(abs(pida)==2212 && abs(pidb)==2212){
-					numer_pp->Increment(&partaa,&partbb,effa,effb);
+					if(alice_acceptance){
+						if(fabs(ya)<0.6 && fabs(yb)<0.6){
+							numer_pp->Increment(&partaa,&partbb,effa,effb);
+						}
+					}
+					else{
+						numer_pp->Increment(&partaa,&partbb,effa,effb);
+					}
 				}
 			}
 			

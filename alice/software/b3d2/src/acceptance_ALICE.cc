@@ -40,7 +40,7 @@ void CAcceptance_ALICE::CalcAcceptance(bool &accept,double &efficiency,CPart *pa
 				}
 			}
 			else if(abs(pid)==2212){
-				if(pt>500.0 && dcaxy<0.04 && fabs(y)<0.7){  // for pp BF, it was required that fabs(y)<0.6
+				if(pt>500.0 && pt<2500 && dcaxy<0.04 && fabs(y)<0.7){  // for pp BF, it was required that fabs(y)<0.7
 					accept=true; efficiency=1.0;
 				}
 			}

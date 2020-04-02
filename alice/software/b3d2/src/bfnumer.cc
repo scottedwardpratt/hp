@@ -66,7 +66,7 @@ void CBFNumer::Reset(){
 }
 
 void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
-	int ibin;
+	int ibin,iphi,iy;
 	double qinv,qout,qside,qlong,deleta,dely,delphi,deletas;
 	double QaQb,CaCb;
 	Misc::outsidelong(parta->p,partb->p,qinv,qout,qside,qlong,deleta,dely,delphi);
@@ -119,7 +119,7 @@ void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
 		By[ibin]-=QaQb;
 		Cy[ibin]+=CaCb;
 	}
-	int iy=ibin;
+	iy=ibin;
 	
 	double phia=atan2(parta->p[2],parta->p[1]);
 	if(sin(2.0*phia)<0.0){
@@ -130,15 +130,17 @@ void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
 		Bphi[ibin]-=QaQb;
 		Cphi[ibin]+=CaCb;
 	}
+	iphi=ibin;
 	
 	ibin=floorl(deletas/Dy);
 	if(ibin>=0 && ibin<Nybins){
 		Betas[ibin]-=QaQb;
 		Cetas[ibin]+=CaCb;
 	}
-	int iphi=ibin;
+	
 	if(iphi<Nphibins && iy<Netabins)
 		Nyphi[iy][iphi]+=QaQb;
+	
 }
 
 CBFDenom::CBFDenom(CparameterMap *parmapset){
