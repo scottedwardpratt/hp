@@ -139,7 +139,7 @@ void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
 	}
 	
 	if(iphi<Nphibins && iy<Netabins)
-		Nyphi[iy][iphi]+=QaQb;
+		Nyphi[iy][iphi]-=QaQb;
 	
 }
 
