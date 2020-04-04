@@ -1,9 +1,16 @@
 #!/bin/bash
-make b3d_fromcascade
-nproc=24
-iproc0=0
-iprocf=`expr ${iproc0} + ${nproc}`
-for ((i=iproc0;i<procf;iproc+=1))
-do
-	`./runner_b3d.sh ${i} > logfiles/b3d_${i}.txt &` ;
-done
+NEVENTS=1000
+case $# in
+	0)
+		echo "Usage: runner_b3d.sh iproc0 // runs from idefault*1000 to idefault*1000 +999";
+  	exit 1 ;;
+	1)
+		iproc0=$1
+		nproc=24
+		iprocf=`expr ${iproc0} + ${nproc}`
+		make b3d_fromcascade
+		do
+			`./runner_b3d.sh ${i} > logfiles/b3d_${i}.txt &` ;
+		done
+		
+esac
