@@ -6,8 +6,8 @@ case $# in
   	exit 1 ;;
 	1)
 		idefault=$1
-		firsti=`expr ${idefault} \* 4000`
-		lasti=`expr ${firsti} + 4000`
+		firsti=`expr ${idefault} \* ${NEVENTS}`
+		lasti=`expr ${firsti} + ${NEVENTS}`
 		echo idefault=${idefault}, firsti=${firsti}, lasti=${lasti}
 		./b3d_fromcascade default_${idefault} ${firsti} ${lasti}
 		
