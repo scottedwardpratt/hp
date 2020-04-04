@@ -37,9 +37,11 @@ CBFNumer::CBFNumer(CparameterMap *parmapset){
 	Cetas.resize(Netabins,0);
 	Cphi.resize(Nphibins,0);
 	
-	Nyphi.resize(Netabins);
+	Byphi.resize(Netabins);
+	Cyphi.resize(Netabins);
 	for(ieta=0;ieta<Netabins;ieta++){
-		Nyphi[ieta].resize(Nphibins,0);
+		Byphi[ieta].resize(Nphibins,0);
+		Cyphi[ieta].resize(Nphibins,0);
 	}
 }
 
@@ -61,7 +63,8 @@ void CBFNumer::Reset(){
 	Cphi.assign(Nphibins,0);
 	Cetas.assign(Netabins,0);
 	for(int ieta=0;ieta<Netabins;ieta++){
-		Nyphi[ieta].assign(Nphibins,0);
+		Byphi[ieta].assign(Nphibins,0);
+		Cyphi[ieta].assign(Nphibins,0);
 	}
 }
 
@@ -74,7 +77,6 @@ void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
 	QaQb=(parta->resinfo->charge*parta->bweight)*(partb->resinfo->charge*partb->bweight);
 	QaQb*=effa*effb;
 	CaCb=parta->bweight*partb->bweight*effa*effb;
-	//printf("QaQb=%g, CaCb=%g\n",QaQb,CaCb);
 	deletas=fabs(parta->eta-partb->eta);
 	npairs+=QaQb;
 	
@@ -138,9 +140,10 @@ void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
 		Cetas[ibin]+=CaCb;
 	}
 	
-	if(iphi<Nphibins && iy<Netabins)
-		Nyphi[iy][iphi]-=QaQb;
-	
+	if(iphi<Nphibins && iy<Netabins){
+		Byphi[iy][iphi]-=QaQb;
+		Cyphi[iy][iphi]+=CaCb;
+	}
 }
 
 CBFDenom::CBFDenom(CparameterMap *parmapset){
@@ -210,12 +213,22 @@ void CBFNumer::WriteNumer(string dirname,string numertype,bool NoQ){
 	}
 	fclose(fptr);
 	
-	filename=dirname+"/"+name+"/"+numertype+"_yphi.dat";
+	filename=dirname+"/"+name+"/"+numertype+"_Byphi.dat";
 	fptr=fopen(filename.c_str(),"w");
 	fprintf(fptr,"#Nybins= %d Nphibins= %d\n",Netabins,Nphibins);
 	for(ibin=0;ibin<Netabins;ibin++){
 		for(jbin=0;jbin<Nphibins;jbin++)
-			fprintf(fptr,"%12.4e ",Nyphi[ibin][jbin]);
+			fprintf(fptr,"%12.4e ",Byphi[ibin][jbin]);
+		fprintf(fptr,"\n");
+	}
+	fclose(fptr);
+	
+	filename=dirname+"/"+name+"/"+numertype+"_Cyphi.dat";
+	fptr=fopen(filename.c_str(),"w");
+	fprintf(fptr,"#Nybins= %d Nphibins= %d\n",Netabins,Nphibins);
+	for(ibin=0;ibin<Netabins;ibin++){
+		for(jbin=0;jbin<Nphibins;jbin++)
+			fprintf(fptr,"%12.4e ",Cyphi[ibin][jbin]);
 		fprintf(fptr,"\n");
 	}
 	fclose(fptr);

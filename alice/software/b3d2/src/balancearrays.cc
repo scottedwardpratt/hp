@@ -5,6 +5,7 @@
 #include "randy.h"
 #include "resonances.h"
 #include "constants.h"
+#include "misc.h"
 
 using namespace std;
 
@@ -221,7 +222,8 @@ void CBalanceArrays::ConstructBF(CBFNumer *numer,CBFDenom *denom,CBFNumer *bf,do
 	int iy,iphi;
 	for(iy=0;iy<numer->Netabins;iy++){
 		for(iphi=0;iphi<numer->Nphibins;iphi++){
-			bf->Nyphi[iy][iphi]=numer->Nyphi[iy][iphi];
+			bf->Byphi[iy][iphi]=numer->Byphi[iy][iphi];
+			bf->Cyphi[iy][iphi]=numer->Cyphi[iy][iphi];
 		}
 	}
 	printf("%7s: normalization=%g, npairs=%g\n",bf->name.c_str(),norm,bf->npairs);
@@ -517,23 +519,35 @@ void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
 		acceptance->CalcAcceptance(accepta,effa,&partaa);
 		acceptance->CalcAcceptanceNoID(acceptaNoID,effaNoID,&partaa);
 		if(accepta || acceptaNoID){
-			if(partb->eta-parta->eta>B3D_ETAMAX)
+			delyb=0.0;
+			if(partb->y+dely>B3D_ETAMAX){
 				delyb=-2.0*B3D_ETAMAX;
-			if(partb->eta-parta->eta<-B3D_ETAMAX)
+			}
+			if(partb->y+dely<-B3D_ETAMAX)
 				delyb=2.0*B3D_ETAMAX;
 			partbb.Copy(partb);
 			partbb.BoostRap(dely+delyb);
+			
 			if(alice_acceptance)
-				yb=partb->y;
+				yb=partbb.y;
 			acceptance->CalcAcceptance(acceptb,effb,&partbb);
 			acceptance->CalcAcceptanceNoID(acceptbNoID,effbNoID,&partbb);
+			
+			if(fabs(yb-ya)>2.0){
+				printf("ya,yb=%5.2f %5.2f, dely=%6.2f\n",ya,yb,yb-ya);
+				Misc::Pause();
+			}
 			if(NoKsNoPhi){
-				Minv=GetMinv(&partaa,&partbb);
-				if(abs(pida)==321 && abs(pidb)==321 && Minv>1010.0 && Minv<1030)
-					accepta=acceptb=false;
-				if(abs(pida)==211 && abs(pidb)==211 && Minv>497.146 && Minv<498.146)
-					accepta=acceptb=false;
-				
+				if(abs(pida)==321 && abs(pidb)==321){
+					Minv=GetMinv(&partaa,&partbb);
+					if(Minv>1010.0 && Minv<1030)
+						accepta=acceptb=false;
+				}
+				if(abs(pida)==211 && abs(pidb)==211){
+					Minv=GetMinv(&partaa,&partbb);
+					if(Minv>497.146 && Minv<498.146)
+						accepta=acceptb=false;
+				}
 			}
 			if(accepta && acceptb){
 				if(abs(pida)==211 && abs(pidb)==211){

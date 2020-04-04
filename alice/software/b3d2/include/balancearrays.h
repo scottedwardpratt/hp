@@ -11,7 +11,7 @@ public:
 	double npairs;
 	vector<double> Bqinv,Bqout,Bqlong,Bqside,By,Beta,Bphi,Betas;  //q = 1/2 rel. momentum in CM frame
 	vector<double> Cqinv,Cqout,Cqlong,Cqside,Cy,Ceta,Cphi,Cetas;
-	vector<vector<double>> Nyphi; // Array for opp. signs, binned by both y and phi
+	vector<vector<double>> Byphi,Cyphi; // Array for opp. signs, binned by both y and phi
 	double Dy,Deta,Dqinv,Dphi;
 	int Netabins,Nybins,Nqbins,Nphibins;
 	CparameterMap *parmap;
