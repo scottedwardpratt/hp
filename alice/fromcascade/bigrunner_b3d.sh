@@ -9,6 +9,7 @@ case $# in
 		nproc=24
 		iprocf=`expr ${iproc0} + ${nproc}`
 		make b3d_fromcascade
+		for((i=iproc0;i<iprocf;i++))
 		do
 			`./runner_b3d.sh ${i} > logfiles/b3d_${i}.txt &` ;
 		done

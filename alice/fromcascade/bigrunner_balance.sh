@@ -9,6 +9,7 @@ case $# in
 		nproc=24
 		iprocf=`expr ${iproc0} + ${nproc}`
 		make balance_fromcascade
+		for((i=iproc0;i<iprocf;i++))
 		do
 			`./runner_balance.sh ${i} > logfiles/balance_${i}.txt &` ;
 		done
