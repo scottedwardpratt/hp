@@ -559,6 +559,10 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 				if((minmass>0.0)&&(width>1.0E-3)){
 					freegascalc_onespecies_finitewidth(m,m1,m2,T,width,
 					epsiloni,pi,densi,sigma2i,dedti,maxweighti);
+					if(densi!=densi){
+						resinfoptr->Print();
+						exit(1);
+					}
 				}
 				else{
 					freegascalc_onespecies(m,T,epsiloni,pi,densi,sigma2i,dedti);
@@ -583,7 +587,6 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 		netchi+=resinfoptr->netchi*density[ires];
 		netchi0+=resinfoptr->netchi0*density[ires];
 	}
-	printf("nh=%g,netchi0=%g, netchi=%g\n",nh,netchi0,netchi);
 }
 
 double CResList::triangle(double m0,double m1,double m2){

@@ -22,7 +22,7 @@ CSampler::CSampler(CB3D *b3dset){
 	cummulative_N=0.0;
 	nevents=0;
 	cummulative_random=-log(randy->ran());
-	Tf=b3d->parmap.getD("FREEZEOUT_TEMP",0.155);
+	Tf=b3d->parmap.getD("FREEZEOUT_TEMP",155);
 	ETAMAX=b3d->parmap.getD("B3D_ETAMAX",1.0);
 	NBOSE=b3d->parmap.getI("B3D_NBOSE",1);
 	NSAMPLE=b3d->parmap.getI("B3D_NSAMPLE",1);
@@ -322,7 +322,7 @@ void CSampler::ReadHyperElements2D_OSU(){
 		if(int(hyper.size())==ielement)
 			hyper.resize(hyper.size()+initarraysize);
 		elem=&hyper[ielement];
-		elem->T=b3d->parmap.getD("FREEZEOUT_TEMP",0.155);
+		elem->T=b3d->parmap.getD("FREEZEOUT_TEMP",155);
 		fscanf(fptr,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&tau,&x,&y,&ux,&uy,&dOmega0,&dOmegaX,&dOmegaY,&pitildexx,&pitildeyy,&pitildexy);
 		//dOmegaX=-dOmegaX; dOmegaY=-dOmegaY;
