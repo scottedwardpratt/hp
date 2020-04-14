@@ -8,6 +8,7 @@ case $# in
 		idefault=$1
 		firsti=`expr ${idefault} \* ${NEVENTS}`
 		lasti=`expr ${firsti} + ${NEVENTS}`
-		echo idefault=${idefault}, firsti=${firsti}, lasti=${lasti}
+		echo idefault=${idefault}, firsti=${firsti}, lasti=${lasti};
+		./b3d_fromcascade default_${idefault} ${firsti} ${lasti};
 		./balance_fromcascade default_${idefault} ${firsti} ${lasti}
 esac
