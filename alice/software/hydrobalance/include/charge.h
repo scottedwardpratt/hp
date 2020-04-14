@@ -8,7 +8,7 @@ using namespace std;
 
 class CCharge{
 public:
-	CCharge();
+	CCharge(){};
 	~CCharge(){};
 	bool active;
 	int q[3];
