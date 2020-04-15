@@ -10,12 +10,6 @@ using namespace std;
 CHydroBalance *CCharge::hb=NULL;
 CB3D *CCharge::b3d=NULL;
 
-/*
-CCharge::CCharge(){
-	//
-}
-*/
-
 void CCharge::Propagate(double newtau){
 	double t0,tf,neweta;
 	if(active==true){
