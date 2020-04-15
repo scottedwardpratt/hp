@@ -13,7 +13,6 @@ int main(int argc, char *argv[]){
 		exit(-1);
   }
 	CBalanceArrays *barray;
-	double dnchdy=0.0;
 	int nparts,nchargesample=1,isample;
 	long long int npartstot;
 	long long int ncolls=0,nannihilate=0,nregen=0,nbaryons=0,norm;
@@ -29,7 +28,6 @@ int main(int argc, char *argv[]){
 	CQualifiers qualifiers;
 	qualifiers.Read("qualifiers.dat");
 	for(iqual=0;iqual<qualifiers.nqualifiers;iqual++){
-		dnchdy=0;
 		ncolls=0;
 		npartstot=0;
 		b3d->SetQualifier(qualifiers.qualifier[iqual]);
@@ -48,7 +46,7 @@ int main(int argc, char *argv[]){
 					b3d->DeleteCharges();
 				}
 				b3d->PerformAllActions();
-				printf("nparts=%d\n",int(b3d->PartMap.size()));
+				printf("nparts=%d=?%d\n",int(b3d->PartMap.size()),nparts);
 				printf("nscatter=%lld, nbscatter=%lld, nmerges=%lld, ndecays=%lld,  ncellexits=%lld, nregenerate=%lld\n",
 				b3d->nscatter,b3d->nbscatter,b3d->nmerge,b3d->ndecay,b3d->nexit,b3d->nregenerate);
 				ncolls+=b3d->nscatter+b3d->nmerge;
