@@ -533,10 +533,10 @@ void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
 			acceptance->CalcAcceptance(acceptb,effb,&partbb);
 			acceptance->CalcAcceptanceNoID(acceptbNoID,effbNoID,&partbb);
 			
-			if(fabs(yb-ya)>2.0){
-				printf("ya,yb=%5.2f %5.2f, dely=%6.2f\n",ya,yb,yb-ya);
-				Misc::Pause();
-			}
+			//(fabs(yb-ya)>2.0){
+				//printf("ya,yb=%5.2f %5.2f, dely=%6.2f\n",ya,yb,yb-ya);
+				//Misc::Pause();
+			//}
 			if(NoKsNoPhi){
 				if(abs(pida)==321 && abs(pidb)==321){
 					Minv=GetMinv(&partaa,&partbb);
