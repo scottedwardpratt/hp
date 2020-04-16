@@ -1,11 +1,13 @@
 #!/bin/bash
-make b3d
+make b3d_fromhydro
 nproc=24
-nruns=30
+nruns=34
 for ((i=0;i<${nproc};i+=1))
 do
 	firsti=`expr ${i} \* ${nruns}`;
-	lasti=`expr ${firsti} + ${nruns} - 1`;
-	echo firsti=${firsti}, lasti=${lasti};
+	lasti=`expr ${firsti} + ${nruns}`;
+	rm -f logfiles/b3d_${firsti}_${lasti}.txt;
+	echo starting run with firsti=${firsti}, lasti=${lasti};
 	`./runner_b3d.sh ${firsti} ${lasti} > logfiles/b3d_${firsti}_${lasti}.txt &` ;
+	echo finished run with firsti=${firsti}, lasti=${lasti};
 done
