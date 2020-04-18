@@ -9,5 +9,4 @@ do
 	rm -f logfiles/b3d_${firsti}_${lasti}.txt;
 	echo starting run with firsti=${firsti}, lasti=${lasti};
 	`./runner_b3d.sh ${firsti} ${lasti} > logfiles/b3d_${firsti}_${lasti}.txt &` ;
-	echo finished run with firsti=${firsti}, lasti=${lasti};
 done
