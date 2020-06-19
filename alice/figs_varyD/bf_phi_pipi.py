@@ -24,10 +24,6 @@ ax = fig.add_axes([0.15,0.12,0.8,0.8])
 
 centrality='alice_cent0_5'
 chargepair='pipi'
-alicedata_filename='alicedata/alice_pipidata.txt'
-#centrality='alice_cent0_10'
-#chargepair='KK'
-#alicedata_filename='alicedata/alice_KKdata.txt'
 
 chargesdata = np.loadtxt('../D1/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_phi.dat',skiprows=0,unpack=True)
 x=chargesdata[0]
@@ -84,7 +80,7 @@ i=0
 while(i<28):
   yc2[i]=yc1[27-i]
   i=i+1
-yc=(yc1+yc2)
+yc=(yc1+yc2)*0.5
 yc=efficiency*yc*180.0/pi
 
 ysum_D1=y_D1+yc
@@ -92,23 +88,16 @@ ysum_D0_5=y_D0_5+yc
 ysum_D2=y_D2+yc
 ysum_D4=y_D4+yc
 
-cdata=np.loadtxt('../acc_correction/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_phi.dat',skiprows=0,unpack=True)
-cfactor=cdata[2]/0.000555
-ysum_D1=ysum_D1/cfactor
-ysum_D0_5=ysum_D0_5/cfactor
-ysum_D2=ysum_D2/cfactor
-ysum_D4=ysum_D4/cfactor
-
 Dphi=pi/14.0
 D1norm=D2norm=D0_5norm=D4norm=0.0
-for i in range(0,20):
+for i in range(0,18):
   D0_5norm+=ysum_D0_5[i]*Dphi
   D1norm+=ysum_D1[i]*Dphi
   D2norm+=ysum_D2[i]*Dphi
   D4norm+=ysum_D4[i]*Dphi
 print('norms are: ',D0_5norm,', ',D1norm,', ',D2norm,', ',D4norm)
 
-alicedata=np.loadtxt(alicedata_filename,skiprows=0,unpack=True)
+alicedata=np.loadtxt('alicedata/alice_pipidata.txt',skiprows=0,unpack=True)
 alice_phi=alicedata[0]
 alice_phi=alice_phi*180.0/np.pi
 alice_bf=alicedata[1]
@@ -134,6 +123,35 @@ for i in range(9,14):
   aliceTOT_phi[i]=alice_phi[8+i]
   print('i=',i,' angles are ',alice_phi[8+i],' ',alice_phi[28-i]-360.0)
   
+
+
+
+
+
+
+#stardata=np.loadtxt('stardata/AuAuPhiCent0_5.dat',skiprows=0,unpack=True)
+#stardata=np.loadtxt('stardata/AuAuPhiCent40_50.dat',skiprows=0,unpack=True)
+#xstar=stardata[0]*180.0/pi
+#ystar=stardata[1]
+
+#normstar=0.0
+#normmodel=0.0
+#widthstar=0.0
+#widthmodel=0.0
+#for i in range(0,20):
+#  phimodel=(i+0.5)*(4.0*pi/180.0)
+#  normmodel+=(4.0*pi/180.0)*ysum[i]
+#  widthmodel+=(4.0*pi/180.0)*ysum[i]*phimodel
+
+#for i in range(0,24):
+#  phistar=(i+0.5)*(7.5*pi/180.0)
+#  normstar+=(4.0*pi/180.0)*ystar[i]
+#  widthstar+=(4.0*pi/180.0)*ystar[i]*phistar
+  
+#widthstar=widthstar/normstar
+#widthmodel=widthmodel/normmodel
+#print('normstar=',normstar,' normmodel=',normmodel)
+#print('widthstar=',widthstar,' widthmodel=',widthmodel)
 
 plt.plot(x,ysum_D0_5,linestyle='-',linewidth=2,marker='o',color='r',label='$0.5D_{\\rm latt}$')
 plt.plot(x,ysum_D1,linestyle='-',linewidth=2,marker='o',color='k',label='$D_{\\rm latt}$')
@@ -163,8 +181,8 @@ plt.ylim(0.0,0.375)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
 ax.yaxis.set_major_formatter(sformatter)
 
-plt.xlabel('$\Delta \phi (degrees)$', fontsize=18,weight='normal')
-plt.ylabel('$B(\Delta \phi)$',fontsize=18,weight='normal')
+plt.xlabel('$\Delta\phi$ (degrees)', fontsize=18, weight='normal')
+plt.ylabel('$B(\Delta\phi)$',fontsize=18,weight='normal')
 #plt.title('MathText Number $\sum_{n=1}^\infty({-e^{i\pi}}/{2^n})$!',
 #fontsize=12, color='gray')
 #plt.subplots_adjust(top=0.85)

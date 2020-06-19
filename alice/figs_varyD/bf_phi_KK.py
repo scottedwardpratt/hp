@@ -22,10 +22,10 @@ plt.figure(figsize=(6,5))
 fig = plt.figure(1)
 ax = fig.add_axes([0.15,0.12,0.8,0.8])
 
-centrality='alice_cent0_10'
+centrality='alice_cent0_5'
 chargepair='KK'
 
-chargesdata = np.loadtxt('../alice_D1/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_phi.dat',skiprows=0,unpack=True)
+chargesdata = np.loadtxt('../D1/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_phi.dat',skiprows=0,unpack=True)
 x=chargesdata[0]
 y1=chargesdata[1]
 y2=y1
@@ -36,7 +36,7 @@ while(i<28):
 y_D1=(y1+y2)*0.5
 y_D1=efficiency*y_D1*180.0/pi
 
-chargesdata_D0_5 = np.loadtxt('../alice_D0.5/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_phi.dat',skiprows=0,unpack=True)
+chargesdata_D0_5 = np.loadtxt('../D0.5/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_phi.dat',skiprows=0,unpack=True)
 x_D4=chargesdata_D0_5[0]
 y1=chargesdata_D0_5[1]
 y2=y1
@@ -47,7 +47,7 @@ while(i<28):
 y_D0_5=(y1+y2)*0.5
 y_D0_5=efficiency*y_D0_5*180.0/pi
 
-filename='../alice_D2/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_phi.dat'
+filename='../D2/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_phi.dat'
 chargesdata_D2 = np.loadtxt(filename,skiprows=0,unpack=True)
 x_D4=chargesdata_D2[0]
 y1=chargesdata_D2[1]
@@ -59,7 +59,7 @@ while(i<28):
 y_D2=(y1+y2)*0.5
 y_D2=efficiency*y_D2*180.0/pi
 
-filename='../alice_D4/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_phi.dat'
+filename='../D4/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_phi.dat'
 print ('filename=',filename)
 chargesdata_D4 = np.loadtxt(filename,skiprows=0,unpack=True)
 x_D4=chargesdata_D4[0]
@@ -72,7 +72,7 @@ while(i<28):
 y_D4=(y1+y2)*0.5
 y_D4=efficiency*y_D4*180.0/pi
 
-cascadedata = np.loadtxt('../alice_fromcascade/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_phi.dat',skiprows=0,unpack=True)
+cascadedata = np.loadtxt('../fromcascade/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_phi.dat',skiprows=0,unpack=True)
 xc=cascadedata[0]
 yc1=cascadedata[1]
 yc2=yc1
@@ -81,7 +81,7 @@ while(i<28):
   yc2[i]=yc1[27-i]
   i=i+1
 yc=(yc1+yc2)*0.5
-yc=efficiency*yc*180.0/pi
+yc=efficiency*yc*180.0/np.pi
 
 ysum_D1=y_D1+yc
 ysum_D0_5=y_D0_5+yc
