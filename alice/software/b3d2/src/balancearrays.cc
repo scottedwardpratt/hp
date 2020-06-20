@@ -22,7 +22,7 @@ void CBalanceArrays::InitArrays(){
 	NSAMPLE_HYDRO2UDS=parmap->getD("NSAMPLE_HYDRO2UDS",1);
 	NSAMPLE_UDS2BAL=parmap->getD("NSAMPLE_UDS2BAL",1);
 	FROM_UDS=parmap->getB("BF_FROM_UDS",false);
-	BF_YMAX=parmap->getD("BF_YMAX",1.0);
+	BF_YMAX=parmap->getD("BF_YMAX",0.8);
 	BF_YMIN=-BF_YMAX;
 	BF_PHICUT=parmap->getD("BF_PHICUT",15);
 	NPHI=parmap->getI("BF_NPHIBINS",180);
@@ -304,6 +304,7 @@ void CBalanceArrays::WriteDenoms(){
 
 void CBalanceArrays::ProcessBFPartMap(){
 	int balanceID,pida,pidb,maxbid=-1;
+	double delymax=1.6,dely,ya,yb;
 	pair<CPartMap::iterator,CPartMap::iterator> itpair_even,itpair_odd;
 	CPartMap::iterator it,ita0,itaf,itb0,itbf,ita,itb;
 	CPart *parta,*partb,*part;
@@ -326,12 +327,16 @@ void CBalanceArrays::ProcessBFPartMap(){
 		if(ita0!=itaf && itb0!=itbf){
 			for(ita=ita0;ita!=itaf;++ita){
 				parta=ita->second;
+				ya=atanh(parta->p[3]/parta->p[0]);
 				pida=parta->resinfo->code;
 				if(abs(pida)==211 || abs(pida)==321 || abs(pida)==2212){
 					for(itb=itb0;itb!=itbf;++itb){
 						partb=itb->second;
 						pidb=partb->resinfo->code;
-						if(abs(pidb)==211 || abs(pidb)==321 || abs(pidb)==2212){
+						yb=atanh(partb->p[3]/partb->p[0]);
+						dely=fabs(ya-yb);
+						delymax=acceptance->GetDelYMax(pida,pidb);
+						if(dely<delymax){
 							IncrementNumer(parta,partb);
 							IncrementNumer(partb,parta);
 						}
@@ -345,10 +350,11 @@ void CBalanceArrays::ProcessBFPartMap(){
 
 void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from cascade
 	multimap<double,CPart *> ppartmap;
-	double ya,yb,dely,B3D_ETAMAX=b3d->ETAMAX;
+	double ya,yb,dely,delymax,B3D_ETAMAX=b3d->ETAMAX;
 	CPartMap::iterator it;
 	multimap<double,CPart *>::iterator ita,itb;
 	int netN=0,netQ=0;
+	int pida,pidb;
 	CPart *parta,*partb;
 	pair<CPartMap::iterator,CPartMap::iterator> itpair;
 	printf("processing %d parts in PartMap\n",int(b3d->PartMap.size()));
@@ -383,21 +389,30 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 		do{
 			parta=ita->second;
 			if(abs(parta->resinfo->charge)==1){
+				pida=parta->resinfo->code;
 				IncrementDenom(parta);
 				ya=ita->first;
 				itb=ita;
 				++itb;
 				if(itb==ppartmap.end())
 					itb=ppartmap.begin();
+				dely=0.0;
 				do{
 					partb=itb->second;
-					yb=itb->first;
-					dely=yb-ya;
-					if(dely<0.0)
-						dely+=2.0*B3D_ETAMAX;
-					if(abs(partb->resinfo->charge)==1 && dely<2.0*BF_YMAX){
-						IncrementNumer(parta,partb);
-						IncrementNumer(partb,parta);
+					if(abs(partb->resinfo->charge)==1){
+						yb=itb->first;
+						dely=yb-ya;
+						if(dely<0.0)
+							dely+=2.0*B3D_ETAMAX;
+				
+						// See Jinjin's thesis, page 31
+						//delymax=2.0*BF_YMAX;
+						pidb=partb->resinfo->code;
+						delymax=acceptance->GetDelYMax(pida,pidb);
+						if(dely<delymax){
+							IncrementNumer(parta,partb);
+							IncrementNumer(partb,parta);
+						}
 					}
 					++itb;
 					if(itb==ppartmap.end())
