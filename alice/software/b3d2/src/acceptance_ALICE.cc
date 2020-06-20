@@ -25,7 +25,7 @@ void CAcceptance_ALICE::CalcAcceptance(bool &accept,double &efficiency,CPart *pa
 	eta=atanh(p[3]/pmag);
 	accept=false;
 	efficiency=0.0;
-	if(eta>ETAMIN && eta<ETAMAX && pt>PTMIN && pt<PTMAX && part->resinfo->charge!=0){
+	if(pt>PTMIN && pt<PTMAX && part->resinfo->charge!=0){
 		part->CalcDCA(dca);
 		if(fabs(dca[3])<2.0){
 			dcaxy=sqrt(dca[1]*dca[1]+dca[2]*dca[2]);

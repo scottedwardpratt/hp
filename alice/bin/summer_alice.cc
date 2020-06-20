@@ -14,7 +14,7 @@ int main(int argc,char *argv[]){
 	const int NPHIBINS=28,NYBINS=20;
 	const int NTYPES=10,NJDIR=48;
 	const double YMAX=1.0;
-	string qualifier="alice_cent0_10";
+	string qualifier;
 	string acceptance="results_alice";
 	string dirprefix="default";
 	//string dirprefix="default";

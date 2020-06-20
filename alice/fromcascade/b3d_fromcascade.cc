@@ -12,7 +12,7 @@ int main(int argc, char *argv[]){
 		printf("Usage: b3d_fromcascade run_name ievent0 ieventf\n");
 		exit(-1);
   }
-	//CBalanceArrays *barray;
+	CBalanceArrays *barray;
 	long long int npartstot;
 	long long int ncolls=0,nannihilate=0,nregen=0,nbaryons=0,norm;
 	int ievent,iqual,nevents;
@@ -22,7 +22,7 @@ int main(int argc, char *argv[]){
 	printf("ievent0=%d, ieventf=%d\n",ievent0,ieventf);
 	CB3D *b3d=new CB3D(run_name);
 	b3d->InitCascade();
-	//barray=b3d->balancearrays;
+	barray=b3d->balancearrays;
 	CQualifiers qualifiers;
 	qualifiers.Read("qualifiers.dat");
 	
@@ -47,15 +47,15 @@ int main(int argc, char *argv[]){
 			nannihilate+=b3d->nannihilate;
 			nregen+=b3d->nregenerate;
 			npartstot+=b3d->PartMap.size();
-			b3d->WriteBalanceParts(ievent);
-			//barray->ProcessPartMap();
+			//b3d->WriteBalanceParts(ievent);
+			barray->ProcessPartMap();
 		}
 		norm=nevents*b3d->NSAMPLE;
 		printf("npartstot=%g, <# collisions>=%g \n",double(npartstot)/norm,double(ncolls)/norm);
-		//barray->ConstructBFs();
-		//barray->WriteBFs();
-		//barray->WriteDenoms();
-		//barray->WriteGammaP();
+		barray->ConstructBFs();
+		barray->WriteBFs();
+		barray->WriteDenoms();
+		barray->WriteGammaP();
 	}
 	return 0;
 }

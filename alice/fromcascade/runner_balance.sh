@@ -1,5 +1,5 @@
 #!/bin/bash
-NEVENTS=1000
+NEVENTS=250
 case $# in
 	0)
 		echo "Usage: runner_balance.sh idefault // runs from idefault*1000 to idefault*1000 +999";
