@@ -1,5 +1,5 @@
 #!/bin/bash
-NEVENTS=1000
+NEVENTS=100
 case $# in
 	0)
 		echo "Usage: runner_b3d.sh idefault // runs from idefault*1000 to idefault*1000 +999";

@@ -1,12 +1,11 @@
 #!/bin/bash
-NEVENTS=1000
 case $# in
 	0)
 		echo "Usage: runner_b3d.sh iproc0 // runs from idefault*1000 to idefault*1000 +999";
   	exit 1 ;;
 	1)
 		iproc0=$1
-		nproc=24
+		nproc=16
 		iprocf=`expr ${iproc0} + ${nproc}`
 		make b3d_fromcascade
 		for((i=iproc0;i<iprocf;i++))

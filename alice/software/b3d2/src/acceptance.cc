@@ -44,3 +44,11 @@ void CAcceptance::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part
 	else
 		printf("Calculating acceptance for null part\n");
 }
+
+double CAcceptance::GetDelYMax(int pida,int pidb){
+	if(abs(pida)==0 && abs(pidb)==0){
+		return 0.0;
+	}
+	else
+		return 2.0;
+}
