@@ -23,7 +23,9 @@ message("Libraries: b3d_alice ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY}" )
 
 
 find_library(${CMAKE_CURRENT_SOURCE_DIR}/../software/b3d2/lib b3d_alice)
+find_library(${CMAKE_CURRENT_SOURCE_DIR}/../software/hydrobalance/lib hydro2uds_alice)
 find_library(${CMAKE_CURRENT_SOURCE_DIR}/../../../commonutils/software/lib commonutils)
+
 
 set(SOURCE_FILES ./b3d_fromhydro.cc)
 SET_SOURCE_FILES_PROPERTIES(
@@ -39,6 +41,10 @@ SET_SOURCE_FILES_PROPERTIES(
       hydro2uds.cc PROPERTIES OBJECT_DEPENDS
     ../software/b3d2/lib/libb3d_alice.a
  )
+ SET_SOURCE_FILES_PROPERTIES(
+       hydro2uds.cc PROPERTIES OBJECT_DEPENDS
+     ../software/hydrobalance/lib/libhydro2uds_alice.a
+  )
 add_executable(hydro2uds ${SOURCE_FILES})
 add_dependencies(hydro2uds extern_b3d_alice extern_commonutils)
-target_link_libraries(hydro2uds b3d_alice hydro2uds_alice hydrobalance commonutils ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY} ${EIGEN3_LIBRARY})
+target_link_libraries(hydro2uds hydro2uds_alice b3d_alice commonutils ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY} ${EIGEN3_LIBRARY})
