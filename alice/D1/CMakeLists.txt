@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 project(b3d_fromhydro CXX)
 project(hydro2uds CXX)
