@@ -81,7 +81,7 @@ while(i<28):
   yc2[i]=yc1[27-i]
   i=i+1
 yc=(yc1+yc2)*0.5
-yc=efficiency*yc*180.0/pi
+yc=efficiency*yc*180.0/np.pi
 
 ysum_D1=y_D1+yc
 ysum_D0_5=y_D0_5+yc
@@ -122,36 +122,6 @@ for i in range(9,14):
   aliceTOT_errors[i]=0.5*(alice_errors[8+i]+alice_errors[28-i])*sqrt(2.0)
   aliceTOT_phi[i]=alice_phi[8+i]
   print('i=',i,' angles are ',alice_phi[8+i],' ',alice_phi[28-i]-360.0)
-  
-
-
-
-
-
-
-#stardata=np.loadtxt('stardata/AuAuPhiCent0_5.dat',skiprows=0,unpack=True)
-#stardata=np.loadtxt('stardata/AuAuPhiCent40_50.dat',skiprows=0,unpack=True)
-#xstar=stardata[0]*180.0/pi
-#ystar=stardata[1]
-
-#normstar=0.0
-#normmodel=0.0
-#widthstar=0.0
-#widthmodel=0.0
-#for i in range(0,20):
-#  phimodel=(i+0.5)*(4.0*pi/180.0)
-#  normmodel+=(4.0*pi/180.0)*ysum[i]
-#  widthmodel+=(4.0*pi/180.0)*ysum[i]*phimodel
-
-#for i in range(0,24):
-#  phistar=(i+0.5)*(7.5*pi/180.0)
-#  normstar+=(4.0*pi/180.0)*ystar[i]
-#  widthstar+=(4.0*pi/180.0)*ystar[i]*phistar
-  
-#widthstar=widthstar/normstar
-#widthmodel=widthmodel/normmodel
-#print('normstar=',normstar,' normmodel=',normmodel)
-#print('widthstar=',widthstar,' widthmodel=',widthmodel)
 
 plt.plot(x,ysum_D0_5,linestyle='-',linewidth=2,marker='o',color='r',label='$0.5D_{\\rm latt}$')
 plt.plot(x,ysum_D1,linestyle='-',linewidth=2,marker='o',color='k',label='$D_{\\rm latt}$')
@@ -176,7 +146,7 @@ plt.xlim(0.0,181)
 ax.set_yticks(np.arange(0,1.0,0.05), minor=False)
 ax.set_yticklabels(np.arange(0,1.0,0.05), minor=False, family='serif')
 ax.set_yticks(np.arange(0,1.0,0.025), minor=True)
-plt.ylim(0.0,0.375)
+plt.ylim(0.0,0.4)
 #ax.set_yticks(0.1:1.0:10.0:100.0, minor=True)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
 ax.yaxis.set_major_formatter(sformatter)

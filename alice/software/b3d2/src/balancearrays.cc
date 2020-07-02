@@ -385,6 +385,7 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 			}
 		}
 		printf("ppartmap built\n");
+
 		ita=ppartmap.begin();
 		do{
 			parta=ita->second;
@@ -406,7 +407,6 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 							dely+=2.0*B3D_ETAMAX;
 				
 						// See Jinjin's thesis, page 31
-						//delymax=2.0*BF_YMAX;
 						pidb=partb->resinfo->code;
 						delymax=acceptance->GetDelYMax(pida,pidb);
 						if(dely<delymax){
@@ -547,11 +547,7 @@ void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
 				yb=partbb.y;
 			acceptance->CalcAcceptance(acceptb,effb,&partbb);
 			acceptance->CalcAcceptanceNoID(acceptbNoID,effbNoID,&partbb);
-			
-			//(fabs(yb-ya)>2.0){
-				//printf("ya,yb=%5.2f %5.2f, dely=%6.2f\n",ya,yb,yb-ya);
-				//Misc::Pause();
-			//}
+
 			if(NoKsNoPhi){
 				if(abs(pida)==321 && abs(pidb)==321){
 					Minv=GetMinv(&partaa,&partbb);

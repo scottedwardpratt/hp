@@ -1,7 +1,7 @@
 #!/bin/bash
 make b3d_fromhydro
-nproc=24
-nruns=34
+nproc=12
+nruns=67
 for ((i=0;i<${nproc};i+=1))
 do
 	firsti=`expr ${i} \* ${nruns}`;

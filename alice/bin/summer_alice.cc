@@ -12,7 +12,7 @@ using namespace std;
 
 int main(int argc,char *argv[]){
 	const int NPHIBINS=28,NYBINS=20;
-	const int NTYPES=10,NJDIR=48;
+	const int NTYPES=10,NJDIR=24;
 	const double YMAX=1.0;
 	string qualifier;
 	string acceptance="results_alice";

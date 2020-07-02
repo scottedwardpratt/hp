@@ -51,6 +51,8 @@ void CAcceptance_ALICE::CalcAcceptance_Realistic(bool &accept,double &efficiency
 	double pt,*p=part->p,y=part->y;
 	double dca[4],dcaxy;
 	int pid=part->resinfo->code;
+	printf("this is dead code in acceptance_ALICE.cc, shouldn't be here\n");
+	exit(1);
 	
 	efficiency=0.0;
 	pt=sqrt(p[1]*p[1]+p[2]*p[2]);
@@ -91,7 +93,7 @@ void CAcceptance_ALICE::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart
 	eta=atanh(p[3]/pmag);
 	accept=false;
 	efficiency=0.0;
-	if(eta>ETAMIN && eta<ETAMAX && pt>PTMIN && pt<PTMAX && part->resinfo->charge!=0){
+	if(pt>PTMIN && pt<PTMAX && part->resinfo->charge!=0){
 		accept=true; efficiency=1.0;
 	}
 }

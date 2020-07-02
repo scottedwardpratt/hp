@@ -54,17 +54,18 @@ xc=cascadedata[0]
 yc1=cascadedata[1]
 yc=efficiency*yc1
 
-ysum_D1=y_D1+yc
-ysum_D0_5=y_D0_5+yc
-ysum_D2=y_D2+yc
-ysum_D4=y_D4+yc
+cfactor=1.0/(1.0-x_D4/1.6);
+ysum_D1=cfactor*y_D1+yc
+ysum_D0_5=cfactor*y_D0_5+yc
+ysum_D2=cfactor*y_D2+yc
+ysum_D4=cfactor*y_D4+yc
 
-cdata=np.loadtxt('../acc_correction/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_y.dat',skiprows=0,unpack=True)
-cfactor=cdata[2]*4
-ysum_D1=ysum_D1/cfactor
-ysum_D0_5=ysum_D0_5/cfactor
-ysum_D2=ysum_D2/cfactor
-ysum_D4=ysum_D4/cfactor
+#cdata=np.loadtxt('../acc_correction/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_y.dat',skiprows=0,unpack=True)
+#cfactor=cdata[2]*4
+#ysum_D1=ysum_D1/cfactor
+#ysum_D0_5=ysum_D0_5/cfactor
+#ysum_D2=ysum_D2/cfactor
+#ysum_D4=ysum_D4/cfactor
 
 Dy=0.1
 D1norm=D2norm=D0_5norm=D4norm=0.0

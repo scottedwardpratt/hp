@@ -3,7 +3,6 @@
 #include "balancearrays.h"
 #include "qualifier.h"
 #include "randy.h"
-#include "misc.h"
 
 using namespace std;
 
@@ -13,7 +12,7 @@ int main(int argc, char *argv[]){
 		exit(-1);
   }
 	CBalanceArrays *barray;
-	int nparts,nchargesample=1,isample;
+	int nchargesample=1,isample;
 	long long int npartstot;
 	long long int ncolls=0,nannihilate=0,nregen=0,nbaryons=0,norm;
 	int ievent,iqual,nevents;
@@ -34,19 +33,19 @@ int main(int argc, char *argv[]){
 		qualifiers.SetPars(&(b3d->parmap),iqual);
 		printf("_________________ iqual=%d, nevents=%d ________________\n",iqual,nevents);
 		b3d->sampler->ReadHyperElements2D_OSU();
-		for(ievent=ievent0;ievent<ieventf;ievent++){
+		for(ievent=ievent0;ievent<=ieventf;ievent++){
 			printf("------ beginning, ievent=%d --------\n",ievent);
 			for(isample=0;isample<nchargesample;isample++){
 				b3d->Reset();
 				b3d->randy->reset(-isample-ievent*nchargesample-10000000);
-				nparts=b3d->sampler->GenHadronsFromHyperSurface(); // Generates particles from hypersurface, each has bid=-1
+				b3d->sampler->GenHadronsFromHyperSurface(); // Generates particles from hypersurface, each has bid=-1
 				if(barray->FROM_UDS){
 					b3d->ReadCharges(ievent);
 					b3d->GenHadronsFromCharges(); // Generates inter-correlated parts, with bids = (0,1),(2,3)....
 					b3d->DeleteCharges();
 				}
 				b3d->PerformAllActions();
-				printf("nparts=%d=?%d\n",int(b3d->PartMap.size()),nparts);
+				printf("nparts=%d\n",int(b3d->PartMap.size()));
 				printf("nscatter=%lld, nbscatter=%lld, nmerges=%lld, ndecays=%lld,  ncellexits=%lld, nregenerate=%lld\n",
 				b3d->nscatter,b3d->nbscatter,b3d->nmerge,b3d->ndecay,b3d->nexit,b3d->nregenerate);
 				ncolls+=b3d->nscatter+b3d->nmerge;

@@ -21,7 +21,6 @@ message("Includes: ${GSL_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${CMAKE_CURRENT_SOUR
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../software/b3d2/lib ${CMAKE_CURRENT_SOURCE_DIR}/../../../commonutils/software/lib)
 message("Libraries: b3d_alice ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY}" )
 
-
 find_library(${CMAKE_CURRENT_SOURCE_DIR}/../software/b3d2/lib b3d_alice)
 find_library(${CMAKE_CURRENT_SOURCE_DIR}/../../../commonutils/software/lib commonutils)
 
