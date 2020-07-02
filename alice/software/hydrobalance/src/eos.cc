@@ -20,10 +20,15 @@ CEoS::CEoS(){
 
 CEoS::CEoS(CparameterMap *parmapset){
 	parmap=parmapset;
+	printf("check check a\n");
 	reslist=new CResList(parmap);
+		printf("check check b\n");
 	ReadDiffusionData();
+		printf("check check c\n");
 	ReadChiData_Claudia();
+		printf("check check d\n");
 	FillOutdDdT();
+		printf("check check e\n");
 };
 
 void CEoS::ReadDiffusionData(){
@@ -40,6 +45,7 @@ void CEoS::ReadDiffusionData(){
 	fscanf(fptr,"%s",&voldummy);
 	while(!feof(fptr)){
 		fscanf(fptr,"%lf %d %lf %lf %lf",&t,&ntaudummy,&td,&errsysdummy,&errsysstatdummy);
+		printf("t=%g\n",t);
 		Tdiff.push_back(t*0.001);
 		twopiTD.push_back(td);
 		fscanf(fptr,"%s",&voldummy);

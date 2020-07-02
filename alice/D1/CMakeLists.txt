@@ -4,6 +4,7 @@ project(b3d_fromhydro CXX)
 project(hydro2uds CXX)
 
 add_custom_target(extern_b3d_alice COMMAND make WORKING_DIRECTORY ../software/b3d2)
+add_custom_target(extern_hydro2uds_alice COMMAND make WORKING_DIRECTORY ../software/hydrobalance)
 add_custom_target(extern_commonutils COMMAND make WORKING_DIRECTORY ../../../commonutils/software)
 
 #include(${CMAKE_CURRENT_SOURCE_DIR}/../software/b3d2/CMakeLists.txt)
@@ -33,8 +34,8 @@ SET_SOURCE_FILES_PROPERTIES(
     ../software/b3d2/lib/libb3d_alice.a
  )
 add_executable(b3d_fromhydro ${SOURCE_FILES})
-add_dependencies(b3d_fromhydro extern_b3d_alice extern_commonutils)
-target_link_libraries(b3d_fromhydro b3d_alice commonutils ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY} ${EIGEN3_LIBRARY})
+add_dependencies(b3d_fromhydro extern_b3d_alice extern_hydro2uds_alice extern_commonutils)
+target_link_libraries(b3d_fromhydro b3d_alice hydrobalance_alice commonutils ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY} ${EIGEN3_LIBRARY})
 
 set(SOURCE_FILES ./hydro2uds.cc)
 SET_SOURCE_FILES_PROPERTIES(
@@ -46,5 +47,5 @@ SET_SOURCE_FILES_PROPERTIES(
      ../software/hydrobalance/lib/libhydro2uds_alice.a
   )
 add_executable(hydro2uds ${SOURCE_FILES})
-add_dependencies(hydro2uds extern_b3d_alice extern_commonutils)
+add_dependencies(hydro2uds extern_b3d_alice extern_hydro2uds_alice extern_commonutils)
 target_link_libraries(hydro2uds hydro2uds_alice b3d_alice commonutils ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY} ${EIGEN3_LIBRARY})

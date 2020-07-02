@@ -17,6 +17,7 @@ CHydroBalance::CHydroBalance(string parfilename,int ranseed){
 	DiffusionRatio=parmap.getD("DIFFUSION_RATIO",1.0);
 	printf("DiffusionRatio=%g\n",DiffusionRatio);
 	eos=new CEoS(&parmap);
+	printf("howdy a\n");
 	eos->ReadEoS_PST();
 	eos->BuildMap();
 	eos->GetEoSFromT_PST(Tf);

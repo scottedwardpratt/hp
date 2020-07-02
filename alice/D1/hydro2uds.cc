@@ -13,6 +13,7 @@ int main(int argc,char *argv[]){
 	int run_number=atoi(argv[1]);
 	string udsfilename="uds"+string(argv[1])+".dat";
 	CHydroBalance hb("udsdata/udsparameters.dat",run_number);
+	printf("howdy\n");
 	hb.parmap.set("CHARGESINFO_FILENAME",udsfilename);
 	CQualifiers qualifiers;
 	qualifiers.Read("qualifiers.dat");
@@ -22,10 +23,15 @@ int main(int argc,char *argv[]){
 		oscarfile=hb.ReadOSCAR(hb.mesh);
 		printf("tau=%g, cmap.size=%d, emap.size=%d\n",
 		hb.mesh->tau,int(hb.cmap.size()),int(hb.emap.size()));
+		printf("check a\n");
 		hb.HyperFind();
+		printf("check b\n");
 		oscarfile=hb.ReadOSCAR(hb.newmesh);
+		printf("check b\n");
 		hb.HyperFind();
+		printf("check c\n");
 		hb.MakeCharges();
+		printf("check d\n");
 		printf("tau=%g, cmap.size=%d, emap.size=%d\n",
 		hb.newmesh->tau,int(hb.cmap.size()),int(hb.emap.size()));
 		hb.PropagateCharges();
