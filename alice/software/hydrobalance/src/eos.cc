@@ -30,19 +30,19 @@ void CEoS::ReadDiffusionData(){
 	string dirname=parmap->getS("LATTICEDATA_DIRNAME","../latticedata");
 	string filename=dirname+"/diffusion.dat";
 	char dummy[100];
-	char voldummy;
+	char voldummy[100];
 	int ntaudummy;
 	int ndata=7;
 	double errsysdummy,errsysstatdummy,t,td;
 	FILE *fptr=fopen(filename.c_str(),"r");
 	fgets(dummy,100,fptr);
 	//printf("%s\n",dummy);
-	fscanf(fptr,"%s",&voldummy);
+	fscanf(fptr,"%s",voldummy);
 	while(!feof(fptr)){
 		fscanf(fptr,"%lf %d %lf %lf %lf",&t,&ntaudummy,&td,&errsysdummy,&errsysstatdummy);
 		Tdiff.push_back(t*0.001);
 		twopiTD.push_back(td);
-		fscanf(fptr,"%s",&voldummy);
+		fscanf(fptr,"%s",voldummy);
 	}	
 	fclose(fptr);
 }
