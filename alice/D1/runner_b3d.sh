@@ -8,8 +8,7 @@ case $# in
 		lasti=$2
 		for ((ii=${firsti};ii<${lasti};ii++))
 		do
-			jj=`expr ${ii} + 1`
 			echo "____________ b3d for run number " ${ii} ______________;
-			./b3d_fromhydro default_${ii} ${ii} ${jj};
+			./b3d_fromhydro default_${ii} ${ii} ${ii};
 		done
 esac
