@@ -1,3 +1,4 @@
+
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 project(b3d_fromhydro CXX)
 project(hydro2uds CXX)
@@ -34,7 +35,7 @@ SET_SOURCE_FILES_PROPERTIES(
  )
 add_executable(b3d_fromhydro ${SOURCE_FILES})
 add_dependencies(b3d_fromhydro extern_b3d_alice extern_hydro2uds_alice extern_commonutils)
-target_link_libraries(b3d_fromhydro b3d_alice hydrobalance_alice commonutils ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY} ${EIGEN3_LIBRARY})
+target_link_libraries(b3d_fromhydro b3d_alice hydro2uds_alice commonutils ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY} ${EIGEN3_LIBRARY})
 
 set(SOURCE_FILES ./hydro2uds.cc)
 SET_SOURCE_FILES_PROPERTIES(
