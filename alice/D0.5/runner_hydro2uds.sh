@@ -6,6 +6,7 @@ case $# in
 	2)
 		firsti=$1
 		lasti=$2
+		echo testing firsti=${firsti}  lasti=${lasti}
 		for ((ii=${firsti};ii<=${lasti};ii++))
 		do
 			echo "____________ hydro2uds for run number " ${ii} ______________;
