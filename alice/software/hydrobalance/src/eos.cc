@@ -32,7 +32,6 @@ void CEoS::ReadDiffusionData(){
 	char dummy[100];
 	char voldummy[100];
 	int ntaudummy;
-	int ndata=7;
 	double errsysdummy,errsysstatdummy,t,td;
 	FILE *fptr=fopen(filename.c_str(),"r");
 	fgets(dummy,100,fptr);
@@ -126,39 +125,39 @@ void CEoS::ReadChiData_HSC(){
 	double error,chi0;
 	int idata;
 	const int ndata=7;
-	double chiB[ndata],chiI[ndata],chiQ[ndata],chiSS[ndata],chiLL[ndata],T[ndata];
+	double chiB[ndata],chiI[ndata],chiQ[ndata],chiSS[ndata],chiLL[ndata],Tarray[ndata];
 	FILE *fptr;
 	filename=dirname+"/chi-B.dat";
 	fptr=fopen(filename.c_str(),"r");
 	for(idata=0;idata<ndata;idata++){
-		fscanf(fptr,"%lf %lf %lf",&T[idata],&chiB[idata],&error);
+		fscanf(fptr,"%lf %lf %lf",&Tarray[idata],&chiB[idata],&error);
 	}
 	fclose(fptr);
 	filename=dirname+"/chi-I.dat";
 	fptr=fopen(filename.c_str(),"r");
 	for(idata=0;idata<ndata;idata++){
-		fscanf(fptr,"%lf %lf %lf",&T[idata],&chiI[idata],&error);
+		fscanf(fptr,"%lf %lf %lf",&Tarray[idata],&chiI[idata],&error);
 	}
 	fclose(fptr);
 	fclose(fptr);
 	filename=dirname+"/chi-LL.dat";
 	fptr=fopen(filename.c_str(),"r");
 	for(idata=0;idata<ndata;idata++){
-		fscanf(fptr,"%lf %lf %lf",&T[idata],&chiLL[idata],&error);
+		fscanf(fptr,"%lf %lf %lf",&Tarray[idata],&chiLL[idata],&error);
 	}
 	fclose(fptr);
 	fclose(fptr);
 	filename=dirname+"/chi-Q.dat";
 	fptr=fopen(filename.c_str(),"r");
 	for(idata=0;idata<ndata;idata++){
-		fscanf(fptr,"%lf %lf %lf",&T[idata],&chiQ[idata],&error);
+		fscanf(fptr,"%lf %lf %lf",&Tarray[idata],&chiQ[idata],&error);
 	}
 	fclose(fptr);
 	fclose(fptr);
 	filename=dirname+"/chi-SS.dat";
 	fptr=fopen(filename.c_str(),"r");
 	for(idata=0;idata<ndata;idata++){
-		fscanf(fptr,"%lf %lf %lf",&T[idata],&chiSS[idata],&error);
+		fscanf(fptr,"%lf %lf %lf",&Tarray[idata],&chiSS[idata],&error);
 	}
 	fclose(fptr);
 	
@@ -167,7 +166,7 @@ void CEoS::ReadChiData_HSC(){
 	chiss_HSC.resize(ndata);
 	chiud_HSC.resize(ndata);
 	for(idata=0;idata<ndata;idata++){
-		chi0=pow(T[idata]/HBARC,3)*(pow(PI,4)/90.0)*(4.0/(2.0*PI*PI))*2.0;
+		chi0=pow(Tarray[idata]/HBARC,3)*(pow(PI,4)/90.0)*(4.0/(2.0*PI*PI))*2.0;
 		chiLL[idata]*=chi0;
 		chiB[idata]*=chi0/3.0;
 		chiSS[idata]*=chi0;
@@ -178,15 +177,15 @@ void CEoS::ReadChiData_HSC(){
 		chiud_HSC[idata]=chiLL[idata]-2.0*chiI[idata];
 		chils_HSC[idata]=2.25*(chiB[idata]-(2.0/9.0)*chiLL[idata]-(1.0/9.0)*chiSS[idata]-(2.0/9.0)*chiud_HSC[idata]);
 		//chils[idata]=-4.5*(chiQ[idata]-(5.0/9.0)*chiLL[idata]-(1.0/9.0)*chiSS[idata]+(4.0/9.0)*chiud[idata]);
-		printf("-------  T=%g --------\n",T[idata]);
+		printf("-------  T=%g --------\n",Tarray[idata]);
 		printf("%8.5f %8.5f %8.5f\n",chill_HSC[idata],chiud_HSC[idata],chils_HSC[idata]);
 		printf("%8.5f %8.5f %8.5f\n",chiud_HSC[idata],chill_HSC[idata],chils_HSC[idata]);
 		printf("%8.5f %8.5f %8.5f\n",chils_HSC[idata],chils_HSC[idata],chiss_HSC[idata]);
 		/*
 		chils_HSC[idata]=2.25*(chiB[idata]-(2.0/9.0)*chiLL[idata]-(1.0/9.0)*chiSS[idata]-(2.0/9.0)*chiud_HSC[idata]);
-		printf("T=%g: chils_HSC[%d]=%g\n",T[idata],idata,chils_HSC[idata]);
+		printf("T=%g: chils_HSC[%d]=%g\n",Tarray[idata],idata,chils_HSC[idata]);
 		chils_HSC[idata]=-4.5*(chiQ[idata]-(5.0/9.0)*chiLL[idata]-(1.0/9.0)*chiSS[idata]+(4.0/9.0)*chiud[idata]);
-		printf("T=%g: chils_HSC[%d]=%g\n",T[idata],idata,chils_HSC[idata]);
+		printf("T=%g: chils_HSC[%d]=%g\n",Tarray[idata],idata,chils_HSC[idata]);
 		printf("--------\n");
 		*/
 		
@@ -196,7 +195,6 @@ void CEoS::ReadChiData_HSC(){
 void CEoS::ReadChiData_Claudia(){
 	string dirname=parmap->getS("LATTICEDATA_DIRNAME","latticedata");
 	string filename;
-	double error,chi0,delT=5.0;
 	int idata;
 	const int ndata=81;
 	char dummy[100];
@@ -219,9 +217,8 @@ void CEoS::ReadChiData_Claudia(){
 }
 
 void CEoS::GetChiOverS_Claudia(){
-	double delT=5.0,Tmax=400.0,w0,w1,sc,Tm=1000.0*T;
+	double delT=5.0,Tmax=400.0,w0,w1,Tm=1000.0*T;
 	const int ndata=81;
-	double answer;
 	int iT0;
 	if(Tm<20){
 		chill=chill_claudia[5]*Tm/20.0;
@@ -257,7 +254,7 @@ void CEoS::CalcEoS_PST(){
 		=parmap->getS("EOS_PSTDATA_FILENAME","../eos/EOS_tables/EOS_PST.dat");
 	FILE *fptr=fopen(filename.c_str(),"r");
 	FILE *fptrh=fopen("hadroneos.dat","w");
-	double epsilon;
+	double eps;
 	const int ndata=155500;
 	epsilon_PST.resize(ndata);
 	P_PST.resize(ndata);
@@ -265,18 +262,18 @@ void CEoS::CalcEoS_PST(){
 	T_PST.resize(ndata);
 	
 	int ie=0,ne;
-	fscanf(fptr,"%lf ",&epsilon);
+	fscanf(fptr,"%lf ",&eps);
 	while(!feof(fptr)){
-		epsilon_PST[ie]=epsilon;
+		epsilon_PST[ie]=eps;
 		fscanf(fptr,"%lf %lf %lf",&P_PST[ie],&s_PST[ie],&T_PST[ie]);
 		//printf("epsilon=%g, P=%g, s=%g,T=%g\n",epsilon_PST[ie],P_PST[ie],s_PST[ie],T_PST[ie]);
 		ie+=1;
-		fscanf(fptr,"%lf ",&epsilon);
+		fscanf(fptr,"%lf ",&eps);
 	}
 	
 	double TH=0.155, TQGP=0.175;
-	double T,Ph,eh,nh,sh,w;
-	int a,nres=reslist->resmap.size();
+	double TT,Ph,eh,nh,sh,w;
+	int nres=reslist->resmap.size();
 	vector<double> density;
 	vector<double> maxweight;
 	Eigen::Matrix3d chi;
@@ -285,18 +282,18 @@ void CEoS::CalcEoS_PST(){
 	ne=ie;
 	for(ie=0;ie<ne;ie++){
 		if(T_PST[ie]<TQGP){
-			T=T_PST[ie];
-			reslist->CalcEoSandChi(T*1000.0,Ph,eh,nh,density,maxweight,chi);
+			TT=T_PST[ie];
+			reslist->CalcEoSandChi(TT*1000.0,Ph,eh,nh,density,maxweight,chi);
 			Ph=Ph/1000.0;
 			eh=eh/1000.0;
-			sh=(Ph+eh)/T;
+			sh=(Ph+eh)/TT;
 			if(T<TH){
 				P_PST[ie]=Ph;
 				s_PST[ie]=sh;
 				epsilon_PST[ie]=eh;
 			}
 			else{
-				w=(TQGP-T)/(TQGP-TH);
+				w=(TQGP-TT)/(TQGP-TH);
 				P_PST[ie]=w*Ph+(1.0-w)*P_PST[ie];
 				s_PST[ie]=w*sh+(1.0-w)*s_PST[ie];
 				epsilon_PST[ie]=w*eh+(1.0-w)*epsilon_PST[ie];
@@ -318,24 +315,24 @@ void CEoS::ReadEoS_PST(){
 	string filename
 		=parmap->getS("EOS_PSTDATA_FILENAME","../eos/EOS_tables/EOS_PST.dat");
 	FILE *fptr=fopen(filename.c_str(),"r");
-	double epsilon;
+	double eps;
 	const int ndata=155500;
 	epsilon_PST.resize(ndata);
 	P_PST.resize(ndata);
 	s_PST.resize(ndata);
 	T_PST.resize(ndata);
 	
-	int ie=0,ne;
-	fscanf(fptr,"%lf ",&epsilon);
+	unsigned int ie=0;
+	fscanf(fptr,"%lf ",&eps);
 	while(!feof(fptr)){
-		epsilon_PST[ie]=epsilon;
+		epsilon_PST[ie]=eps;
 		fscanf(fptr,"%lf %lf %lf",&P_PST[ie],&s_PST[ie],&T_PST[ie]);
-		//printf("epsilon=%g, P=%g, s=%g,T=%g\n",epsilon_PST[ie],P_PST[ie],s_PST[ie],T_PST[ie]);
+		//printf("eps=%g, P=%g, s=%g,T=%g\n",epsilon_PST[ie],P_PST[ie],s_PST[ie],T_PST[ie]);
 		ie+=1;
-		fscanf(fptr,"%lf ",&epsilon);
+		fscanf(fptr,"%lf ",&eps);
 	}
 	
-	int a,nres=reslist->resmap.size();
+	int nres=reslist->resmap.size();
 	vector<double> density;
 	vector<double> maxweight;
 	Eigen::Matrix3d chi;
@@ -346,7 +343,7 @@ void CEoS::ReadEoS_PST(){
 }
 
 void CEoS::BuildMap(){
-	int ie;
+	unsigned int ie;
 	//printf("check BuildMap, epsilon_PST.size()=%d\n",int(epsilon_PST.size()));
 	for(ie=0;ie<epsilon_PST.size();ie++){
 		etmap.insert(pairdi(T_PST[ie],ie));
@@ -355,36 +352,35 @@ void CEoS::BuildMap(){
 }
 
 void CEoS::GetEoSFromEpsilon_PST(double epsilonset){
-	double depsilon=0.02,w0;
+	double depsilon=0.02,w0,TT;
 	int ie0,ndata;
 	epsilon=epsilonset;
 	ie0=lrint(floor(-0.5+epsilon/depsilon));
 	if(ie0<0)
 		ie0=0;
-	if(ie0>=epsilon_PST.size()-1){
+	if(ie0>=int(epsilon_PST.size()-1)){
 		ndata=epsilon_PST.size();
 		P=P_PST[ndata]+0.33*(epsilon_PST[ndata]-epsilon);
-		T=T_PST[ndata]*pow(epsilon/epsilon_PST[ndata],0.25);
+		TT=T_PST[ndata]*pow(epsilon/epsilon_PST[ndata],0.25);
 		s=(P+epsilon)/T;
 	}
 	else{
 		w0=(epsilon-epsilon_PST[ie0+1])/depsilon;
 		P=w0*P_PST[ie0]+(1.0-w0)*P_PST[ie0+1];
-		T=w0*T_PST[ie0]+(1.0-w0)*T_PST[ie0+1];
+		TT=w0*T_PST[ie0]+(1.0-w0)*T_PST[ie0+1];
 		s=w0*s_PST[ie0]+(1.0-w0)*s_PST[ie0+1];
 	}
 	if(fabs(T-0.140)<0.01){
 		printf("TESTING, s=%g\n",s);
-		double T,Ph,eh,nh,sh;
-		int a,nres=reslist->resmap.size();
+		double Ph,eh,nh;
+		int nres=reslist->resmap.size();
 		vector<double> density,maxweight;;
 		Eigen::Matrix3d chi;
 		density.resize(nres);
 		maxweight.resize(nres);
-		reslist->CalcEoSandChi(T*1000.0,Ph,eh,nh,density,maxweight,chi);
+		reslist->CalcEoSandChi(TT*1000.0,Ph,eh,nh,density,maxweight,chi);
 		Ph=Ph/1000.0;
 		eh=eh/1000.0;
-		sh=(Ph+eh)/T;
 	}
 }
 
@@ -397,7 +393,6 @@ void CEoS::Print(){
 
 void CEoS::PrintChi(){
 	Eigen::Matrix3d chimat;
-	int a,b;
 	chimat(0,0)=chimat(1,1)=chill;
 	chimat(1,0)=chimat(0,1)=chiud;
 	chimat(0,2)=chimat(1,2)=chimat(2,1)=chimat(2,0)=chils;

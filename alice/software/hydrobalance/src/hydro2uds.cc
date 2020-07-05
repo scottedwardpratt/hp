@@ -124,7 +124,7 @@ double &pitildeyybar){
 }
 
 void CHydroBalance::MakeCharges(){
-	int ix,iy,sign,a,b,balanceID,itau;
+	int ix,iy,sign,a,b,itau;
 	double DQll,DQud,DQls,DQss,g1,g2;
 	Eigen::Matrix3d DQ(3,3);
 	CCharge *charge1,*charge2;
@@ -202,19 +202,17 @@ void CHydroBalance::MakeCharges(){
 
 void CHydroBalance::PropagateCharges(){
 	mapic::iterator it,oldit,its;
-	double dTdt,dTdx,dTdy,u0,udotGradT,x,y,vOmega;
+	double dTdt,dTdx,dTdy,u0;
 	bool GGTt,GGTx,GGTy;
 	int nstrange=0,ic;
 	CHyperElement *hyper;
 	CCharge *charge;
 	int ix,iy,id;
-	bool eraseme;
 	double newtau=newmesh->tau;
 	it=cmap.begin();
 	its=it;
 	ic=0;
 	while(it!=cmap.end()){
-		eraseme=false;
 		charge=it->second;
 		if(ic!=0){
 			its=it;
@@ -268,8 +266,7 @@ void CHydroBalance::ScatterCharges(){
 	mapic::iterator it;
 	double u0,ux,uy,D;
 	CCharge *charge;
-	int ix,iy,id;
-	double newtau=newmesh->tau;
+	int ix,iy;
 	it=cmap.begin();
 	while(it!=cmap.end()){
 		charge=it->second;
@@ -292,10 +289,9 @@ void CHydroBalance::ScatterCharges(){
 void CHydroBalance::CalcDQ(int ix,int iy,double &DQll,
 double &DQud,double &DQls,double &DQss){
 	double d4x,s0,sx,sy;
-	CEoS eos[2][2][2];
+	CEoS eos222[2][2][2];
 	int j0,jx,jy;
 	double ux[2][2][2],uy[2][2][2],u0[2][2][2];
-	double chill[2][2][2],chiud[2][2][2],chils[2][2][2],chiss[2][2][2];
 	CHydroMesh *mptr;
 	
 	for(j0=0;j0<2;j0++){
@@ -309,8 +305,8 @@ double &DQud,double &DQls,double &DQss){
 				uy[j0][jx][jy]=mptr->UY[ix+jx][iy+jy];
 				u0[j0][jx][jy]=sqrt(1.0
 					+ux[j0][jx][jy]*ux[j0][jx][jy]+uy[j0][jx][jy]*uy[j0][jx][jy]);
-				eos[j0][jx][jy].GetEoSFromT_PST(mptr->T[ix+jx][iy+jy]);
-				eos[j0][jx][jy].GetChiOverS_Claudia();
+				eos222[j0][jx][jy].GetEoSFromT_PST(mptr->T[ix+jx][iy+jy]);
+				eos222[j0][jx][jy].GetChiOverS_Claudia();
 			}
 		}
 	}
@@ -335,20 +331,20 @@ double &DQud,double &DQls,double &DQss){
 				else
 					sy=0.25;
 				
-				DQll+=d4x*s0*u0[j0][jx][jy]*eos[j0][jx][jy].chill/DELTAU;
-				DQud+=d4x*s0*u0[j0][jx][jy]*eos[j0][jx][jy].chiud/DELTAU;
-				DQls+=d4x*s0*u0[j0][jx][jy]*eos[j0][jx][jy].chils/DELTAU;
-				DQss+=d4x*s0*u0[j0][jx][jy]*eos[j0][jx][jy].chiss/DELTAU;
+				DQll+=d4x*s0*u0[j0][jx][jy]*eos222[j0][jx][jy].chill/DELTAU;
+				DQud+=d4x*s0*u0[j0][jx][jy]*eos222[j0][jx][jy].chiud/DELTAU;
+				DQls+=d4x*s0*u0[j0][jx][jy]*eos222[j0][jx][jy].chils/DELTAU;
+				DQss+=d4x*s0*u0[j0][jx][jy]*eos222[j0][jx][jy].chiss/DELTAU;
 				
-				DQll+=d4x*sx*ux[j0][jx][jy]*eos[j0][jx][jy].chill/DX;
-				DQud+=d4x*sx*ux[j0][jx][jy]*eos[j0][jx][jy].chiud/DX;
-				DQls+=d4x*sx*ux[j0][jx][jy]*eos[j0][jx][jy].chils/DX;
-				DQss+=d4x*sx*ux[j0][jx][jy]*eos[j0][jx][jy].chiss/DX;
+				DQll+=d4x*sx*ux[j0][jx][jy]*eos222[j0][jx][jy].chill/DX;
+				DQud+=d4x*sx*ux[j0][jx][jy]*eos222[j0][jx][jy].chiud/DX;
+				DQls+=d4x*sx*ux[j0][jx][jy]*eos222[j0][jx][jy].chils/DX;
+				DQss+=d4x*sx*ux[j0][jx][jy]*eos222[j0][jx][jy].chiss/DX;
 				
-				DQll+=d4x*sy*uy[j0][jx][jy]*eos[j0][jx][jy].chill/DY;
-				DQud+=d4x*sy*uy[j0][jx][jy]*eos[j0][jx][jy].chiud/DY;
-				DQls+=d4x*sy*uy[j0][jx][jy]*eos[j0][jx][jy].chils/DY;
-				DQss+=d4x*sy*uy[j0][jx][jy]*eos[j0][jx][jy].chiss/DY;
+				DQll+=d4x*sy*uy[j0][jx][jy]*eos222[j0][jx][jy].chill/DY;
+				DQud+=d4x*sy*uy[j0][jx][jy]*eos222[j0][jx][jy].chiud/DY;
+				DQls+=d4x*sy*uy[j0][jx][jy]*eos222[j0][jx][jy].chils/DY;
+				DQss+=d4x*sy*uy[j0][jx][jy]*eos222[j0][jx][jy].chiss/DY;
 				
 			}
 		}
@@ -358,17 +354,16 @@ double &DQud,double &DQls,double &DQss){
 void CHydroBalance::CalcDQ0(int ix,int iy,double &DQll,double &DQud,
 double &DQls,double &DQss){
 	double u0,ux,uy,d3x=DX*DY*newmesh->tau,T;
-	CEoS eos;
 	GetUxyBar(ix,iy,ux,uy);
 	u0=sqrt(1.0+ux*ux+uy*uy);
 	GetTBar(ix,iy,T);
 	if(T>Tf){
-		eos.GetEoSFromT_PST(T);
-		eos.GetChiOverS_Claudia();
-		DQll=d3x*u0*eos.chill;
-		DQud=d3x*u0*eos.chiud;
-		DQls=d3x*u0*eos.chils;
-		DQss=d3x*u0*eos.chiss;
+		eos->GetEoSFromT_PST(T);
+		eos->GetChiOverS_Claudia();
+		DQll=d3x*u0*eos->chill;
+		DQud=d3x*u0*eos->chiud;
+		DQls=d3x*u0*eos->chils;
+		DQss=d3x*u0*eos->chiss;
 	}
 	else{
 		DQll=DQud=DQls=DQss=0.0;

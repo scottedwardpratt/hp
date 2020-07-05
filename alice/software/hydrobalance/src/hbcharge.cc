@@ -27,7 +27,7 @@ void CCharge::Propagate(double newtau){
 }
 
 void CCharge::SetV(double uxmatter,double uymatter){
-	double vz,vperp,phi,oldum0,vmag=1.0;
+	double vz,vperp,phi,vmag=1.0;
 	FourVector v,umatter;
 	vz=vmag*(1.0-2.0*hb->randy->ran());
 	phi=2.0*PI*hb->randy->ran();
@@ -52,7 +52,6 @@ void CCharge::SetV(double uxmatter,double uymatter){
 }	
 
 void CCharge::Print(){
-	int ix,iy;
 	printf("Charge Info:\n");
 	if(active)
 		printf("active\n");

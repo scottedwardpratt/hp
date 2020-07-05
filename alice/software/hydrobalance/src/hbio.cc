@@ -6,17 +6,15 @@
 using namespace std;
 
 bool CHydroBalance::ReadOSCAR(CHydroMesh *hydromesh){
-	double deltau=0.02,tau0=0.6;
 	double r,x,y,rmax=0.0,highestT,biggestU,ur;
 	double xbar=0.0,ybar=0.0,norm=0.0;
 	double Stot=0.0;
 	bool keepgoing=true;
-	int olditau,ix,iy,iline,flag,alpha,beta;
+	int olditau,ix,iy,iline,flag,alpha;
 	char dummy[300];
 	double **pi,**pitilde;
 	FourVector u;
 	double e,p,t,vx,vy,pi00,pi01,pi02,pi11,pi12,pi22,pi33,Pi;
-	double etaovers,taupi,tauPI,u0;
 	pi=new double*[4];
 	pitilde=new double*[4];
 	for(alpha=0;alpha<4;alpha++){
@@ -28,7 +26,7 @@ bool CHydroBalance::ReadOSCAR(CHydroMesh *hydromesh){
 		oscar_filename="../hydrodata/"+qualifier+"/"+parmap.getS("HYDRODATA_FILENAME","OSCAR2008H.dat");
 		printf("filename=%s\n",oscar_filename.c_str());
 		fptr_oscar=fopen(oscar_filename.c_str(),"r");
-		for(int iline=0;iline<14;iline++){
+		for(iline=0;iline<14;iline++){
 			fgets(dummy,300,fptr_oscar);
 			//printf("%s",dummy);
 		}
@@ -125,7 +123,7 @@ void CHydroBalance::WriteCharges(){
 	mapic::iterator it;
 	CCharge *charge;
 	CHyperElement *hyper;
-	int ix,iy,balanceID,nstrange=0;
+	int balanceID,nstrange=0;
 	FILE *fptr=fopen(filename.c_str(),"w");
 	fprintf(fptr,"#  id   u  d  s      weight        tau           eta           x             y\n");
 	it=emap.begin();
@@ -159,14 +157,12 @@ void CHydroBalance::WriteCharges(){
 	// for testing
 	Eigen::Matrix3d chitotcharges;
 	chitotcharges.setZero();
-	int a,b,bid1,bid2;
+	int a,b;
 	it=emap.begin();
 	CCharge *charge1,*charge2;
 	while(it!=emap.end()){
-		bid1=it->first;
 		charge1=it->second;
 		++it;
-		bid2=it->first;
 		charge2=it->second;
 		for(a=0;a<3;a++){
 			for(b=0;b<3;b++){
@@ -181,14 +177,11 @@ void CHydroBalance::WriteCharges(){
 
 void CHydroBalance::ClearCharges(){
 	mapic::iterator it;
-	int bid1,bid2;
 	it=emap.begin();
 	CCharge *charge1,*charge2;
 	while(it!=emap.end()){
-		bid1=it->first;
 		charge1=it->second;
 		++it;
-		bid2=it->first;
 		charge2=it->second;
 		delete charge1;
 		delete charge2;

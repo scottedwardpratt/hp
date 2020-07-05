@@ -84,7 +84,7 @@ public:
 	static void GetDimensions(int &NXs,int &NYs,double &DXs,double &DYs,double &DELTAUs,double &TAU0s,double &XMINs,double &XMAXs,double &YMINs,double &YMAXs){
 		NXs=NX; NYs=NY;
 		DXs=DX; DYs=DY; DELTAUs=DELTAU; TAU0s=TAU0;
-		XMINs=XMIN; XMAXs=XMAX; YMINs=YMIN; YMINs=YMIN;
+		XMINs=XMIN; XMAXs=XMAX; YMINs=YMIN; YMAXs=YMAX;
 	}
 };
 

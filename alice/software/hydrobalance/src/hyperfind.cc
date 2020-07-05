@@ -6,8 +6,7 @@ using namespace std;
 
 void CHydroBalance::HyperFind(){
 	int ix,iy,a,b;
-	double u0,omega,gradT2,udotgradT;
-	double w,dTdx,dTdy,dTdt,dV;
+	double dTdx,dTdy,dTdt;
 	CHyperElement hyper;
 	CHyperElement *newhyper;
 	bool GGTt,GGTx,GGTy;
@@ -47,8 +46,6 @@ bool CHydroBalance::GetGradT(int ix,int iy,
 double &dTdt,double &dTdx,double &dTdy,bool &GGTt,bool &GGTx,bool &GGTy){
 	bool hypercheck=false;
 	double Txplus,Txminus,Typlus,Tyminus,Ttplus,Ttminus;
-	double DX,DY,DELTAU,TAU0,XMIN,XMAX,YMIN,YMAX;
-	int NX,NY;
 	mesh->GetDimensions(NX,NY,DX,DY,DELTAU,TAU0,XMIN,XMAX,YMIN,YMAX);
 	
 	Txminus=0.25*(mesh->T[ix][iy]+newmesh->T[ix][iy]
