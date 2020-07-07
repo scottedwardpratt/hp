@@ -6,7 +6,7 @@ case $# in
 	2)
 		firsti=$1
 		lasti=$2
-		for ((ii=${firsti};ii<${lasti};ii++))
+		for ((ii=${firsti};ii<=${lasti};ii++))
 		do
 			echo "____________ b3d for run number " ${ii} ______________;
 			./b3d_fromhydro default_${ii} ${ii} ${ii};
