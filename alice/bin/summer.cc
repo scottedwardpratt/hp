@@ -22,7 +22,7 @@ int main(int argc,char *argv[]){
 	FILE *fptr_write;
 	char oldfilename[100],newfilename[100];
 	vector<double> ysum,xsum;
-	double x,y,xbar,xbarnorm,x2bar,fudge,bfnorm;
+	double x,y,xbar,xbarnorm,x2bar,fudge,bfnorm,error,dx;
 	int jdir,itype,ifn,ix;
 	printf("Enter qualifier: ");
 	scanf("%s",qs);
@@ -45,7 +45,7 @@ int main(int argc,char *argv[]){
 	double nplus,nminus;
 	for(jdir=J0DIR;jdir<NJDIR;jdir++){
 		sprintf(oldfilename,"%s_%d/%s/%s/denom.dat",dirprefix.c_str(),jdir,qualifier.c_str(),acceptance.c_str());
-		printf("oldfilename=%s\n",oldfilename);
+		//printf("oldfilename=%s\n",oldfilename);
 		fptr_read=fopen(oldfilename,"r");
 		fscanf(fptr_read,"%s %lf %lf",dummy,&nplus,&nminus);
 		denom_pi+=nplus+nminus;
@@ -79,6 +79,7 @@ int main(int argc,char *argv[]){
 			fclose(fptr_read);
 		}
 	}
+	//
 	sprintf(newfilename,"%s_sum/%s/%s/denom.dat",dirprefix.c_str(),qualifier.c_str(),acceptance.c_str());
 	fptr_write=fopen(newfilename,"w");
 	fprintf(fptr_write,"denom_pi: %g\ndenom_K: %g\ndenom_p: %g\ndenom_allcharges: %g\ndenom_allcharges_phi0: %g\ndenom_allcharges_phi45: %g\ndenom_allcharges_phi90 %g\n",
@@ -99,6 +100,13 @@ int main(int argc,char *argv[]){
 	double denom;
 	for(itype=0;itype<NTYPES;itype++){
 		for(ifn=0;ifn<3;ifn++){
+			dx=0.0;
+			if(ifn==0)
+				dx=360.0/28.0;
+			if(ifn==1)
+				dx=0.1;
+			if(ifn==2)
+				dx=0.1;
 			sprintf(newfilename,"%s_sum/%s/%s/%s/%s",dirprefix.c_str(),qualifier.c_str(),acceptance.c_str(),dirname[itype].c_str(),
 			newdatafilename[ifn].c_str());
 			printf("newfilename=%s\n",newfilename);
@@ -115,6 +123,7 @@ int main(int argc,char *argv[]){
 				ysum.clear();
 				ix=0;
 				fscanf(fptr_read,"%lf %lf",&x,&y);
+				fgets(dummy,100,fptr_read);
 				fudge=1.0;
 				//if(ifn>0 && jdir<200)
 					//fudge=0.25;
@@ -132,6 +141,7 @@ int main(int argc,char *argv[]){
 					xbarnorm+=y;
 					ix+=1;
 					fscanf(fptr_read,"%lf %lf",&x,&y);
+					fgets(dummy,100,fptr_read);
 					fudge=1.0;
 					//if(ifn>0 && jdir<200)
 					//	fudge=0.25;
@@ -145,16 +155,17 @@ int main(int argc,char *argv[]){
 				double ybar=ysum[ix];
 				if(ifn==0 && (itype!=8))
 					ybar=0.5*(ysum[ix]+ysum[nx-ix-1]);
-				fprintf(fptr_write,"%5.2f %10.3e\n",xsum[ix],ybar/double(NJDIR-J0DIR));
-				if(itype==6 && ifn==2){
-					bfnorm+=ybar*0.1/double(NJDIR-J0DIR);
-					printf("%2d %g\n",ix,ybar/double(NJDIR-J0DIR));
+				ybar=ybar/double(NJDIR-J0DIR);
+				fprintf(fptr_write,"%5.2f %10.3e\n",xsum[ix],ybar);
+				bfnorm+=ybar*dx;
+				if(itype==4 && ifn==0){
+					printf("%2d %g\n",ix,ybar);
 				}
 			}
 			fclose(fptr_write);
-			printf("ifn=%d, <x>=%g,  <x^2>=%g\n",ifn,xbar/xbarnorm,x2bar/xbarnorm);
-			if(ifn==2 && itype==6)
-				printf("----------------------- bfnorm=%g ------------------------\n",bfnorm);
+			//printf("ifn=%d, <x>=%g,  <x^2>=%g\n",ifn,xbar/xbarnorm,x2bar/xbarnorm);
+			//if(ifn==2 && itype==6)
+			printf("bfnorm=%g\n------------------------\n",bfnorm);
 		}
 	}
 	
