@@ -112,16 +112,52 @@ aliceTOT_phi[0]=alice_phi[8]
 aliceTOT_bf[14]=alice_bf[22]
 aliceTOT_errors[14]=alice_errors[22]
 aliceTOT_phi[14]=alice_phi[22]
+alice_norm=0.0
 for i in range(1,8):
   aliceTOT_bf[i]=0.5*(alice_bf[8-i]+alice_bf[8+i])
   aliceTOT_errors[i]=0.5*(alice_errors[8-i]+alice_errors[8+i])
   print('i=',i,' angles are ',alice_phi[8+i],' ',alice_phi[8-i])
   aliceTOT_phi[i]=alice_phi[8+i]
+  alice_norm=alice_norm+aliceTOT_bf[i]
 for i in range(9,14):
   aliceTOT_bf[i]=0.5*(alice_bf[8+i]+alice_bf[28-i])
   aliceTOT_errors[i]=0.5*(alice_errors[8+i]+alice_errors[28-i])*sqrt(2.0)
   aliceTOT_phi[i]=alice_phi[8+i]
   print('i=',i,' angles are ',alice_phi[8+i],' ',alice_phi[28-i]-360.0)
+  alice_norm=alice_norm+aliceTOT_bf[i]
+
+alice_norm=alice_norm+aliceTOT_bf[8]+aliceTOT_bf[0]
+alice_norm=alice_norm*pi/14
+print('alice_norm=',alice_norm)
+
+
+
+
+
+
+#stardata=np.loadtxt('stardata/AuAuPhiCent0_5.dat',skiprows=0,unpack=True)
+#stardata=np.loadtxt('stardata/AuAuPhiCent40_50.dat',skiprows=0,unpack=True)
+#xstar=stardata[0]*180.0/pi
+#ystar=stardata[1]
+
+#normstar=0.0
+#normmodel=0.0
+#widthstar=0.0
+#widthmodel=0.0
+#for i in range(0,20):
+#  phimodel=(i+0.5)*(4.0*pi/180.0)
+#  normmodel+=(4.0*pi/180.0)*ysum[i]
+#  widthmodel+=(4.0*pi/180.0)*ysum[i]*phimodel
+
+#for i in range(0,24):
+#  phistar=(i+0.5)*(7.5*pi/180.0)
+#  normstar+=(4.0*pi/180.0)*ystar[i]
+#  widthstar+=(4.0*pi/180.0)*ystar[i]*phistar
+  
+#widthstar=widthstar/normstar
+#widthmodel=widthmodel/normmodel
+#print('normstar=',normstar,' normmodel=',normmodel)
+#print('widthstar=',widthstar,' widthmodel=',widthmodel)
 
 plt.plot(x,ysum_D0_5,linestyle='-',linewidth=2,marker='o',color='r',label='$0.5D_{\\rm latt}$')
 plt.plot(x,ysum_D1,linestyle='-',linewidth=2,marker='o',color='k',label='$D_{\\rm latt}$')
@@ -143,10 +179,10 @@ ax.set_xticks(np.arange(0,225,15), minor=True)
 ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0.0f'))
 plt.xlim(0.0,181)
 
-ax.set_yticks(np.arange(0,1.0,0.05), minor=False)
-ax.set_yticklabels(np.arange(0,1.0,0.05), minor=False, family='serif')
-ax.set_yticks(np.arange(0,1.0,0.025), minor=True)
-plt.ylim(0.0,0.4)
+ax.set_yticks(np.arange(0,1.0,0.1), minor=False)
+ax.set_yticklabels(np.arange(0,1.0,0.1), minor=False, family='serif')
+ax.set_yticks(np.arange(0,1.0,0.05), minor=True)
+plt.ylim(0.0,0.375)
 #ax.set_yticks(0.1:1.0:10.0:100.0, minor=True)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
 ax.yaxis.set_major_formatter(sformatter)

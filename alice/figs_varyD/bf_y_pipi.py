@@ -81,11 +81,11 @@ alice_y=alicedata[0]
 alice_bf=alicedata[1]
 alice_errors=alicedata[2]
 
-plt.plot(x,0.5*ysum_D0_5,linestyle='-',linewidth=2,marker='o',color='r',label='$0.5D_{\\rm latt}$')
-plt.plot(x,0.5*ysum_D1,linestyle='-',linewidth=2,marker='o',color='k',label='$D_{\\rm latt}$')
-plt.plot(x,0.5*ysum_D2,linestyle='-',linewidth=2,marker='o',color='g',label='$2D_{\\rm latt}$')
-plt.plot(x,0.5*ysum_D4,linestyle='-',linewidth=2,marker='o',color='b',label='$4D_{\\rm latt}$')
-plt.errorbar(alice_y,alice_bf,alice_errors,linestyle='None',marker='*',color='k',label='ALICE (prel)')
+plt.plot(x,ysum_D0_5,linestyle='-',linewidth=2,marker='o',color='r',label='$0.5D_{\\rm latt}$')
+plt.plot(x,ysum_D1,linestyle='-',linewidth=2,marker='o',color='k',label='$D_{\\rm latt}$')
+plt.plot(x,ysum_D2,linestyle='-',linewidth=2,marker='o',color='g',label='$2D_{\\rm latt}$')
+plt.plot(x,ysum_D4,linestyle='-',linewidth=2,marker='o',color='b',label='$4D_{\\rm latt}$')
+plt.errorbar(alice_y,2.0*alice_bf,alice_errors,linestyle='None',marker='*',color='k',label='ALICE (prel)')
 #plt.plot(aliceTOT_phi,aliceTOT_bf,linestyle='None',marker='*',color='k',label='ALICE (prel)')
 ax.legend()
 
@@ -101,10 +101,10 @@ ax.set_xticks(np.arange(0,2,0.1), minor=True)
 ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0.0f'))
 plt.xlim(0.0,1.8)
 
-ax.set_yticks(np.arange(0,1.0,0.05), minor=False)
-ax.set_yticklabels(np.arange(0,1.0,0.05), minor=False, family='serif')
-ax.set_yticks(np.arange(0,1.0,0.025), minor=True)
-plt.ylim(0.0,0.45)
+ax.set_yticks(np.arange(0,2.0,0.2), minor=False)
+ax.set_yticklabels(np.arange(0,2.0,0.2), minor=False, family='serif')
+ax.set_yticks(np.arange(0,2.0,0.05), minor=True)
+plt.ylim(0.0,0.95)
 #ax.set_yticks(0.1:1.0:10.0:100.0, minor=True)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
 ax.yaxis.set_major_formatter(sformatter)

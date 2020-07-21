@@ -112,17 +112,23 @@ aliceTOT_phi[0]=alice_phi[8]
 aliceTOT_bf[14]=alice_bf[22]
 aliceTOT_errors[14]=alice_errors[22]
 aliceTOT_phi[14]=alice_phi[22]
+alice_norm=0.0
 for i in range(1,8):
   aliceTOT_bf[i]=0.5*(alice_bf[8-i]+alice_bf[8+i])
   aliceTOT_errors[i]=0.5*(alice_errors[8-i]+alice_errors[8+i])
   print('i=',i,' angles are ',alice_phi[8+i],' ',alice_phi[8-i])
   aliceTOT_phi[i]=alice_phi[8+i]
+  alice_norm=alice_norm+aliceTOT_bf[i]
 for i in range(9,14):
   aliceTOT_bf[i]=0.5*(alice_bf[8+i]+alice_bf[28-i])
   aliceTOT_errors[i]=0.5*(alice_errors[8+i]+alice_errors[28-i])*sqrt(2.0)
   aliceTOT_phi[i]=alice_phi[8+i]
   print('i=',i,' angles are ',alice_phi[8+i],' ',alice_phi[28-i]-360.0)
-  
+  alice_norm=alice_norm+aliceTOT_bf[i]
+
+alice_norm=alice_norm+aliceTOT_bf[8]+aliceTOT_bf[0]
+alice_norm=alice_norm*pi/14
+print('alice_norm=',alice_norm)
 
 
 
