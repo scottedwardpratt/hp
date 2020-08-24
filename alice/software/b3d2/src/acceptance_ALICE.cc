@@ -84,13 +84,11 @@ void CAcceptance_ALICE::CalcAcceptance_Realistic(bool &accept,double &efficiency
 }
 
 void CAcceptance_ALICE::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part){
-	double eta,pt,pmag,*p=part->p;
+	double pt,*p=part->p;
 	//double dca[4],dcaxy;
 	//int pid=part->resinfo->code;
 	efficiency=0.0;
 	pt=sqrt(p[1]*p[1]+p[2]*p[2]);
-	pmag=sqrt(pt*pt+p[3]*p[3]);
-	eta=atanh(p[3]/pmag);
 	accept=false;
 	efficiency=0.0;
 	if(pt>PTMIN && pt<PTMAX && part->resinfo->charge!=0){

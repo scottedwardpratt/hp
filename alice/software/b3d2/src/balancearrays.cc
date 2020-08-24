@@ -227,7 +227,7 @@ void CBalanceArrays::ConstructBF(CBFNumer *numer,CBFDenom *denom,CBFNumer *bf,do
 			bf->Cyphi[iy][iphi]=numer->Cyphi[iy][iphi];
 		}
 	}
-	printf("%7s: normalization=%g, npairs=%g\n",bf->name.c_str(),norm,bf->npairs);
+	printf("%7s: normalization=%g, npairs=%lld\n",bf->name.c_str(),norm,bf->npairs);
 }
 
 void CBalanceArrays::WriteNumers(){
@@ -512,7 +512,7 @@ void CBalanceArrays::IncrementDenom(CPart *part){
 }
 
 void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
-	double effa,effb,effaNoID,effbNoID,ya,yb=0.0,dely,phia,phib,delyb=0.0,Minv;
+	double effa,effb,effaNoID,effbNoID,ya,dely,phia,phib,delyb=0.0,Minv;
 	bool accepta,acceptb,acceptaNoID,acceptbNoID;
 	double B3D_ETAMAX=b3d->ETAMAX;
 	int pida,pidb;
@@ -543,9 +543,6 @@ void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
 				delyb=2.0*B3D_ETAMAX;
 			partbb.Copy(partb);
 			partbb.BoostRap(dely+delyb);
-			
-			if(alice_acceptance)
-				yb=partbb.y;
 			acceptance->CalcAcceptance(acceptb,effb,&partbb);
 			acceptance->CalcAcceptanceNoID(acceptbNoID,effbNoID,&partbb);
 

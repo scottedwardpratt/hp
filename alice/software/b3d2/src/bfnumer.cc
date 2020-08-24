@@ -3,10 +3,11 @@
 #include "resonances.h"
 #include "parametermap.h"
 #include "misc.h"
+#include "acceptance.h"
 
 using namespace std;
 
-CAcceptance CBFNumer::acceptance=NULL;
+CAcceptance *CBFNumer::acceptance=NULL;
 
 CBFNumer::CBFNumer(CparameterMap *parmapset){
 	int ieta;
