@@ -8,7 +8,7 @@ using namespace std;
 class CBFNumer{
 public:
 	string name;
-	double npairs;
+	long long int npairs;
 	vector<double> Bqinv,Bqout,Bqlong,Bqside,By,Beta,Bphi,Betas;  //q = 1/2 rel. momentum in CM frame
 	vector<double> Cqinv,Cqout,Cqlong,Cqside,Cy,Ceta,Cphi,Cetas;
 	vector<vector<double>> Byphi,Cyphi; // Array for opp. signs, binned by both y and phi
@@ -20,6 +20,7 @@ public:
 	void Increment(CPart *parta,CPart *partb,double effa,double effb);
 	void WriteNumer(string dirname,string numertype,bool NoQ);
 	void Print();
+	static CAcceptance *acceptance;
 };
 
 class CBFDenom{

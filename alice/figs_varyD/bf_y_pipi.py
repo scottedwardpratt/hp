@@ -53,12 +53,12 @@ cascadedata = np.loadtxt('../fromcascade/model_output/default_sum/'+centrality+'
 xc=cascadedata[0]
 yc1=cascadedata[1]
 yc=efficiency*yc1
-
+3
 cfactor=1.0/(1.0-x_D4/1.6);
-ysum_D1=cfactor*y_D1+yc
-ysum_D0_5=cfactor*y_D0_5+yc
-ysum_D2=cfactor*y_D2+yc
-ysum_D4=cfactor*y_D4+yc
+ysum_D1=y_D1+yc
+ysum_D0_5=y_D0_5+yc
+ysum_D2=y_D2+yc
+ysum_D4=y_D4+yc
 
 #cdata=np.loadtxt('../acc_correction/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_y.dat',skiprows=0,unpack=True)
 #cfactor=cdata[2]*4
@@ -98,7 +98,7 @@ ax.tick_params(axis='both', which='major', labelsize=14)
 ax.set_xticks(np.arange(0,2,0.5), minor=False)
 ax.set_xticklabels(np.arange(0,2,0.5), minor=False, family='serif')
 ax.set_xticks(np.arange(0,2,0.1), minor=True)
-ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0.0f'))
+ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0.1f'))
 plt.xlim(0.0,1.8)
 
 ax.set_yticks(np.arange(0,2.0,0.2), minor=False)
