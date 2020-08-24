@@ -16,7 +16,8 @@ int main(int argc,char *argv[]){
 	string dirprefix="default";
 	//string dirprefix="default";
 	char qs[200];
-	const int NTYPES=10,NJDIR=720,J0DIR=0;
+	const int NTYPES=10;
+	int NJDIR;
 	bool CalcGammaP=false;
 	FILE *fptr_read;
 	FILE *fptr_write;
@@ -24,8 +25,12 @@ int main(int argc,char *argv[]){
 	vector<double> ysum,xsum;
 	double x,y,xbar,xbarnorm,x2bar,fudge,bfnorm,error,dx;
 	int jdir,itype,ifn,ix;
+	
 	printf("Enter qualifier: ");
 	scanf("%s",qs);
+	printf("Enter NJDIR: (the number of default_xxx dirs)");
+	scanf("%d",&NJDIR);
+	
 	qualifier=qs;
 	string olddatafilename[3]={"bf_phi.dat","bf_eta.dat","bf_y.dat"};
 	string newdatafilename[3]={"bf_phi.dat","bf_eta.dat","bf_y.dat"};
@@ -43,7 +48,8 @@ int main(int argc,char *argv[]){
 	char dummy[100];
 	string gpstring,dumbo;
 	double nplus,nminus;
-	for(jdir=J0DIR;jdir<NJDIR;jdir++){
+	printf("NJDIR=%d\n",NJDIR);
+	for(jdir=0;jdir<NJDIR;jdir++){
 		sprintf(oldfilename,"%s_%d/%s/%s/denom.dat",dirprefix.c_str(),jdir,qualifier.c_str(),acceptance.c_str());
 		//printf("oldfilename=%s\n",oldfilename);
 		fptr_read=fopen(oldfilename,"r");
@@ -89,11 +95,11 @@ int main(int argc,char *argv[]){
 	if(CalcGammaP){
 		sprintf(newfilename,"%s_sum/%s/%s/gammap.dat",dirprefix.c_str(),qualifier.c_str(),acceptance.c_str());
 		fptr_write=fopen(newfilename,"w");
-		gammap=gammap/double(NJDIR-J0DIR);
-		gammap2=gammap2/double(NJDIR-J0DIR);
-		gammap2=sqrt((gammap2-gammap*gammap)/double(NJDIR-J0DIR));
+		gammap=gammap/double(NJDIR);
+		gammap2=gammap2/double(NJDIR);
+		gammap2=sqrt((gammap2-gammap*gammap)/double(NJDIR));
 		fprintf(fptr_write,"%g  %g\n",gammap,gammap2);
-		printf("%g\n",gammap/double(NJDIR-J0DIR));
+		printf("%g\n",gammap/double(NJDIR));
 		fclose(fptr_write);
 	}
 	
@@ -114,8 +120,8 @@ int main(int argc,char *argv[]){
 			xsum.clear();
 			ysum.clear();
 			xbar=xbarnorm=x2bar=0.0;
-			for(jdir=J0DIR;jdir<NJDIR;jdir++){
-				denom=double(NJDIR-J0DIR);
+			for(jdir=0;jdir<NJDIR;jdir++){
+				denom=double(NJDIR);
 				sprintf(oldfilename,"%s_%d/%s/%s/%s/%s",dirprefix.c_str(),jdir,qualifier.c_str(),acceptance.c_str(),
 				dirname[itype].c_str(),olddatafilename[ifn].c_str());
 				//printf("oldfilename=%s\n",oldfilename);
@@ -129,7 +135,7 @@ int main(int argc,char *argv[]){
 					//fudge=0.25;
 				y=y*fudge;
 				do{
-					if(jdir==J0DIR){
+					if(jdir==0){
 						xsum.push_back(x);
 						ysum.push_back(y);
 					}
@@ -155,7 +161,7 @@ int main(int argc,char *argv[]){
 				double ybar=ysum[ix];
 				if(ifn==0 && (itype!=8))
 					ybar=0.5*(ysum[ix]+ysum[nx-ix-1]);
-				ybar=ybar/double(NJDIR-J0DIR);
+				ybar=ybar/double(NJDIR);
 				fprintf(fptr_write,"%5.2f %10.3e\n",xsum[ix],ybar);
 				bfnorm+=ybar*dx;
 				if(itype==4 && ifn==0){

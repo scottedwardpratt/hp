@@ -22,7 +22,7 @@ void CBalanceArrays::InitArrays(){
 	NSAMPLE_HYDRO2UDS=parmap->getD("NSAMPLE_HYDRO2UDS",1);
 	NSAMPLE_UDS2BAL=parmap->getD("NSAMPLE_UDS2BAL",1);
 	FROM_UDS=parmap->getB("BF_FROM_UDS",false);
-	BF_YMAX=parmap->getD("BF_YMAX",0.8);
+	BF_YMAX=parmap->getD("BF_YMAX",1.0);
 	BF_YMIN=-BF_YMAX;
 	BF_PHICUT=parmap->getD("BF_PHICUT",15);
 	NPHI=parmap->getI("BF_NPHIBINS",180);
@@ -47,6 +47,7 @@ void CBalanceArrays::InitArrays(){
 		printf("Define BF_ACCEPTANCE in parameters.dat\n");
 		exit(1);
 	}
+	CBFNumer::acceptance=acceptance;
 	NSAMPLE_HYDRO2UDS=NSAMPLE_HYDRO2UDS/(2.0*b3d->ETAMAX);
 	NEVENTS=0;
 	GAMMAP_OS=GAMMAP_SS=0.0;
@@ -564,42 +565,20 @@ void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
 				if(abs(pida)==211 && abs(pidb)==211){
 					numer_pipi->Increment(&partaa,&partbb,effa,effb);
 				}
-				if( (abs(pida)==211 && abs(pidb)==321)
-				|| (abs(pidb)==211 && abs(pida)==321) ){
-					if(alice_acceptance){
-						if((abs(pida)==211 && fabs(ya)<0.7) || (abs(pidb)==211 && fabs(yb)<0.7) )
-							numer_piK->Increment(&partaa,&partbb,effa,effb);
-					}
-					else{
-						numer_piK->Increment(&partaa,&partbb,effa,effb);
-					}
+				if( (abs(pida)==211 && abs(pidb)==321) || (abs(pidb)==211 && abs(pida)==321) ){
+					numer_piK->Increment(&partaa,&partbb,effa,effb);
 				}
-				if( (abs(pida)==211 && abs(pidb)==2212)
-				|| (abs(pidb)==211 && abs(pida)==2212) ){
-					if(alice_acceptance){
-						if((abs(pida)==211 && fabs(ya)<0.7) || (abs(pidb)==211 && fabs(yb)<0.7) )
-							numer_pip->Increment(&partaa,&partbb,effa,effb);
-					}
-					else{
-						numer_pip->Increment(&partaa,&partbb,effa,effb);
-					}
+				if( (abs(pida)==211 && abs(pidb)==2212) || (abs(pidb)==211 && abs(pida)==2212) ){
+					numer_pip->Increment(&partaa,&partbb,effa,effb);
 				}
 				if(abs(pida)==321 && abs(pidb)==321){
 					numer_KK->Increment(&partaa,&partbb,effa,effb);
 				}
-				if( (abs(pida)==321 && abs(pidb)==2212)
-				|| (abs(pidb)==321 && abs(pida)==2212) ){
+				if( (abs(pida)==321 && abs(pidb)==2212) || (abs(pidb)==321 && abs(pida)==2212) ){
 					numer_Kp->Increment(&partaa,&partbb,effa,effb);
 				}
 				if(abs(pida)==2212 && abs(pidb)==2212){
-					if(alice_acceptance){
-						if(fabs(ya)<0.6 && fabs(yb)<0.6){
-							numer_pp->Increment(&partaa,&partbb,effa,effb);
-						}
-					}
-					else{
 						numer_pp->Increment(&partaa,&partbb,effa,effb);
-					}
 				}
 			}
 			

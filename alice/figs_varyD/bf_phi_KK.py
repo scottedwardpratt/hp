@@ -22,7 +22,7 @@ plt.figure(figsize=(6,5))
 fig = plt.figure(1)
 ax = fig.add_axes([0.15,0.12,0.8,0.8])
 
-centrality='alice_cent0_5'
+centrality='alice_cent0_10'
 chargepair='KK'
 
 chargesdata = np.loadtxt('../D1/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_phi.dat',skiprows=0,unpack=True)
@@ -88,6 +88,8 @@ ysum_D0_5=y_D0_5+yc
 ysum_D2=y_D2+yc
 ysum_D4=y_D4+yc
 
+#ysum_D0_5=ysum_D1=ysum_D2=ysum_D4=yc
+
 Dphi=pi/14.0
 D1norm=D2norm=D0_5norm=D4norm=0.0
 for i in range(0,18):
@@ -135,7 +137,7 @@ print('alice_norm=',alice_norm)
 
 
 
-#stardata=np.loadtxt('stardata/AuAuPhiCent0_5.dat',skiprows=0,unpack=True)
+#stardata=np.loadtxt('stardata/AuAuPhicent0_10.dat',skiprows=0,unpack=True)
 #stardata=np.loadtxt('stardata/AuAuPhiCent40_50.dat',skiprows=0,unpack=True)
 #xstar=stardata[0]*180.0/pi
 #ystar=stardata[1]
@@ -182,7 +184,7 @@ plt.xlim(0.0,181)
 ax.set_yticks(np.arange(0,1.0,0.05), minor=False)
 ax.set_yticklabels(np.arange(0,1.0,0.05), minor=False, family='serif')
 ax.set_yticks(np.arange(0,1.0,0.025), minor=True)
-plt.ylim(0.0,0.175)
+plt.ylim(0.0,0.25)
 #ax.set_yticks(0.1:1.0:10.0:100.0, minor=True)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
 ax.yaxis.set_major_formatter(sformatter)

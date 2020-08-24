@@ -6,9 +6,11 @@
 
 using namespace std;
 
+CAcceptance CBFNumer::acceptance=NULL;
+
 CBFNumer::CBFNumer(CparameterMap *parmapset){
 	int ieta;
-	npairs=0.0;
+	npairs=0;
 	parmap=parmapset;
 	Netabins=parmap->getD("BF_NETABINS",50);
 	Nybins=parmap->getD("BF_NYBINS",50);
@@ -69,7 +71,7 @@ void CBFNumer::Reset(){
 }
 
 void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
-	int ibin,iphi,iy;
+	int ibin,iphi,iy,pida=parta->resinfo->code,pidb=partb->resinfo->code;
 	double qinv,qout,qside,qlong,deleta,dely,delphi,deletas;
 	double QaQb,CaCb;
 	Misc::outsidelong(parta->p,partb->p,qinv,qout,qside,qlong,deleta,dely,delphi);
@@ -78,13 +80,12 @@ void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
 	QaQb*=effa*effb;
 	CaCb=parta->bweight*partb->bweight*effa*effb;
 	deletas=fabs(parta->eta-partb->eta);
-	npairs+=QaQb;
+	npairs+=1;
 	
 	if(dely<0.0 || deleta<0.0 || qout<0.0 || qside<0.0 || qlong <0.0 || qinv<0.0 || deletas<0.0){
 		printf("bad sign: dely=%g, deleta=%g, deletas=%g, q=(%g,%g,%g,%g)\n",dely,deleta,deletas,qout,qside,qlong,qinv);
 		exit(1);
 	}
-	
 	
 	ibin=floorl(qinv/Dqinv);	
 	if(ibin>=0 && ibin<Nqbins){
@@ -123,26 +124,28 @@ void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
 	}
 	iy=ibin;
 	
-	double phia=atan2(parta->p[2],parta->p[1]);
-	if(sin(2.0*phia)<0.0){
-		delphi=-delphi;
-	}
-	ibin=floorl((180.0+delphi)/Dphi);
-	if(ibin>=0 && ibin<Nphibins){
-		Bphi[ibin]-=QaQb;
-		Cphi[ibin]+=CaCb;
-	}
-	iphi=ibin;
-	
 	ibin=floorl(deletas/Dy);
 	if(ibin>=0 && ibin<Nybins){
 		Betas[ibin]-=QaQb;
 		Cetas[ibin]+=CaCb;
 	}
 	
-	if(iphi<Nphibins && iy<Netabins){
-		Byphi[iy][iphi]-=QaQb;
-		Cyphi[iy][iphi]+=CaCb;
+	//only increment if dely is in measurable range
+	if(fabs(dely)<acceptance->GetDelYMax(pida,pidb)){
+		double phia=atan2(parta->p[2],parta->p[1]);
+		if(sin(2.0*phia)<0.0){
+			delphi=-delphi;
+		}
+		ibin=floorl((180.0+delphi)/Dphi);
+		if(ibin>=0 && ibin<Nphibins){
+			Bphi[ibin]-=QaQb;
+			Cphi[ibin]+=CaCb;
+		}
+		iphi=ibin;
+		if(iphi<Nphibins && iy<Netabins){
+			Byphi[iy][iphi]-=QaQb;
+			Cyphi[iy][iphi]+=CaCb;
+		}
 	}
 }
 
