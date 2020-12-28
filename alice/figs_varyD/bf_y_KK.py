@@ -53,7 +53,6 @@ cascadedata = np.loadtxt('../fromcascade/model_output/default_sum/'+centrality+'
 xc=cascadedata[0]
 yc1=cascadedata[1]
 yc=efficiency*yc1
-#yc=yc
 
 cfactor=1.0/(1.0-x_D4/1.6);
 ysum_D1=y_D1+yc
