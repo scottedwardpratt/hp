@@ -26,7 +26,7 @@ centrality='alice_cent0_10'
 chargepair='KK'
 alicedata_filename='alicedata/BF_dy_KK_C0_10_ALICE.dat'
 
-chargesdata = np.loadtxt('../D1/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_y.dat',skiprows=0,unpack=True)
+chargesdata = np.loadtxt('../D1_bigsigma/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_y.dat',skiprows=0,unpack=True)
 x=chargesdata[0]
 y1=chargesdata[1]
 y_D1=efficiency*y1
@@ -53,6 +53,7 @@ cascadedata = np.loadtxt('../fromcascade/model_output/default_sum/'+centrality+'
 xc=cascadedata[0]
 yc1=cascadedata[1]
 yc=efficiency*yc1
+#yc=yc
 
 cfactor=1.0/(1.0-x_D4/1.6);
 ysum_D1=y_D1+yc
@@ -115,6 +116,7 @@ plt.ylabel('$B(\Delta y)$',fontsize=18)
 #fontsize=12, color='gray')
 #plt.subplots_adjust(top=0.85)
 plt.savefig('bf_y_KK.pdf',format='pdf')
-os.system('open -a Preview bf_y_KK.pdf')
+#os.system('open -a Preview bf_y_KK.pdf')
+os.system('evince bf_y_KK.pdf &')
 #plt.show()
 quit()

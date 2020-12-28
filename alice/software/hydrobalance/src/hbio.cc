@@ -212,8 +212,8 @@ void CHydroBalance::WriteSource(){
 
 void CHydroBalance::WriteFinalCF(){
 	int ieta,a,b,c;
-	int Netabins=parmap.getD("BF_NETABINS",50);
-	double Deta=parmap.getD("BF_DETA",0.1);
+	int Netabins=parmap.getD("CF_NETABINS",50);
+	double Deta=parmap.getD("CF_DETA",0.1);
 	double eta,Z=NSAMPLE_HYDRO2UDS*Deta;
 	Eigen::Matrix3d *cf=new Eigen::Matrix3d[Netabins];
 	for(ieta=0;ieta<Netabins;ieta++)
