@@ -17,7 +17,7 @@ int main(int argc,char *argv[]){
 	CQualifiers qualifiers;
 	qualifiers.Read("qualifiers.dat");
 	for(int iqual=0;iqual<qualifiers.nqualifiers;iqual++){
-		hb.qualifier=qualifiers.qualifier[iqual];
+		hb.qualifier=qualifiers.qualifier[iqual]->qualname;
 		printf("--------- BEGIN CALC FOR %s ---------\n",hb.qualifier.c_str());
 		oscarfile=hb.ReadOSCAR(hb.mesh);
 		printf("tau=%g, cmap.size=%d, emap.size=%d\n",

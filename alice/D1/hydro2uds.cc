@@ -16,9 +16,8 @@ int main(int argc,char *argv[]){
 	hb.parmap.set("CHARGESINFO_FILENAME",udsfilename);
 	CQualifiers qualifiers;
 	qualifiers.Read("qualifiers.dat");
-	printf("nqualifiers=%d\n",qualifiers.nqualifiers);
 	for(int iqual=0;iqual<qualifiers.nqualifiers;iqual++){
-		hb.qualifier=qualifiers.qualifier[iqual];
+		hb.qualifier=qualifiers.qualifier[iqual]->qualname;
 		printf("--------- BEGIN CALC FOR %s ---------\n",hb.qualifier.c_str());
 		oscarfile=hb.ReadOSCAR(hb.mesh);
 		printf("tau=%g, cmap.size=%d, emap.size=%d\n",

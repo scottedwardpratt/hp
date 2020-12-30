@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
+set(GITHOME_MSU $ENV{GITHOME_MSU})
 project(hydro2uds_alice CXX C)
 message("CXX is ${CXX}")
 
@@ -19,6 +20,6 @@ add_library(hydro2uds_alice STATIC ${hydro2uds_alice_src})
 target_link_libraries(hydro2uds_alice ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY} ${Boost_LIBRARIES})
 message("Libraries: ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY}")
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/../commonutils/include ${CMAKE_CURRENT_SOURCE_DIR}/../coral/include ${CMAKE_CURRENT_SOURCE_DIR}/../b3d2/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${GITHOME_MSU}/commonutils/software/include ${GITHOME_MSU}/coral/software/include ${CMAKE_CURRENT_SOURCE_DIR}/../b3d2/include)
 
 

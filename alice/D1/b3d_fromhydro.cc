@@ -30,7 +30,7 @@ int main(int argc, char *argv[]){
 	for(iqual=0;iqual<qualifiers.nqualifiers;iqual++){
 		ncolls=0;
 		npartstot=0;
-		b3d->SetQualifier(qualifiers.qualifier[iqual]);
+		b3d->SetQualifier(qualifiers.qualifier[iqual]->qualname);
 		qualifiers.SetPars(&(b3d->parmap),iqual);
 		printf("_________________ iqual=%d, nevents=%d ________________\n",iqual,nevents);
 		b3d->sampler->ReadHyperElements2D_OSU();
