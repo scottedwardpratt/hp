@@ -56,6 +56,7 @@ public:
 	void WriteSource();
 	void WriteHyper();
 	void WriteFinalCF();
+	void Reset();
 	bool ReadOSCAR(CHydroMesh *hydromesh);
 	bool FakeReadOSCAR(CHydroMesh *hydromesh);
 	double SpectraFromHyper(double mass,double px,double py);

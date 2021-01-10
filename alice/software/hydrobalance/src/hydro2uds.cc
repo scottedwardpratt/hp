@@ -36,6 +36,7 @@ CHydroBalance::CHydroBalance(string parfilename,int ranseed){
 	CHydroMesh::GetDimensions(NX,NY,DX,DY,DELTAU,TAU0,XMIN,XMAX,YMIN,YMAX);
 	
 	NSAMPLE_HYDRO2UDS=parmap.getD("NSAMPLE_HYDRO2UDS",4);
+	randy=new CRandy(ranseed);
 	mesh=newmesh=oldmesh=NULL;
 	Ncollisions=0;
 	CHydroMesh::hb=this;
@@ -43,7 +44,6 @@ CHydroBalance::CHydroBalance(string parfilename,int ranseed){
 	tau0check=true;
 	tau0readcheck=true;
 	itauread=0;
-	randy=new CRandy(ranseed);
 	ransum=0.0;
 	ranthresh=randy->ran_exp();
 	idmax=0;
@@ -376,6 +376,14 @@ void CHydroBalance::SwapMeshes(){
 	oldmesh=mesh;
 	mesh=newmesh;
 	newmesh=swap;
+}
+
+void CHydroBalance::Reset(){
+	Ncollisions=0;
+	itauread=0;
+	idmax=0;
+	tau0readcheck=tau0check=true;
+	oldmesh->tau=mesh->tau=newmesh->tau=CHydroMesh::TAU0;
 }
 
 

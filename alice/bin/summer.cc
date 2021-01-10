@@ -41,7 +41,7 @@ int main(int argc,char *argv[]){
 		system(command);
 	}
 	
-	// Write denom sum
+	// Read denom sum
 	double denom_pi=0,denom_K=0,denom_p=0,denom_allcharges=0;
 	double denom_allcharges_phi0=0,denom_allcharges_phi45=0,denom_allcharges_phi90=0;
 	double gammap=0.0,gammap2=0.0,gammap1;

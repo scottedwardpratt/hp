@@ -10,7 +10,6 @@ void CAction::PerformActivate(){
 	ppos=partmap.begin();
 	part=ppos->second;
 	part->active=true;
-	
 	part->ChangeMap(&(b3d->PartMap));
 	part->ChangeCell(part->FindCell());
 	part->CyclicReset();

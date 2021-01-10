@@ -36,6 +36,7 @@ CHydroMesh::CHydroMesh(){
 				=pitildexx[ix][iy]=pitildexy[ix][iy]=pitildeyy[ix][iy]=0.0;
 		}
 	}
+	tau=TAU0;
 }
 
 void CHydroMesh::GetXY(int ix,int iy,double &x,double &y){

@@ -129,6 +129,7 @@ void CHydroBalance::WriteCharges(){
 	it=emap.begin();
 	while(it!=emap.end()){
 		balanceID=it->first;
+		//("writing, balanceID=%d\n",balanceID);
 		charge=it->second;
 		if(abs(charge->q[2])>0)
 			nstrange+=1;
@@ -202,8 +203,7 @@ void CHydroBalance::WriteSource(){
 		fprintf(fptr,"%5.2f ",(0.5+itau)*0.5);
 		for(a=0;a<3;a++){
 			for(b=a;b<3;b++)
-				fprintf(fptr,"%7.0f ",
-			0.5*(source[itau](a,b)+source[itau](b,a))/(0.5*NSAMPLE_HYDRO2UDS));
+				fprintf(fptr,"%7.0f ",0.5*(source[itau](a,b)+source[itau](b,a))/(0.5*NSAMPLE_HYDRO2UDS));
 		}
 		fprintf(fptr,"\n");
 	}

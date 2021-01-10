@@ -14,26 +14,28 @@ void CB3D::GenHadronsFromCharges(){
 	int maxbid,bid,newcount=0;
 	CCharge *chargea,*chargeb;
 	pair<CChargeMap::iterator,CChargeMap::iterator> icpair_even,icpair_odd;
-	CChargeMap::iterator itc;
+	CChargeMap::iterator itc0,itc1;
 	CPartMap::iterator itp;
-	itc=chargemap.end(); itc--;
-	maxbid=itc->first;
+	itc1=chargemap.end(); itc1--;
+	maxbid=itc1->first;
 
 	sampler->cummulative_N=0.0;
 	sampler->cummulative_random=randy->ran_exp();
 	
-	printf("maxbid=%d, number of charges=%d\n",maxbid,int(chargemap.size()));
 	for(bid=0;bid<maxbid;bid+=2){
-		//printf("-----------\n");
 		newcount+=2;
 		icpair_even=chargemap.equal_range(bid);
-		itc=icpair_even.first;
-		chargea=itc->second;
-		icpair_odd=chargemap.equal_range(bid+1);
-		itc=icpair_odd.first;
-		chargeb=itc->second;
-		GenHadronsFromCharge(bid,chargea);
-		GenHadronsFromCharge(bid+1,chargeb);
+		itc0=icpair_even.first;
+		if(itc0!=chargemap.end()){
+			chargea=itc0->second;
+			icpair_odd=chargemap.equal_range(bid+1);
+			itc1=icpair_odd.first;
+			if(itc1!=chargemap.end()){
+				chargeb=itc1->second;
+				GenHadronsFromCharge(bid,chargea);
+				GenHadronsFromCharge(bid+1,chargeb);
+			}
+		}
 	}
 }
 
@@ -91,7 +93,6 @@ void CB3D::AnalyzeCharges(){
 				delphi-=2.0*PI;
 				delphi=fabs(delphi);
 			}
-			//printf("delphi=%g\n",delphi);
 			iphi=lrint(floor((delphi/PI)*nphi));
 			phicount[iphi]-=charge1->q[2]*charge2->q[2];
 		}
@@ -187,6 +188,7 @@ void CB3D::ReadCharges(int ichargefile){
 		while(charge->eta<-ETAMAX){
 			charge->eta+=2.0*ETAMAX;
 		}
+		hyper=&(charge->hyper);
 	}
 	etaboost.clear();
 	//CalcChiTotFromQ();

@@ -1,4 +1,5 @@
 #!/bin/bash
+cd ~/git/hp/alice/D4
 make hydro2uds
 nproc=24
 nruns=30

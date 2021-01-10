@@ -18,16 +18,13 @@ int main(int argc,char *argv[]){
 	qualifiers.Read("qualifiers.dat");
 	for(int iqual=0;iqual<qualifiers.nqualifiers;iqual++){
 		hb.qualifier=qualifiers.qualifier[iqual]->qualname;
+		hb.Reset();
 		printf("--------- BEGIN CALC FOR %s ---------\n",hb.qualifier.c_str());
 		oscarfile=hb.ReadOSCAR(hb.mesh);
-		printf("tau=%g, cmap.size=%d, emap.size=%d\n",
-		hb.mesh->tau,int(hb.cmap.size()),int(hb.emap.size()));
 		hb.HyperFind();
 		oscarfile=hb.ReadOSCAR(hb.newmesh);
 		hb.HyperFind();
 		hb.MakeCharges();
-		printf("tau=%g, cmap.size=%d, emap.size=%d\n",
-		hb.newmesh->tau,int(hb.cmap.size()),int(hb.emap.size()));
 		hb.PropagateCharges();
 		do{
 			hb.SwapMeshes();
@@ -57,7 +54,7 @@ int main(int argc,char *argv[]){
 		cout << hb.chitothyper << endl;
 		hb.chitothyper=hb.chitothyper/hb.chitothyper(0,0);
 		cout << hb.chitothyper << endl;
-	
+
 		hb.ClearCharges();
 	}
 	
