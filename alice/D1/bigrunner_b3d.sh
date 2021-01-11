@@ -1,5 +1,5 @@
 #! /bin/bash
-cd /home/scott/git/hp/alice/D0.5
+cd /home/scott/git/hp/alice/D1
 make b3d_fromhydro
 nproc=24
 nruns=30
