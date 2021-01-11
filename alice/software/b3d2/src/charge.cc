@@ -74,6 +74,32 @@ void CB3D::GenHadronsFromCharge(int balanceID,CCharge *charge){
 	}
 }
 
+void CB3D::TestChargeConservation(int pid){
+	CResInfo *resinfo,*resinfo0=reslist->GetResInfoPtr(pid);
+	Eigen::Vector3d Qprime,Q,q,Qtot;
+	CResInfoMap::iterator itr;
+	int ires;
+	double delN;
+	Q(0)=resinfo0->q[0];
+	Q(1)=resinfo0->q[1];
+	Q(2)=resinfo0->q[2];
+	Qtot(0)=Qtot(1)=Qtot(2)=0.0;
+	Qprime=sampler->chiinvf*Q;
+	for(itr=reslist->resmap.begin();itr!=reslist->resmap.end();++itr){
+		resinfo=itr->second;
+		ires=resinfo->ires;
+		if(resinfo->baryon!=0 || resinfo->charge!=0 || resinfo->strange!=0){ 
+			q[0]=resinfo->q[0]; q[1]=resinfo->q[1]; q[2]=resinfo->q[2];
+			delN=-sampler->densityf[ires]*q.dot(Qprime); // number of hadrons to create
+			if(fabs(delN*q[2])>0.001){
+				printf("%5d: %7.5f %s\n",resinfo->code,delN*q[2],resinfo->name.c_str());
+			}
+			Qtot(0)+=delN*q[0]; Qtot(1)+=delN*q[1]; Qtot(2)+=delN*q[2];
+		}
+	}
+	printf("Qtot=(%g,%g,%g)\n",Qtot(0),Qtot(1),Qtot(2));
+}
+
 void CB3D::AnalyzeCharges(){
 	double phi1,phi2,delphi;
 	int nphi=18,iphi;

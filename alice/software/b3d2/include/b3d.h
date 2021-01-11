@@ -47,6 +47,7 @@ public:
 	void ReadCharges(int ichargefile);
 	void GenHadronsFromCharges();
 	void GenHadronsFromCharge(int balanceID,CCharge *charge);
+	void TestChargeConservation(int pid);
 	
 	void ReadHydroInput();
 	CPart *GetDeadPart();
