@@ -34,8 +34,6 @@ int main(int argc, char *argv[]){
 		qualifiers.SetPars(&(b3d->parmap),iqual);
 		printf("_________________ iqual=%d, nevents=%d ________________\n",iqual,nevents);
 		b3d->sampler->ReadHyperElements2D_OSU();
-		b3d->TestChargeConservation(321);
-		exit(1);
 		for(ievent=ievent0;ievent<=ieventf;ievent++){
 			printf("------ beginning, ievent=%d --------\n",ievent);
 			for(isample=0;isample<nchargesample;isample++){
