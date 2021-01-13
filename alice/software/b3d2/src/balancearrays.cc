@@ -386,8 +386,6 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 				ppartmap.insert(pair<double,CPart* >(ya,parta));
 			}
 		}
-		printf("ppartmap built\n");
-
 		ita=ppartmap.begin();
 		do{
 			parta=ita->second;
