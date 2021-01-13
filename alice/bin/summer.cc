@@ -17,12 +17,11 @@ int main(int argc,char *argv[]){
 	char qs[200];
 	const int NTYPES=10;
 	int NJDIR;
-	bool CalcGammaP=false;
 	FILE *fptr_read;
 	FILE *fptr_write;
 	char oldfilename[100],newfilename[100];
 	vector<double> ysum[4],xsum;
-	double x,y[4],bfnorm,error,dx;
+	double x,y[4],bfnorm,dx;
 	int jdir,itype,ifn,ix;
 	
 	printf("Enter qualifier: ");
@@ -66,7 +65,6 @@ int main(int argc,char *argv[]){
 		fscanf(fptr_read,"%s %lf %lf",dummy,&nplus,&nminus);
 		denom_allcharges_phi90+=nplus+nminus;
 		fclose(fptr_read);		
-		double normtest,mult;
 	}
 	sprintf(newfilename,"%s_sum/%s/%s/denom.dat",dirprefix.c_str(),qualifier.c_str(),acceptance.c_str());
 	fptr_write=fopen(newfilename,"w");
@@ -149,7 +147,7 @@ int main(int argc,char *argv[]){
 				}
 				fprintf(fptr_write,"%5.2f %10.3e",xsum[ix],y[0]);
 				if(ifn>2)
-					fprintf(fptr_write," %10.3e %10.3e %10.3e",xsum[ix],y[0]);
+					fprintf(fptr_write," %10.3e %10.3e %10.3e",y[1],y[2],y[3]);
 				fprintf(fptr_write,"\n");
 				bfnorm+=y[0]*dx;
 				if(itype==4 && ifn==0){
