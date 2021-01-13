@@ -145,7 +145,7 @@ int main(int argc,char *argv[]){
 				if(ifn>2){
 					y[1]=ysum[1][ix]/double(NJDIR);
 					y[2]=ysum[2][ix]/double(NJDIR);
-					y[2]=ysum[2][ix]/double(NJDIR);
+					y[3]=ysum[3][ix]/double(NJDIR);
 				}
 				fprintf(fptr_write,"%5.2f %10.3e",xsum[ix],y[0]);
 				if(ifn>2)
