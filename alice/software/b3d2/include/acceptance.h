@@ -30,9 +30,18 @@ public:
 	}
 };
 
-class CAcceptance_ALICE  : public CAcceptance{
+class CAcceptance_ALICE : public CAcceptance{
 public:
 	CAcceptance_ALICE(CparameterMap *parmapin);
+	void CalcAcceptance(bool &accept,double &efficiency,CPart *part);  // ignores cuts in rapidity
+	void CalcAcceptance_Realistic(bool &accept,double &efficiency,CPart *part); // cuts in rapidity
+	void CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part);
+	double GetDelYMax(int pida,int pidb);
+};
+
+class CAcceptance_ALICE_Perfect : public CAcceptance{
+public:
+	CAcceptance_ALICE_Perfect(CparameterMap *parmapin);
 	void CalcAcceptance(bool &accept,double &efficiency,CPart *part);  // ignores cuts in rapidity
 	void CalcAcceptance_Realistic(bool &accept,double &efficiency,CPart *part); // cuts in rapidity
 	void CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part);

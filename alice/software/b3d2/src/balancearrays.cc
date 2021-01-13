@@ -32,7 +32,6 @@ void CBalanceArrays::InitArrays(){
 	CreateBFArrays();
 	acceptance_description=parmap->getS("BF_ACCEPTANCE","PERFECT");
 	NoKsNoPhi=parmap->getB("BF_NoKsNoPhi",false);
-	alice_acceptance=false;
 	if(acceptance_description=="PERFECT"){
 		acceptance=new CAcceptance_CHEAP(parmap);
 	}
@@ -40,8 +39,10 @@ void CBalanceArrays::InitArrays(){
 		acceptance=new CAcceptance_STAR(parmap);
 	}
 	else if(acceptance_description=="ALICE"){
-		alice_acceptance=true; // this used because ALICE acceptance varies depending on which pair of particle is analyzed
 		acceptance=new CAcceptance_ALICE(parmap);
+	}
+	else if(acceptance_description=="ALICE_PERFECT"){
+		acceptance=new CAcceptance_ALICE_Perfect(parmap);
 	}
 	else{
 		printf("Define BF_ACCEPTANCE in parameters.dat\n");
@@ -424,7 +425,6 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 		}while(ita!=ppartmap.end());
 		ppartmap.clear();
 	}
-	printf("netN=%d, netQ=%d\n",netN,netQ);
 }
 
 void CBalanceArrays::ProcessV2Perfect(){
@@ -619,6 +619,9 @@ void CBalanceArrays::SetQualifier(string qualifier_set){
 		bf_results_dirname="model_output/"+b3d->run_name+"/"+qualifier+"/results_star";
 	}
 	else if(acceptance_description=="ALICE"){
+		bf_results_dirname="model_output/"+b3d->run_name+"/"+qualifier+"/results_alice";
+	}
+	else if(acceptance_description=="ALICE_PERFECT"){
 		bf_results_dirname="model_output/"+b3d->run_name+"/"+qualifier+"/results_alice";
 	}
 	else{

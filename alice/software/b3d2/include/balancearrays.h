@@ -47,7 +47,6 @@ public:
 	string bf_results_dirname;
 	CAcceptance *acceptance;
 	string acceptance_description;
-	bool alice_acceptance;
 	CBalanceArrays(CB3D *b3dset);
 	void Reset();
 	void InitArrays();

@@ -9,8 +9,8 @@
 
 using namespace std;
 class CSampler;
+/*
 class Cvertex2D;
-
 class CvolumeElement2D{
 public:
 	double T,muB,muE,muS,XUD,XS,Xscale;
@@ -43,13 +43,14 @@ public:
 		printf("vertex: r=(%g,%g,%g), u=(%g,%g,%g)\n",r[0],r[1],r[2],sqrt(1.0+ux*ux+uy*uy),ux,uy);
 	};
 };
+*/
 
 class CSampler{
 public:
 	CRandy *randy;
 	CResList *reslist;
-	vector<CvolumeElement2D> volume_element;
-	vector<Cvertex2D> vertex;
+	//vector<CvolumeElement2D> volume_element;
+	//vector<Cvertex2D> vertex;
 	bool VISCOUSCORRECTIONS,TRIANGLE_FORMAT,JAKI_FORMAT,OSU_FORMAT;
 	FILE *xyfptr;
 	int NSAMPLE;
@@ -57,19 +58,21 @@ public:
 	CSampler(CB3D *b3d); // Constructor
 	~CSampler();
 
+	/*
 	void ReadVolumeElements2D();
 	void ReadVolumeElements2D_triangles();
 	void ReadVolumeElements2D_Jaki();
 	void ReadVolumeElements2D_center();
+	*/
 	void ReadHyperElements2D_OSU();
-	void ReadVolumeElements3D();
-	vector<CvolumeElement2D> element;
+	//void ReadVolumeElements3D();
+	//vector<CvolumeElement2D> element;
 	vector<CHyperElement> hyper;
 	int GenHadronsFromHyperSurface();
 	double cummulative_N,cummulative_random;
 	double ETAMAX;
 	int NBOSE;
-	void SetVolumeElementsByHand(double T,int nelements_set,double elementvolume);
+	//void SetVolumeElementsByHand(double T,int nelements_set,double elementvg);
 	void SetPiByHand(double pixx,double pixy,double pixz,double piyy,double piyz,double pizz);
 	double GetLambda(); // Calculates lambda in terms of T and densities
 	void CalcPiFromParts();

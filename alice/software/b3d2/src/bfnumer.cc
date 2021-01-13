@@ -97,7 +97,7 @@ void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
 	ibin=floorl(qout/Dqinv);
 	if(ibin>=0 && ibin<Nqbins){
 		Bqout[ibin]-=QaQb;
-		Cqinv[ibin]+=CaCb;
+		Cqout[ibin]+=CaCb;
 	}
 	
 	ibin=floorl(qside/Dqinv);

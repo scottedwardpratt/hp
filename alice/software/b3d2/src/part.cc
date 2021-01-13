@@ -250,7 +250,7 @@ void CPart::Propagate(double tau){
 	CPartMap::iterator neighbor;
 	if(active==true){
 		eta=GetEta(tau);//y-asinh((tau0/tau)*sinh(y-eta));
-		if(currentmap==&(b3d->PartMap) && b3d->tau<b3d->TAUCOLLMAX && fabs(eta)>0.000001+b3d->ETAMAX && b3d->BJORKEN && b3d->COLLISIONS){
+		if(currentmap==&(b3d->PartMap) && b3d->tau<b3d->TAUCOLLMAX && fabs(eta)>0.0001+b3d->ETAMAX && b3d->BJORKEN && b3d->COLLISIONS){
 			printf("eta out of bounds after propagation,correcting, etai=%g, etaf=%g, taui=%g, tauf=%g\n",etai,eta,tau0,tau);
 			Print();
 			if(eta>b3d->ETAMAX)
@@ -259,7 +259,7 @@ void CPart::Propagate(double tau){
 				eta=-b3d->ETAMAX;
 			r[0]=tau0*cosh(eta);
 			r[3]=tau0*sinh(eta);
-			Misc::Pause();
+			//Misc::Pause();
 		}
 		tau0=tau;
 		t0=r[0];

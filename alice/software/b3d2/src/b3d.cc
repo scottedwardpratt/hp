@@ -57,7 +57,6 @@ CB3D::CB3D(string run_name_set){
 	oscarfile=NULL;
 	reslist=new CResList(&parmap);
 	sampler=new CSampler(this);
-	CHyperElement::sampler=sampler;
 }
 
 void CB3D::CopyParMapPars(){

@@ -6,7 +6,7 @@
 #include "part.h"
 
 using namespace std;
-CSampler* CvolumeElement2D::sampler=NULL;
+//CSampler* CvolumeElement2D::sampler=NULL;
 
 CSampler::CSampler(CB3D *b3dset){
 	b3d=b3dset;
@@ -16,7 +16,8 @@ CSampler::CSampler(CB3D *b3dset){
 #endif
 	VISCOUSCORRECTIONS=true;
 	TRIANGLE_FORMAT=false;
-	CvolumeElement2D::sampler=this;
+	//CvolumeElement2D::sampler=this;
+	CHyperElement::sampler=this;
 	randy=b3d->randy;
 	reslist=b3d->reslist;
 	cummulative_N=0.0;
@@ -73,6 +74,7 @@ int CSampler::GenHadronsFromHyperSurface(){
 	return nparts;
 }
 
+/*
 void CSampler::CalcPiFromParts(){
 	double pi[4][4]={{0.0}};
 	CPartMap::iterator ppos;
@@ -111,14 +113,17 @@ void CSampler::CalcPiFromParts(){
 		}
 		printf("\n");
 	}
-}
+}*/
 
+
+/*
 void CSampler::ReadVolumeElements2D(){
 	if(TRIANGLE_FORMAT){
 		ReadVolumeElements2D_triangles();
 		printf("triangle format\n");
 	}
-	else if(OSU_FORMAT){
+	else
+	if(OSU_FORMAT){
 		ReadHyperElements2D_OSU();
 		printf("OSU format\n");
 	}
@@ -127,7 +132,9 @@ void CSampler::ReadVolumeElements2D(){
 		exit(1);
 	}
 }
-	
+*/
+
+/*	
 void CSampler::ReadVolumeElements2D_triangles(){
 	string filename;
 	CvolumeElement2D *elem;
@@ -195,7 +202,9 @@ void CSampler::ReadVolumeElements2D_triangles(){
 	nelements=ielement;
 	printf("data read in, nelements=%d, pi33/P=%g\n",nelements,pi33overPbar);
 }
+*/
 
+/*
 void CSampler::ReadVolumeElements3D(){
 	string filename;
 	CvolumeElement2D *elem;
@@ -247,6 +256,7 @@ void CSampler::ReadVolumeElements3D(){
 	}
 	nelements=ielement;
 }
+*/
 
 double CSampler::GetLambda(double T,double P,double epsilon){
 	int n,i;

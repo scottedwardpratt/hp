@@ -1033,33 +1033,6 @@ src/seinfo.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/seinfo.cc.s
 .PHONY : src/seinfo.cc.s
 
-src/volume_element.o: src/volume_element.cc.o
-
-.PHONY : src/volume_element.o
-
-# target to build an object file
-src/volume_element.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/volume_element.cc.o
-.PHONY : src/volume_element.cc.o
-
-src/volume_element.i: src/volume_element.cc.i
-
-.PHONY : src/volume_element.i
-
-# target to preprocess a source file
-src/volume_element.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/volume_element.cc.i
-.PHONY : src/volume_element.cc.i
-
-src/volume_element.s: src/volume_element.cc.s
-
-.PHONY : src/volume_element.s
-
-# target to generate assembly for a file
-src/volume_element.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/b3d_alice.dir/build.make CMakeFiles/b3d_alice.dir/src/volume_element.cc.s
-.PHONY : src/volume_element.cc.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -1168,9 +1141,6 @@ help:
 	@echo "... src/seinfo.o"
 	@echo "... src/seinfo.i"
 	@echo "... src/seinfo.s"
-	@echo "... src/volume_element.o"
-	@echo "... src/volume_element.i"
-	@echo "... src/volume_element.s"
 .PHONY : help
 
 
