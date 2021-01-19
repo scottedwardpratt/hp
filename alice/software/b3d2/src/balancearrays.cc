@@ -377,7 +377,7 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 				netQ+=parta->resinfo->charge;
 			}
 			
-			if(parta->balanceID<0){
+			if(parta->balanceID<0 && abs(parta->resinfo->code)==321){
 				ya=atanh(parta->p[3]/parta->p[0]);
 				while(ya<-B3D_ETAMAX)
 					ya+=2.0*B3D_ETAMAX;
@@ -417,7 +417,7 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 					++itb;
 					if(itb==ppartmap.end())
 						itb=ppartmap.begin();
-				}while(dely<2.0*BF_YMAX);
+				}while(dely<2.0*BF_YMAX && dely<B3D_ETAMAX);
 			}
 			++ita;
 		}while(ita!=ppartmap.end());
