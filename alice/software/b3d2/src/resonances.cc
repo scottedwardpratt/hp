@@ -690,4 +690,72 @@ void CResList::freegascalc_onespecies(double mass,double T,double &epsiloni,doub
 	
 }
 
+bool CResInfo::FindContent(int codecheck,double weight0,double &weight){
+	// finds how many hadrons of type codecheck result from decays
+	long unsigned int ibody,ibranch;
+	bool dexists,exists=false;
+	CResInfo *daughter;
+	CBranchInfo *bptr;
+	CBranchList::iterator bpos;
+	double dweight;
+	weight=0.0;
+	if(code==codecheck){
+		exists=true;
+		weight=weight0;
+	}
+	else if(decay){
+		for(ibranch=0;ibranch<branchlist.size();ibranch++){
+			bptr=branchlist[ibranch];
+			for(ibody=0;ibody<bptr->resinfoptr.size();ibody++){
+				daughter=bptr->resinfoptr[ibody];
+				dexists=daughter->FindContent(codecheck,weight0*bptr->branching,dweight);
+				if(dexists){
+					exists=true;
+					weight+=dweight;
+				}
+			}
+		}
+	}
+	return exists;
+}
+
+double CResList::CalcBalanceNorm(int pid,int pidprime){
+// ideal norm of B_hh'
+	CResInfo *resinfo;
+	CResInfoMap::iterator rpos;
+	Eigen::Vector3d rho,rhoprime;
+	double dens,densprime,weight,norm;
+	int a;
+	dens=densprime=0.0;
+	for(a=0;a<3;a++)
+		rho(a)=rhoprime[a]=0.0;
+		
+	for(rpos=resmap.begin();rpos!=resmap.end();rpos++){
+		resinfo=rpos->second;
+		if(resinfo->FindContent(pid,1.0,weight)){
+			dens+=weight*densityf[resinfo->ires];
+			for(a=0;a<3;a++)
+				rho(a)+=weight*densityf[resinfo->ires]*resinfo->q[a];
+		}
+		if(resinfo->FindContent(pidprime,1.0,weight)){
+			densprime+=weight*densityf[resinfo->ires];
+			for(a=0;a<3;a++)
+				rhoprime(a)+=weight*densityf[resinfo->ires]*resinfo->q[a];
+		}
+		if(resinfo->FindContent(-pid,1.0,weight)){
+			dens+=weight*densityf[resinfo->ires];
+			for(a=0;a<3;a++)
+				rho(a)-=weight*densityf[resinfo->ires]*resinfo->q[a];
+		}
+		if(resinfo->FindContent(-pidprime,1.0,weight)){
+			densprime+=weight*densityf[resinfo->ires];
+			for(a=0;a<3;a++)
+				rhoprime(a)-=weight*densityf[resinfo->ires]*resinfo->q[a];
+		}
+	}
+	
+	norm=double((rho.transpose())*(chiinvf*rhoprime))/densprime;
+	return norm;
+}
+
 #endif
