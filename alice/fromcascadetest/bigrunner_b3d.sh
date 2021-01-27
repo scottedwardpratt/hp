@@ -5,7 +5,7 @@ case $# in
   	exit 1 ;;
 	1)
 		iproc0=$1
-		nproc=12
+		nproc=24
 		iprocf=`expr ${iproc0} + ${nproc}`
 		make b3d_fromcascade
 		for((i=iproc0;i<iprocf;i++))
