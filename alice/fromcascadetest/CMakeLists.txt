@@ -20,10 +20,8 @@ message("Includes: ${GSL_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${GITHOME_MSU}/hp/al
 link_directories(${GITHOME_MSU}/hp/alice/software/b3d2/lib ${GITHOME_MSU}/commonutils/software/lib)
 message("Libraries: b3d_alice ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY}" )
 
-
 find_library(${GITHOME_MSU}/hp/alice/software/b3d2/lib b3d_alice)
 find_library(${GITHOME_MSU}/commonutils/software/lib commonutils)
-
 
 set(SOURCE_FILES ./b3d_fromcascade.cc)
 SET_SOURCE_FILES_PROPERTIES(
