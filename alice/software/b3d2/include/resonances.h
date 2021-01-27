@@ -2,13 +2,17 @@
 #define __RESONANCES_H__
 
 #include "commondefs.h"
+class CResList;
 
 using namespace std;
+
+typedef multimap<double,CResInfo *> CMassMap;
 
 class CBranchInfo{
 public:
 	vector<CResInfo *> resinfoptr; //pointers for resinfo
-	double branching; 
+	double branching;
+	void Copy(CBranchInfo *branch);
 	CBranchInfo();
 };
 
@@ -38,13 +42,17 @@ public:
 	int up,down;
 	int G_Parity;
 	bool decay; //false if stable, true if can decay. check if true
-	CBranchList branchlist; 
+	CBranchList branchlist;
+	CBranchList finalproductslist;
 	CBranchInfo	*bptr_minmass;
 	void Print();
 	void DecayGetResInfoPtr(int &nbodies,array<CResInfo *,5> &daughterresinfo);
 	void DecayGetResInfoPtr_minmass(int &nbodies,array<CResInfo *,5> &daughterresinfo);
 	bool CheckForDaughters(int code);
+	void FindFinalProducts();
+	void PrintFinalProducts();
 	bool FindContent(int codecheck,double weight0,double &weight);
+	bool FindContentPairs(int codecheck1,int codecheck2,double weight0,double &weight);
 	bool CheckForNeutral();
 	double GenerateMass();
 	double GenerateThermalMass(double maxweight, double T);
@@ -62,6 +70,7 @@ public:
 	~CResList();
 	CResList(CparameterMap* parmap_in);
 	CResInfoMap resmap;
+	CMassMap massmap;
 	CResInfo *GetResInfoPtr(int ID);
 	void ReadResInfo();
 	void CalcEoSandChi(double T,double &P,double &epsilon,double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &chi);
@@ -71,6 +80,8 @@ public:
 	void freegascalc_onespecies_finitewidth(double m, double m1, double m2, double T,double width,double &epsilon,double &P,double &dens,double &sigma2,double &dedt, double &maxweight);
 	double GetLambda(double T,double P,double epsilon);
 	void freegascalc_onespecies(double m,double T,double &e,double &p,double &dens,double &sigma2,double &dedt,double &Jtot);
+	void FindFinalProducts();
+	bool finalproductsfound;
 	CparameterMap *parmap;
 	CMerge ***MergeArray;
 	double **SigmaMaxArray;
@@ -78,7 +89,8 @@ public:
 	bool RESONANCE_DECAYS;
 	bool USEPOLEMASS;
 	//void freegascalc_onespecies_offshell(CResInfo *resinfo,double T,double &epsilon,double &P,double &dens,double &sigma2,double &dedt);
-	double Tf,epsilonf,Pf,lambdaf,nf; // freezeout props
+	// freezeout props
+	double Tf,epsilonf,Pf,lambdaf,nf;
 	vector<double> densityf,maxweightf;
 	Eigen::Matrix3d chif,chiinvf;
 	double triangle(double m0,double m1,double m2);

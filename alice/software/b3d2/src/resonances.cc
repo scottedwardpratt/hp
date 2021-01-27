@@ -23,6 +23,7 @@ CResList::CResList(CparameterMap* parmap_in){
 	RESONANCE_DECAYS=parmap->getB("RESONANCE_DECAYS",true);
 	USEPOLEMASS=parmap->getB("USEPOLEMASS",false);
 	CResInfo::reslist=this;
+	finalproductsfound=false;
 	ReadResInfo();
 }
 
@@ -533,12 +534,18 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 	double width,minmass,maxweighti;
 	double pi,epsiloni,densi,sigma2i,dedti;
 	double netchi=0.0,netchi0=0.0;
-	int a,b,n,ires;
+	int a,b,n,ires,nres=resmap.size();
 	chi.setZero();
 	P=epsilon=s=nh=0.0;
+	density.resize(nres);
+	maxweight.resize(nres);
+	for(ires=0;ires<nres;ires++){
+		density[ires]=0.0;
+	}
 	for(rpos=resmap.begin();rpos!=resmap.end();rpos++){
 		resinfoptr=rpos->second;
 		ires=resinfoptr->ires;
+		
 		if(resinfoptr->code!=22){
 			degen=2.0*resinfoptr->spin+1.0;
 			m=resinfoptr->mass;
@@ -690,72 +697,288 @@ void CResList::freegascalc_onespecies(double mass,double T,double &epsiloni,doub
 	
 }
 
+void CResInfo::FindFinalProducts(){
+	finalproductslist.clear();
+	CBranchList blist;
+	CBranchInfo *bptr,*fbptr;
+	CResInfo *resinfo;
+	bool foundsplit=false;
+	long unsigned int ibranch,iibranch,iires,iiires;
+	double netbranching=0.0;
+	finalproductslist.clear();
+	bptr=new CBranchInfo();
+	if(decay){
+		//finalproductslist.Copy(branchlist);
+		finalproductslist=branchlist;
+		ibranch=0;
+		foundsplit=true;
+		ibranch=0;
+		while(ibranch<finalproductslist.size()){
+			foundsplit=false;
+			bptr=finalproductslist[ibranch];
+			iires=0;
+			do{
+				if(bptr->resinfoptr[iires]->decay){
+					foundsplit=true;
+					resinfo=bptr->resinfoptr[iires];
+					//printf("%d: splitting branches\n",code);
+					//double bcheck=0.0;
+					for(iibranch=1;iibranch<resinfo->finalproductslist.size();iibranch++){
+						fbptr=new CBranchInfo();
+						fbptr->Copy(bptr);
+						finalproductslist.push_back(fbptr);
+						fbptr->resinfoptr[iires]=resinfo->finalproductslist[iibranch]->resinfoptr[0];
+						for(iiires=1;iiires<resinfo->finalproductslist[iibranch]->resinfoptr.size();iiires++){
+							fbptr->resinfoptr.push_back(resinfo->finalproductslist[iibranch]->resinfoptr[iiires]);
+						}
+						fbptr->branching=bptr->branching*resinfo->finalproductslist[iibranch]->branching;
+						//bcheck+=resinfo->finalproductslist[iibranch]->branching;
+						//netbranching+=fbptr->branching;
+					}
+					iibranch=0;
+					bptr->resinfoptr[iires]=resinfo->finalproductslist[iibranch]->resinfoptr[0];
+					for(iiires=1;iiires<resinfo->finalproductslist[iibranch]->resinfoptr.size();iiires++){
+						bptr->resinfoptr.push_back(resinfo->finalproductslist[iibranch]->resinfoptr[iiires]);
+					}
+					bptr->branching=bptr->branching*resinfo->finalproductslist[iibranch]->branching;
+					//bcheck+=resinfo->finalproductslist[iibranch]->branching;
+					
+					/* netbranching+=bcheck*bptr->branching;
+					printf("bcheck=%g\n",bcheck);
+					if(fabs(bcheck-1.0)>1.0E-5){
+						printf("bcheck failed = %g, pid=%d \n",bcheck,resinfo->code);
+						exit(1);
+					}*/
+				}
+				iires+=1;
+			}while(iires<bptr->resinfoptr.size());
+			if(!foundsplit)
+				ibranch+=1;
+		}
+	}
+	
+	netbranching=0.0;
+	for(ibranch=0;ibranch<finalproductslist.size();ibranch++){
+		netbranching+=finalproductslist[ibranch]->branching;
+		int netq[3]={0};
+		for(iires=0;iires<finalproductslist[ibranch]->resinfoptr.size();iires++){
+			for(int iq=0;iq<3;iq++)
+				netq[iq]+=finalproductslist[ibranch]->resinfoptr[iires]->q[iq];
+		}
+		double netB=0.0,netQ=0.0;
+		netB=double(q[0]+q[1]+q[2])/3.0-double(netq[0]+netq[1]+netq[2])/3.0;
+		netQ=(double(2.0*q[0]-q[1]-q[2])/3.0)-double(2*netq[0]-netq[1]-netq[2])/3.0;
+		if(fabs(netB)>1.0E-5 || fabs(netQ)>1.0E-5){
+			printf("charge not conserved for %5d: netQ=%g, netB=%g\n",code,netQ,netB);
+			Print();
+			printf("DAUGHTERS\n");
+			for(iires=0;iires<finalproductslist[ibranch]->resinfoptr.size();iires++){
+				printf("%6d: ",finalproductslist[ibranch]->resinfoptr[iires]->code);
+				for(int iiq=0;iiq<3;iiq++)
+					printf("%4d ",finalproductslist[ibranch]->resinfoptr[iires]->q[iiq]);
+				printf("\n");
+			}
+			exit(1);
+		}
+	}
+	//printf("%d: netbranching=%g, nbranches=%d\n",code,netbranching,int(finalproductslist.size()));
+	if(decay && fabs(netbranching-1.0)>1.0E-5){
+		printf("oops, netbranching for final states=%g, pid=%d\n",netbranching,code);
+		Print();
+		exit(1);
+	}
+}
+
+void CResList::FindFinalProducts(){
+	CResInfoMap::iterator rpos;
+	CMassMap::iterator mpos;
+	CResInfo *resinfo;
+	massmap.clear();
+	for(rpos=resmap.begin();rpos!=resmap.end();rpos++){
+		resinfo=rpos->second;
+		massmap.insert(pair<double,CResInfo*>(resinfo->mass,resinfo));
+	}
+	for(mpos=massmap.begin();mpos!=massmap.end();mpos++){
+		resinfo=mpos->second;
+		//printf("mass=%g, PID=%d\n",resinfo->mass,resinfo->code);
+		resinfo->FindFinalProducts();
+	}
+	finalproductsfound=true;
+}
+
 bool CResInfo::FindContent(int codecheck,double weight0,double &weight){
 	// finds how many hadrons of type codecheck result from decays
-	long unsigned int ibody,ibranch;
-	bool dexists,exists=false;
-	CResInfo *daughter;
+	bool foundpart=false;
 	CBranchInfo *bptr;
-	CBranchList::iterator bpos;
-	double dweight;
+	CResInfo *resinfo1;
+	double B;
+	unsigned long int ibranch,ibody1;
+	if(!reslist->finalproductsfound)
+		reslist->FindFinalProducts();
 	weight=0.0;
-	if(code==codecheck){
-		exists=true;
-		weight=weight0;
-	}
-	else if(decay){
-		for(ibranch=0;ibranch<branchlist.size();ibranch++){
-			bptr=branchlist[ibranch];
-			for(ibody=0;ibody<bptr->resinfoptr.size();ibody++){
-				daughter=bptr->resinfoptr[ibody];
-				dexists=daughter->FindContent(codecheck,weight0*bptr->branching,dweight);
-				if(dexists){
-					exists=true;
-					weight+=dweight;
+	if(decay){
+		for(ibranch=0;ibranch<finalproductslist.size();ibranch++){
+			bptr=finalproductslist[ibranch];
+			for(ibody1=0;ibody1<bptr->resinfoptr.size();ibody1++){
+				resinfo1=bptr->resinfoptr[ibody1];
+				B=double(resinfo1->q[0]+resinfo1->q[1]+resinfo1->q[2])/3.0;
+				if(resinfo1->code==codecheck){
+					weight+=weight0*bptr->branching;
+					foundpart=true;
 				}
 			}
 		}
 	}
-	return exists;
+	else{
+		if(code==codecheck){
+			weight=weight0;
+			foundpart=true;
+		}
+	}
+	return foundpart;	
+}
+
+bool CResInfo::FindContentPairs(int codecheck1,int codecheck2,double weight0,double &weight){
+	// finds how many hadrons of type codecheck result from decays
+	bool foundpair=false;
+	CBranchInfo *bptr;
+	CResInfo *resinfo1,*resinfo2;
+	unsigned long int ibranch,ibody1,ibody2;
+	if(!reslist->finalproductsfound)
+		reslist->FindFinalProducts();
+	weight=0.0;
+	for(ibranch=0;ibranch<finalproductslist.size();ibranch++){
+		bptr=finalproductslist[ibranch];
+		for(ibody1=0;ibody1<bptr->resinfoptr.size();ibody1++){
+			resinfo1=bptr->resinfoptr[ibody1];
+			if(abs(resinfo1->code)==abs(codecheck1)){
+				for(ibody2=0;ibody2<bptr->resinfoptr.size();ibody2++){
+					if(ibody1!=ibody2){
+						resinfo2=bptr->resinfoptr[ibody2];
+						if(abs(resinfo2->code)==abs(codecheck2)){
+							weight+=weight0*bptr->branching*resinfo1->charge*resinfo2->charge;
+							foundpair=true;
+						}
+					}
+				}
+			}
+		}
+	}
+	return foundpair;
+}
+
+void CResInfo::PrintFinalProducts(){
+	CBranchInfo *bptr;
+	CResInfo *resinfo1;
+	unsigned long int ibranch,ibody1;
+	printf("Final Decay Products of %s:\n",name.c_str());
+	double netbranching=0.0;
+	for(ibranch=0;ibranch<finalproductslist.size();ibranch++){
+		bptr=finalproductslist[ibranch];
+		printf("____ BRANCH %ld _____ branching=%g\n",ibranch,bptr->branching);
+		netbranching+=bptr->branching;
+		for(ibody1=0;ibody1<bptr->resinfoptr.size();ibody1++){
+			resinfo1=bptr->resinfoptr[ibody1];
+			printf("%6d ",resinfo1->code);
+		}
+		printf("\n");			
+	}
+	printf("---- NET BRANCHING=%g =? 1.0 ----\n",netbranching);
 }
 
 double CResList::CalcBalanceNorm(int pid,int pidprime){
-// ideal norm of B_hh'
+	printf("here we go\n");
+	// ideal norm of B_hh'
 	CResInfo *resinfo;
 	CResInfoMap::iterator rpos;
+	CMassMap::iterator mpos;
 	Eigen::Vector3d rho,rhoprime;
+	Eigen::Matrix3d chitest,unity;
 	double dens,densprime,weight,norm;
-	int a;
+	int a,ires;
 	dens=densprime=0.0;
+	
+	/*
+	printf("chi------------------\n");
+	cout << chif << endl;
+	chiinvf=chif.inverse();
+	printf("chiinvf------------------\n");
+	cout << chiinvf << endl;
+	unity=chiinvf*chif;
+	printf("unity test??? ------------\n");
+	cout.precision(5);
+	cout << unity << endl;
+	*/
+	for(a=0;a<3;a++){
+		rho(a)=rhoprime(a)=0.0;
+		//for(int b=0;b<3;b++)
+		//	chitest(a,b)=0.0;
+	}
+	/*
+	for(rpos=resmap.begin();rpos!=resmap.end();rpos++){
+	resinfo=rpos->second;
+	//printf("density[%d]=%g\n",ires,densityf[ires]);
 	for(a=0;a<3;a++)
-		rho(a)=rhoprime[a]=0.0;
-		
+	for(int b=0;b<3;b++)
+	chitest(a,b)+=densityf[resinfo->ires]*resinfo->q[a]*resinfo->q[b];
+	}
+	printf("chitest-----------------\n");
+	cout << chitest << endl;
+	*/
+	printf("chi=\n");
+	cout << chif << endl;
+	printf("chiinv=\n");
+	cout << chiinvf << endl;
+	
+	norm=0.0;
+	double netq[3]={0.0};
+	int iq;
 	for(rpos=resmap.begin();rpos!=resmap.end();rpos++){
 		resinfo=rpos->second;
+		ires=resinfo->ires;
+		for(iq=0;iq<3;iq++)
+			netq[iq]+=densityf[ires]*resinfo->q[iq];
+		
 		if(resinfo->FindContent(pid,1.0,weight)){
-			dens+=weight*densityf[resinfo->ires];
+			//printf("mother pid=%d, weight to make %d is %g\n",resinfo->code,pid,weight);
+			dens+=weight*densityf[ires];
 			for(a=0;a<3;a++)
-				rho(a)+=weight*densityf[resinfo->ires]*resinfo->q[a];
+				rho(a)+=weight*densityf[ires]*resinfo->q[a];
 		}
 		if(resinfo->FindContent(pidprime,1.0,weight)){
-			densprime+=weight*densityf[resinfo->ires];
+			densprime+=weight*densityf[ires];
 			for(a=0;a<3;a++)
-				rhoprime(a)+=weight*densityf[resinfo->ires]*resinfo->q[a];
+				rhoprime(a)+=weight*densityf[ires]*resinfo->q[a];
 		}
 		if(resinfo->FindContent(-pid,1.0,weight)){
-			dens+=weight*densityf[resinfo->ires];
+			dens+=weight*densityf[ires];
 			for(a=0;a<3;a++)
-				rho(a)-=weight*densityf[resinfo->ires]*resinfo->q[a];
+				rho(a)-=weight*densityf[ires]*resinfo->q[a];
 		}
 		if(resinfo->FindContent(-pidprime,1.0,weight)){
-			densprime+=weight*densityf[resinfo->ires];
+			densprime+=weight*densityf[ires];
 			for(a=0;a<3;a++)
-				rhoprime(a)-=weight*densityf[resinfo->ires]*resinfo->q[a];
+				rhoprime(a)-=weight*densityf[ires]*resinfo->q[a];
 		}
+		
+		if(resinfo->FindContentPairs(pid,pidprime,1.0,weight)){
+			printf("%5d: pair weight=%g\n",resinfo->code,weight);
+			norm-=weight*densityf[ires];
+		}
+		
 	}
+	printf("density(%d)=%g, density(%d)=%g\n",pid,dens,pidprime,densprime);
+	//norm+=double((rho.transpose())*(chiinvf*rhoprime));
+	norm=norm/densprime;
 	
-	norm=double((rho.transpose())*(chiinvf*rhoprime))/densprime;
+	printf("netu=%g, netd=%g, nets=%g\n",netq[0],netq[1],netq[2]);
+	
 	return norm;
+}
+
+void CBranchInfo::Copy(CBranchInfo *oldbranch){
+	resinfoptr=oldbranch->resinfoptr; //pointers for resinfo
+	branching=oldbranch->branching;
 }
 
 #endif
