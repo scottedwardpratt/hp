@@ -38,7 +38,3 @@ SET_SOURCE_FILES_PROPERTIES(
       balance_fromcascade.cc PROPERTIES OBJECT_DEPENDS
     ${GITHOME_MSU}/hp/alice/software/b3d2/lib/libb3d_alice.a
  )
-add_executable(balance_fromcascade ${SOURCE_FILES})
-add_dependencies(balance_fromcascade extern_b3d_alice extern_commonutils)
-target_link_libraries(balance_fromcascade b3d_alice commonutils ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY} ${EIGEN3_LIBRARY})
-
