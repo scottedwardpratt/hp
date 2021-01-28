@@ -968,7 +968,7 @@ double CResList::CalcBalanceNorm(int pid,int pidprime){
 		
 	}
 	printf("density(%d)=%g, density(%d)=%g\n",pid,dens,pidprime,densprime);
-	//norm+=double((rho.transpose())*(chiinvf*rhoprime));
+	norm+=double((rho.transpose())*(chiinvf*rhoprime));
 	norm=norm/densprime;
 	
 	printf("netu=%g, netd=%g, nets=%g\n",netq[0],netq[1],netq[2]);

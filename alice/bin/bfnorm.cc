@@ -20,12 +20,14 @@ int main(){
 	
 	printf("Enter pid1 & pid2: ");
 	scanf("%d %d",&pid1,&pid2);
-	reslist->Tf=155.0;
-	reslist->CalcEoSandChi(reslist->Tf,reslist->Pf,reslist->epsilonf,reslist->nf,reslist->densityf,reslist->maxweightf,reslist->chif);
-	reslist->chiinvf=(reslist->chif).inverse();
-	double norm=reslist->CalcBalanceNorm(pid1,pid2);
-	printf("norm=%g\n",norm);
-	printf("---------------------------------------------------------------\n");
+	for(double Tf=135.0;Tf<168;Tf+=5){
+		reslist->Tf=Tf;
+		reslist->CalcEoSandChi(reslist->Tf,reslist->Pf,reslist->epsilonf,reslist->nf,reslist->densityf,reslist->maxweightf,reslist->chif);
+		reslist->chiinvf=(reslist->chif).inverse();
+		double norm=reslist->CalcBalanceNorm(pid1,pid2);
+		printf("Tf=%g: norm=%g\n",Tf,norm);
+		printf("---------------------------------------------------------------\n");
+	}
 	/*
 	CResInfo *resinfo;
 	CResInfoMap::iterator rpos;

@@ -85,7 +85,7 @@ plt.plot(x,ysum_D0_5,linestyle='-',linewidth=2,marker='o',color='r',label='$0.5D
 plt.plot(x,ysum_D1,linestyle='-',linewidth=2,marker='o',color='k',label='$D_{\\rm latt}$')
 plt.plot(x,ysum_D2,linestyle='-',linewidth=2,marker='o',color='g',label='$2D_{\\rm latt}$')
 plt.plot(x,ysum_D4,linestyle='-',linewidth=2,marker='o',color='b',label='$4D_{\\rm latt}$')
-plt.errorbar(alice_y,3.0*alice_bf,alice_errors,linestyle='None',markersize='12',marker='*',color='k',label='1.5$\cdot$ALICE (prel)')
+plt.errorbar(alice_y,2.0*alice_bf,alice_errors,linestyle='None',markersize='12',marker='*',color='k',label='1.5$\cdot$ALICE (prel)')
 #plt.plot(aliceTOT_phi,aliceTOT_bf,linestyle='None',marker='*',color='k',label='ALICE (prel)')
 ax.legend()
 
