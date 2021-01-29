@@ -2,7 +2,7 @@
 cd /home/scott/git/hp/alice/Dtest
 make b3d_fromhydro
 nproc=12
-nruns=30
+nruns=60
 for ((i=0;i<${nproc};i+=1))
 do
 	firsti=`expr ${i} \* ${nruns}`;
