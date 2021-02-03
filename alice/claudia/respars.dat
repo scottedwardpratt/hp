@@ -1,0 +1,2 @@
+RESONANCE_INFO_FILE	../progdata/resinfo/resonances_pdg_weak.dat
+RESONANCE_DECAYS_FILE ../progdata/resinfo/decays_pdg_weak.dat

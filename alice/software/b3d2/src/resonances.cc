@@ -596,6 +596,101 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 	}
 }
 
+void CResList::CalcEoSandChiandQdens(double T,double &P,double &epsilon,
+double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &chi,double &strangecontent,double &udcontent){
+	CResInfo *resinfoptr;
+	CResInfoMap::iterator rpos;
+	double m,m1=0.0,m2=0.0,degen,s;
+	double width,minmass,maxweighti;
+	double pi,epsiloni,densi,sigma2i,dedti;
+	double Nud,Nstrange;
+	strangecontent=udcontent=0.0;
+	double netchi=0.0,netchi0=0.0;
+	int a,b,n,ires,nres=resmap.size();
+	chi.setZero();
+	P=epsilon=s=nh=0.0;
+	density.resize(nres);
+	maxweight.resize(nres);
+	for(ires=0;ires<nres;ires++){
+		density[ires]=0.0;
+	}
+	for(rpos=resmap.begin();rpos!=resmap.end();rpos++){
+		Nstrange=Nud=0.0;
+		resinfoptr=rpos->second;
+		ires=resinfoptr->ires;
+		size_t found = resinfoptr->name.find("phi");
+		if(found!=std::string::npos){ 
+			//printf("found Phi: %s\n",resinfoptr->name.c_str());
+			Nstrange=2.0;
+		}
+		else{
+			if(resinfoptr->strange!=0)
+				Nstrange=abs(resinfoptr->strange);
+			if(resinfoptr->baryon!=0)
+				Nud=3-Nstrange;
+			else{
+				if(resinfoptr->code!=22)
+					Nud=2-Nstrange;
+			}
+		}		
+		if(resinfoptr->code!=22){
+			degen=2.0*resinfoptr->spin+1.0;
+			m=resinfoptr->mass;
+			if(USEPOLEMASS){
+				freegascalc_onespecies(m,T,epsiloni,pi,densi,sigma2i,dedti);
+				maxweighti=-1.0;
+			}
+			else{
+				width=resinfoptr->width;
+				minmass=resinfoptr->minmass;
+				if(resinfoptr->decay){
+					m1=resinfoptr->branchlist[0]->resinfoptr[0]->mass;
+					m2=0.0;
+					for(n=1;n<int(resinfoptr->branchlist[0]->resinfoptr.size());n++){
+						m2+=resinfoptr->branchlist[0]->resinfoptr[n]->mass;
+					}
+				}
+				if((minmass>0.0)&&(width>1.0E-3)){
+					freegascalc_onespecies_finitewidth(m,m1,m2,T,width,
+					epsiloni,pi,densi,sigma2i,dedti,maxweighti);
+					if(densi!=densi){
+						resinfoptr->Print();
+						exit(1);
+					}
+				}
+				else{
+					freegascalc_onespecies(m,T,epsiloni,pi,densi,sigma2i,dedti);
+					maxweighti=-1.0;
+				}
+			}
+			P+=pi*degen;
+			epsilon+=epsiloni*degen;
+			s+=(pi+epsiloni)*degen/T;
+			nh+=densi*degen;
+			strangecontent+=Nstrange*densi*degen;
+			udcontent+=Nud*densi*degen;
+			density[ires]=densi*degen;
+			maxweight[ires]=maxweighti;
+			for(a=0;a<3;a++){
+				for(b=0;b<3;b++){
+					chi(a,b)+=densi*degen*resinfoptr->q[a]*resinfoptr->q[b];
+				}
+			}
+		}
+		else{
+			density[ires]=0.0;
+		}
+		netchi+=resinfoptr->netchi*density[ires];
+		netchi0+=resinfoptr->netchi0*density[ires];
+	}
+	strangecontent=strangecontent/s;
+	udcontent=udcontent/s;
+	printf("-----   chi/s -------\n");
+	cout << chi/s << endl;
+	printf("entropy density=%g, hadron density=%g, entropy/hadron=%g\n",s,nh,s/nh);
+	printf("---------------------\n");
+}
+
 double CResList::triangle(double m0,double m1,double m2){
 	double answer,m0sq,m1sq,m2sq;
 	if(m0<m1+m2) {
@@ -811,7 +906,6 @@ bool CResInfo::FindContent(int codecheck,double weight0,double &weight){
 	bool foundpart=false;
 	CBranchInfo *bptr;
 	CResInfo *resinfo1;
-	double B;
 	unsigned long int ibranch,ibody1;
 	if(!reslist->finalproductsfound)
 		reslist->FindFinalProducts();
@@ -821,7 +915,6 @@ bool CResInfo::FindContent(int codecheck,double weight0,double &weight){
 			bptr=finalproductslist[ibranch];
 			for(ibody1=0;ibody1<bptr->resinfoptr.size();ibody1++){
 				resinfo1=bptr->resinfoptr[ibody1];
-				B=double(resinfo1->q[0]+resinfo1->q[1]+resinfo1->q[2])/3.0;
 				if(resinfo1->code==codecheck){
 					weight+=weight0*bptr->branching;
 					foundpart=true;
@@ -887,7 +980,6 @@ void CResInfo::PrintFinalProducts(){
 }
 
 double CResList::CalcBalanceNorm(int pid,int pidprime){
-	printf("here we go\n");
 	// ideal norm of B_hh'
 	CResInfo *resinfo;
 	CResInfoMap::iterator rpos;
@@ -897,7 +989,6 @@ double CResList::CalcBalanceNorm(int pid,int pidprime){
 	double dens,densprime,weight,norm;
 	int a,ires;
 	dens=densprime=0.0;
-	
 	/*
 	printf("chi------------------\n");
 	cout << chif << endl;
@@ -925,10 +1016,12 @@ double CResList::CalcBalanceNorm(int pid,int pidprime){
 	printf("chitest-----------------\n");
 	cout << chitest << endl;
 	*/
+	/*
 	printf("chi=\n");
 	cout << chif << endl;
 	printf("chiinv=\n");
 	cout << chiinvf << endl;
+	*/
 	
 	norm=0.0;
 	double netq[3]={0.0};
@@ -962,7 +1055,7 @@ double CResList::CalcBalanceNorm(int pid,int pidprime){
 		}
 		
 		if(resinfo->FindContentPairs(pid,pidprime,1.0,weight)){
-			printf("%5d: pair weight=%g\n",resinfo->code,weight);
+			//printf("%5d: pair weight=%g\n",resinfo->code,weight);
 			norm-=weight*densityf[ires];
 		}
 		
@@ -971,7 +1064,7 @@ double CResList::CalcBalanceNorm(int pid,int pidprime){
 	norm+=double((rho.transpose())*(chiinvf*rhoprime));
 	norm=norm/densprime;
 	
-	printf("netu=%g, netd=%g, nets=%g\n",netq[0],netq[1],netq[2]);
+	//printf("netu=%g, netd=%g, nets=%g\n",netq[0],netq[1],netq[2]);
 	
 	return norm;
 }

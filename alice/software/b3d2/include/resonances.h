@@ -74,6 +74,8 @@ public:
 	CResInfo *GetResInfoPtr(int ID);
 	void ReadResInfo();
 	void CalcEoSandChi(double T,double &P,double &epsilon,double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &chi);
+	void CalcEoSandChiandQdens(double T,double &P,double &epsilon,
+double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &chi,double &udcontent,double &strangecontent);
 	double CalcBalanceNorm(int pid,int pidprime);
 	void CalcConductivity(double T,double &P,double &epsilon,double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &chi,Eigen::Matrix3d &sigma);
 	void freegascalc_onespecies(double m,double T,double &e,double &p,double &dens,double &sigma2,double &dedt);
