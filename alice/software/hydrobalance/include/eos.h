@@ -12,7 +12,6 @@ public:
 	CparameterMap *parmap;
 	double T,P,epsilon,s;
 	double chill,chiud,chils,chiss;
-	double chillovers,chiudovers,chilsovers,chissovers;
 	CEoS(CparameterMap *parmapset);
 	CEoS();
 	void ReadDiffusionData();

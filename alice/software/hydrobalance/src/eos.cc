@@ -200,7 +200,7 @@ void CEoS::ReadChiData_Claudia(){
 	char dummy[100];
 	FILE *fptr;
 	// You will read in chi/s, not chi
-	filename=dirname+"/chi_claudia.dat";
+	filename=dirname+"/chi.dat";
 	fptr=fopen(filename.c_str(),"r");
 	T_claudia.resize(ndata);
 	chill_claudia.resize(ndata);
@@ -246,6 +246,12 @@ void CEoS::GetChiOverS_Claudia(){
 		chiss=chiss_claudia[iT0]*w0+chiss_claudia[iT0+1]*w1;
 		//printf("iT0=%d, T=%g, chiuu=%g, chiud=%g, chiss=%g\n",iT0,T_claudia[iT0],chill_claudia[iT0],chiud_claudia[iT0],chiss_claudia[iT0]);
 	}
+	chill*=s;
+	chiud*=s;
+	chils*=s;
+	chiss*=s;
+	
+	printf("T=%g, s=%g, chiss=%g\n");
 	
 }
 
@@ -387,8 +393,7 @@ void CEoS::GetEoSFromEpsilon_PST(double epsilonset){
 void CEoS::Print(){
 	printf("---- T=%g, P=%g, epsilon=%g, s=%g  ----\n",T,P,epsilon,s);
 	printf("chill=%g, chiud=%g, chils=%g, chiss=%g\n",chill,chiud,chils,chiss);
-	printf("chill/s=%g, chiud/s=%g, chilsovers=%g, chissovers=%g\n",
-	chillovers,chiudovers,chilsovers,chissovers);
+	printf("chill/s=%g, chiud/s=%g, chils/s=%g, chiss/s=%g\n",chill/s,chiud/s,chils/s,chiss/s);
 }
 
 void CEoS::PrintChi(){
@@ -399,7 +404,6 @@ void CEoS::PrintChi(){
 	chimat(2,2)=chiss;
 	printf("--------- Chi(Tf)-------------\n");
 	cout<< chimat << endl;
-	chimat=chimat/chimat(0,0);
 	cout << chimat << endl;
 }
 
