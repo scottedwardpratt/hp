@@ -159,7 +159,6 @@ void CHydroBalance::MakeCharges(){
 								randy->ran_gauss2(g1,g2);
 								charge1->eta=SIGMA0*g1;
 								charge2->eta=SIGMA0*g2;
-								printf("eta1=%g, eta2=%g\n",charge1->eta,charge2->eta);
 							}
 							charge1->active=charge2->active=true;
 							charge1->weight=charge2->weight=1.0;
