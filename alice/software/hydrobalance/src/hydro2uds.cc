@@ -159,6 +159,9 @@ void CHydroBalance::MakeCharges(){
 								randy->ran_gauss2(g1,g2);
 								charge1->eta=SIGMA0*g1;
 								charge2->eta=SIGMA0*g2;
+								if(abs(charge1->q[2])==1 && (abs(charge2->q[2])==1)){
+									printf("tau=%g, eta=(%g,%g), q=(%d,%d)\n",mesh->tau,charge1->eta,charge2->eta,charge1->q[2],charge2->q[2]);
+								}
 							}
 							charge1->active=charge2->active=true;
 							charge1->weight=charge2->weight=1.0;
@@ -183,14 +186,11 @@ void CHydroBalance::MakeCharges(){
 							if(itau<30)
 								source[itau](a,b)-=charge1->q[a]*charge2->q[b];
 
-							/*
-							if(fabs(charge1->q[2])==1 && (fabs(charge2->q[2])==1)){
-								printf("charges=(%d,%d,%d), (%d,%d,%d), DQ=%g\n",
-								charge1->q[0],charge1->q[1],
-								charge1->q[2],charge2->q[0],charge2->q[1],charge2->q[2],
-								DQ(a,b));
+							
+							if(abs(charge1->q[2])==1 && (abs(charge2->q[2])==1)){
+								printf("%8lu: tau=%5.2f, eta=(%6.3f,%6.3f), q1*q2=%d\n",cmap.size()+emap.size(),
+								mesh->tau,charge1->eta,charge2->eta,charge1->q[2]*charge2->q[2]);
 							}
-							*/
 						}
 					}
 				}

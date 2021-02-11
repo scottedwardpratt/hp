@@ -34,6 +34,10 @@ void CB3D::GenHadronsFromCharges(){
 				chargeb=itc1->second;
 				GenHadronsFromCharge(bid,chargea);
 				GenHadronsFromCharge(bid+1,chargeb);
+				if(abs(chargea->q[2])==1 && abs(chargeb->q[2])==1){
+					printf("eta=(%7.3f %7.3f), q=(%d,%d), weights=(%g,%g)\n",chargea->eta,chargeb->eta,
+					chargea->q[2],chargeb->q[2],chargea->weight,chargeb->weight);
+				}
 			}
 		}
 	}
