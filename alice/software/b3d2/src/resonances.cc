@@ -604,6 +604,7 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 	double width,minmass,maxweighti;
 	double pi,epsiloni,densi,sigma2i,dedti;
 	double Nud,Nstrange;
+	bool special;
 	strangecontent=udcontent=0.0;
 	double netchi=0.0,netchi0=0.0;
 	int a,b,n,ires,nres=resmap.size();
@@ -618,14 +619,22 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 		Nstrange=Nud=0.0;
 		resinfoptr=rpos->second;
 		ires=resinfoptr->ires;
+		special=false;
 		size_t found = resinfoptr->name.find("phi");
 		if(found!=std::string::npos){ 
 			//printf("found Phi: %s\n",resinfoptr->name.c_str());
 			Nstrange=2.0;
+			special=true;
 		}
-		else{
-			if(resinfoptr->strange!=0)
-				Nstrange=abs(resinfoptr->strange);
+		found = resinfoptr->name.find("eta");
+		if(found!=std::string::npos){ 
+			printf("found eta or eta-prime: %s\n",resinfoptr->name.c_str());
+			Nstrange=2.0/3.0;
+			Nud=4.0/3.0;
+			special=true;
+		}
+		if(!special){
+			Nstrange=abs(resinfoptr->strange);
 			if(resinfoptr->baryon!=0)
 				Nud=3-Nstrange;
 			else{
