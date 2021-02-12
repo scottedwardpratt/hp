@@ -246,12 +246,6 @@ void CEoS::GetChiOverS_Claudia(){
 		chiss=chiss_claudia[iT0]*w0+chiss_claudia[iT0+1]*w1;
 		//printf("iT0=%d, T=%g, chiuu=%g, chiud=%g, chiss=%g\n",iT0,T_claudia[iT0],chill_claudia[iT0],chiud_claudia[iT0],chiss_claudia[iT0]);
 	}
-	chill*=s;
-	chiud*=s;
-	chils*=s;
-	chiss*=s;
-	
-	printf("T=%g, s=%g, chiss=%g\n");
 	
 }
 
@@ -392,8 +386,7 @@ void CEoS::GetEoSFromEpsilon_PST(double epsilonset){
 
 void CEoS::Print(){
 	printf("---- T=%g, P=%g, epsilon=%g, s=%g  ----\n",T,P,epsilon,s);
-	printf("chill=%g, chiud=%g, chils=%g, chiss=%g\n",chill,chiud,chils,chiss);
-	printf("chill/s=%g, chiud/s=%g, chils/s=%g, chiss/s=%g\n",chill/s,chiud/s,chils/s,chiss/s);
+	printf("chill/s=%g, chiud/s=%g, chils/s=%g, chiss/s=%g\n",chill,chiud,chils,chiss);
 }
 
 void CEoS::PrintChi(){

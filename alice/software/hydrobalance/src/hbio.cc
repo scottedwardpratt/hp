@@ -151,9 +151,6 @@ void CHydroBalance::WriteCharges(){
 		if(it!=emap.end()){
 			if(balanceID%2==1){
 				CCharge *newcharge=it->second;
-				if(abs(charge->q[2])==1 && abs(newcharge->q[2])==1){
-					printf("writing, %6d eta=(%g,%g), q=(%d,%d)\n",balanceID,charge->eta,newcharge->eta,charge->q[2],newcharge->q[2]);
-				}
 			}
 		}
 	}
