@@ -289,7 +289,7 @@ void CHydroBalance::ScatterCharges(){
 
 void CHydroBalance::CalcDQ(int ix,int iy,double &DQll,
 double &DQud,double &DQls,double &DQss){
-	double d4x,s0,sx,sy,sdens;
+	double d4x,s0,sx,sy;
 	CEoS eos222[2][2][2];
 	int j0,jx,jy;
 	double ux[2][2][2],uy[2][2][2],u0[2][2][2];
@@ -332,22 +332,20 @@ double &DQud,double &DQls,double &DQss){
 				else
 					sy=0.25;
 				
-				sdens=eos222[j0][jx][jy].s;
+				DQll+=d4x*s0*u0[j0][jx][jy]*eos222[j0][jx][jy].chill/DELTAU;
+				DQud+=d4x*s0*u0[j0][jx][jy]*eos222[j0][jx][jy].chiud/DELTAU;
+				DQls+=d4x*s0*u0[j0][jx][jy]*eos222[j0][jx][jy].chils/DELTAU;
+				DQss+=d4x*s0*u0[j0][jx][jy]*eos222[j0][jx][jy].chiss/DELTAU;
 				
-				DQll+=d4x*s0*u0[j0][jx][jy]*eos222[j0][jx][jy].chill*sdens/DELTAU;
-				DQud+=d4x*s0*u0[j0][jx][jy]*eos222[j0][jx][jy].chiud*sdens/DELTAU;
-				DQls+=d4x*s0*u0[j0][jx][jy]*eos222[j0][jx][jy].chils*sdens/DELTAU;
-				DQss+=d4x*s0*u0[j0][jx][jy]*eos222[j0][jx][jy].chiss*sdens/DELTAU;
+				DQll+=d4x*sx*ux[j0][jx][jy]*eos222[j0][jx][jy].chill/DX;
+				DQud+=d4x*sx*ux[j0][jx][jy]*eos222[j0][jx][jy].chiud/DX;
+				DQls+=d4x*sx*ux[j0][jx][jy]*eos222[j0][jx][jy].chils/DX;
+				DQss+=d4x*sx*ux[j0][jx][jy]*eos222[j0][jx][jy].chiss/DX;
 				
-				DQll+=d4x*sx*ux[j0][jx][jy]*eos222[j0][jx][jy].chill*sdens/DX;
-				DQud+=d4x*sx*ux[j0][jx][jy]*eos222[j0][jx][jy].chiud*sdens/DX;
-				DQls+=d4x*sx*ux[j0][jx][jy]*eos222[j0][jx][jy].chils*sdens/DX;
-				DQss+=d4x*sx*ux[j0][jx][jy]*eos222[j0][jx][jy].chiss*sdens/DX;
-				
-				DQll+=d4x*sy*uy[j0][jx][jy]*eos222[j0][jx][jy].chill*sdens/DY;
-				DQud+=d4x*sy*uy[j0][jx][jy]*eos222[j0][jx][jy].chiud*sdens/DY;
-				DQls+=d4x*sy*uy[j0][jx][jy]*eos222[j0][jx][jy].chils*sdens/DY;
-				DQss+=d4x*sy*uy[j0][jx][jy]*eos222[j0][jx][jy].chiss*sdens/DY;
+				DQll+=d4x*sy*uy[j0][jx][jy]*eos222[j0][jx][jy].chill/DY;
+				DQud+=d4x*sy*uy[j0][jx][jy]*eos222[j0][jx][jy].chiud/DY;
+				DQls+=d4x*sy*uy[j0][jx][jy]*eos222[j0][jx][jy].chils/DY;
+				DQss+=d4x*sy*uy[j0][jx][jy]*eos222[j0][jx][jy].chiss/DY;
 								
 			}
 		}
@@ -356,18 +354,17 @@ double &DQud,double &DQls,double &DQss){
 
 void CHydroBalance::CalcDQ0(int ix,int iy,double &DQll,double &DQud,
 double &DQls,double &DQss){
-	double u0,ux,uy,d3x=DX*DY*newmesh->tau,T,sdens;
+	double u0,ux,uy,d3x=DX*DY*newmesh->tau,T;
 	GetUxyBar(ix,iy,ux,uy);
 	u0=sqrt(1.0+ux*ux+uy*uy);
 	GetTBar(ix,iy,T);
 	if(T>Tf){
-		sdens=eos->s;
 		eos->GetEoSFromT_PST(T);
 		eos->GetChiOverS_Claudia();
-		DQll=d3x*u0*eos->chill*sdens;
-		DQud=d3x*u0*eos->chiud*sdens;
-		DQls=d3x*u0*eos->chils*sdens;
-		DQss=d3x*u0*eos->chiss*sdens;
+		DQll=d3x*u0*eos->chill;
+		DQud=d3x*u0*eos->chiud;
+		DQls=d3x*u0*eos->chils;
+		DQss=d3x*u0*eos->chiss;
 	}
 	else{
 		DQll=DQud=DQls=DQss=0.0;

@@ -1,7 +1,7 @@
 #!/bin/bash
 case $# in
 	0|1)
-		echo "Usage: runner_b3d.sh ifirst ifinal  // runs from i=ifirst to <=ifinal";
+		echo "Usage: runner_both.sh ifirst ifinal  // runs from i=ifirst to <=ifinal";
   	exit 1 ;;
 	2)
 		firsti=$1
@@ -10,6 +10,6 @@ case $# in
 		do
 			echo "____________ hydro2uds/b3d for run number " ${ii} ______________;
 			./hydro2uds $ii;
-			./b3d default_${ii} ${ii} ${ii};
+			./b3d_fromhydro default_${ii} ${ii} ${ii};
 		done
 esac

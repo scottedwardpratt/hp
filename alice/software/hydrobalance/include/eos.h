@@ -26,6 +26,7 @@ public:
 	void ReadChiData_HSC();
 	void ReadChiData_Claudia();
 	void GetChiOverS_Claudia();
+	void ReadEoS_Claudia();
 	void Print();
 	void PrintChi();
 	void FillOutdDdT();
@@ -36,7 +37,7 @@ private:
 	static vector<double> epsilon_PST,P_PST,s_PST,T_PST;
 	static vector<double> epsilon_claudia,P_claudia,s_claudia,T_claudia;
 	static vector<double> twopiTD,Tdiff;
-	static vector<double> chill_claudia,chiud_claudia,chils_claudia,chiss_claudia;
+	static vector<double> chill_overs_claudia,chiud_overs_claudia,chils_overs_claudia,chiss_overs_claudia;
 	static vector<double> chill_HSC,chiud_HSC,chils_HSC,chiss_HSC;
 	static vector<double> dDdT;
 	static mapdi etmap;

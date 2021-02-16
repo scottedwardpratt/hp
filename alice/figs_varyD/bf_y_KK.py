@@ -49,7 +49,7 @@ x_D4=chargesdata_D4[0]
 y1=chargesdata_D4[1]
 y_D4=efficiency*y1
 
-cascadedata = np.loadtxt('../fromcascadetest/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_y.dat',skiprows=0,unpack=True)
+cascadedata = np.loadtxt('../fromcascade/model_output/default_sum/'+centrality+'/results_alice/'+chargepair+'/bf_y.dat',skiprows=0,unpack=True)
 xc=cascadedata[0]
 yc1=cascadedata[1]
 yc=efficiency*yc1
@@ -85,7 +85,7 @@ plt.plot(x,ysum_D0_5,linestyle='-',linewidth=2,marker='o',color='r',label='$0.5D
 plt.plot(x,ysum_D1,linestyle='-',linewidth=2,marker='o',color='k',label='$D_{\\rm latt}$')
 plt.plot(x,ysum_D2,linestyle='-',linewidth=2,marker='o',color='g',label='$2D_{\\rm latt}$')
 plt.plot(x,ysum_D4,linestyle='-',linewidth=2,marker='o',color='b',label='$4D_{\\rm latt}$')
-plt.errorbar(alice_y,2.0*alice_bf,alice_errors,linestyle='None',markersize='12',marker='*',color='k',label='1.5$\cdot$ALICE (prel)')
+plt.errorbar(alice_y,2.0*alice_bf,alice_errors,linestyle='None',markersize='12',marker='*',color='k',label='$\cdot$ALICE (prel)')
 #plt.plot(aliceTOT_phi,aliceTOT_bf,linestyle='None',marker='*',color='k',label='ALICE (prel)')
 ax.legend()
 
@@ -115,7 +115,7 @@ plt.ylabel('$B(\Delta y)$',fontsize=18)
 #fontsize=12, color='gray')
 #plt.subplots_adjust(top=0.85)
 plt.savefig('bf_y_KK.pdf',format='pdf')
-os.system('open -a Preview bf_y_KK.pdf')
-#os.system('evince bf_y_KK.pdf &')
+#os.system('open -a Preview bf_y_KK.pdf')
+os.system('okular bf_y_KK.pdf &')
 #plt.show()
 quit()

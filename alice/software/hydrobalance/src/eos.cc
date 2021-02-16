@@ -8,7 +8,7 @@ using namespace std;
 vector<double> CEoS::epsilon_PST,CEoS::P_PST,CEoS::s_PST,CEoS::T_PST;
 vector<double> CEoS::epsilon_claudia,CEoS::P_claudia,CEoS::s_claudia,CEoS::T_claudia;
 vector<double> CEoS::twopiTD,CEoS::Tdiff;
-vector<double> CEoS::chill_claudia,CEoS::chiud_claudia,CEoS::chils_claudia,CEoS::chiss_claudia;
+vector<double> CEoS::chill_overs_claudia,CEoS::chiud_overs_claudia,CEoS::chils_overs_claudia,CEoS::chiss_overs_claudia;
 vector<double> CEoS::chill_HSC,CEoS::chiud_HSC,CEoS::chils_HSC,CEoS::chiss_HSC;
 vector<double> CEoS::dDdT;
 mapdi CEoS::etmap;
@@ -23,7 +23,7 @@ CEoS::CEoS(CparameterMap *parmapset){
 	reslist=new CResList(parmap);
 	ReadDiffusionData();
 	ReadChiData_Claudia();
-	FillOutdDdT();
+	//FillOutdDdT();
 };
 
 void CEoS::ReadDiffusionData(){
@@ -203,15 +203,14 @@ void CEoS::ReadChiData_Claudia(){
 	filename=dirname+"/chi.dat";
 	fptr=fopen(filename.c_str(),"r");
 	T_claudia.resize(ndata);
-	chill_claudia.resize(ndata);
-	chils_claudia.resize(ndata);
-	chiss_claudia.resize(ndata);
-	chiud_claudia.resize(ndata);
+	chill_overs_claudia.resize(ndata);
+	chils_overs_claudia.resize(ndata);
+	chiss_overs_claudia.resize(ndata);
+	chiud_overs_claudia.resize(ndata);
 	fgets(dummy,100,fptr);
 	for(idata=4;idata<ndata;idata++){
 		fscanf(fptr,"%lf %lf %lf %lf %lf",
-		&T_claudia[idata],&chill_claudia[idata],&chiud_claudia[idata],&chils_claudia[idata],&chiss_claudia[idata]);
-		//printf("T=%g, chiuu=%g, chiud=%g, chiss=%g\n",T_claudia[idata],chill_claudia[idata],chiud_claudia[idata],chiss_claudia[idata]);
+		&T_claudia[idata],&chill_overs_claudia[idata],&chiud_overs_claudia[idata],&chils_overs_claudia[idata],&chiss_overs_claudia[idata]);
 	}
 	fclose(fptr);
 }
@@ -221,16 +220,16 @@ void CEoS::GetChiOverS_Claudia(){
 	const int ndata=81;
 	int iT0;
 	if(Tm<20){
-		chill=chill_claudia[5]*Tm/20.0;
-		chiud=chiud_claudia[5]*Tm/20.0;
-		chils=chils_claudia[5]*Tm/20.0;
-		chiss=chiss_claudia[5]*Tm/20.0;
+		chill=chill_overs_claudia[5]*Tm*s/20.0;
+		chiud=chiud_overs_claudia[5]*Tm*s/20.0;
+		chils=chils_overs_claudia[5]*Tm*s/20.0;
+		chiss=chiss_overs_claudia[5]*Tm*s/20.0;
 	}
 	else if(Tm>=Tmax){
-		chill=chill_claudia[ndata-1];
-		chiud=chiud_claudia[ndata-1];
-		chils=chils_claudia[ndata-1];
-		chiss=chiss_claudia[ndata-1];
+		chill=chill_overs_claudia[ndata-1]*s;
+		chiud=chiud_overs_claudia[ndata-1]*s;
+		chils=chils_overs_claudia[ndata-1]*s;
+		chiss=chiss_overs_claudia[ndata-1]*s;
 	}
 	else{
 		iT0=lrint(floor(Tm/delT));
@@ -240,11 +239,10 @@ void CEoS::GetChiOverS_Claudia(){
 		}
 		w1=(Tm-delT*iT0)/delT;
 		w0=1.0-w1;
-		chill=chill_claudia[iT0]*w0+chill_claudia[iT0+1]*w1;
-		chiud=chiud_claudia[iT0]*w0+chiud_claudia[iT0+1]*w1;
-		chils=chils_claudia[iT0]*w0+chils_claudia[iT0+1]*w1;
-		chiss=chiss_claudia[iT0]*w0+chiss_claudia[iT0+1]*w1;
-		//printf("iT0=%d, T=%g, chiuu=%g, chiud=%g, chiss=%g\n",iT0,T_claudia[iT0],chill_claudia[iT0],chiud_claudia[iT0],chiss_claudia[iT0]);
+		chill=chill_overs_claudia[iT0]*s*w0+chill_overs_claudia[iT0+1]*s*w1;
+		chiud=chiud_overs_claudia[iT0]*s*w0+chiud_overs_claudia[iT0+1]*s*w1;
+		chils=chils_overs_claudia[iT0]*s*w0+chils_overs_claudia[iT0+1]*s*w1;
+		chiss=chiss_overs_claudia[iT0]*s*w0+chiss_overs_claudia[iT0+1]*s*w1;
 	}
 	
 }
@@ -271,7 +269,7 @@ void CEoS::CalcEoS_PST(){
 		fscanf(fptr,"%lf ",&eps);
 	}
 	
-	double TH=0.155, TQGP=0.175;
+	double TH=0.150, TQGP=0.160;
 	double TT,Ph,eh,nh,sh,w;
 	int nres=reslist->resmap.size();
 	vector<double> density;

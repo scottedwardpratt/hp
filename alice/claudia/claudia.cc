@@ -106,7 +106,7 @@ int main(){
 	
 	// NOW DO OUTPUT
 
-	FILE *output=fopen("chi.dat","w");
+	FILE *output=fopen("chi_overs.dat","w");
 	fprintf(output,"#  T  chi_uu/s chi_du/s chi_su/s chi_ss/s\n");
 	for(T=20.0;T<400.5;T+=5.0){
 		fprintf(output,"%5.1f",T);
@@ -174,7 +174,7 @@ void GetLatticeEoS(vector<double> &Parray,vector<double> &sarray,vector<double> 
 		printf("%5.1f %g\n",T,sarray[iT]/pow(T,3));
 		if(iT>0){
 			cs2=(Parray[iT+1]-Parray[iT-1])/(epsilonarray[iT+1]-epsilonarray[iT-1]);
-			fprintf(fptr,"%5.1f %8.4f %8.4f %8.4f %6.4f\n",iT*dT,Parray[iT]*hbarc3,epsilonarray[iT]*hbarc3,sarray[iT]*hbarc3,cs2);
+			fprintf(fptr,"%5.1f %14.6e %14.6e %14.6e %14.6e\n",iT*dT,Parray[iT]*hbarc3,epsilonarray[iT]*hbarc3,sarray[iT]*hbarc3,cs2);
 		}
 	}
 	fclose(fptr);

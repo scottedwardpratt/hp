@@ -19,7 +19,7 @@ int main(int argc,char *argv[]){
 	int NJDIR;
 	FILE *fptr_read;
 	FILE *fptr_write;
-	char oldfilename[100],newfilename[100];
+	string oldfilename,newfilename,newdirname;
 	vector<double> ysum[4],xsum;
 	double x,y[4],bfnorm,dx;
 	int jdir,itype,ifn,ix;
@@ -34,10 +34,10 @@ int main(int argc,char *argv[]){
 	string newdatafilename[4]={"bf_phi.dat","bf_eta.dat","bf_y.dat","bf_qinv.dat"};
 	int Nqcut=4;
 	string dirname[NTYPES]={"KK","Kp","piK","pip","pipi","pp","allcharges","allcharges_phi0","allcharges_phi45","allcharges_phi90"};
-	char command[120];
+	string command;
 	for(itype=0;itype<NTYPES;itype++){
-		sprintf(command,"mkdir -p %s_sum/%s/%s/%s",dirprefix.c_str(),qualifier.c_str(),acceptance.c_str(),dirname[itype].c_str());
-		system(command);
+		command="mkdir -p "+dirprefix+"_sum/"+qualifier+"/"+acceptance+"/"+dirname[itype];
+		system(command.c_str());
 	}
 	
 	// Read denom sum
@@ -48,8 +48,8 @@ int main(int argc,char *argv[]){
 	double nplus,nminus;
 	printf("NJDIR=%d\n",NJDIR);
 	for(jdir=0;jdir<NJDIR;jdir++){
-		sprintf(oldfilename,"%s_%d/%s/%s/denom.dat",dirprefix.c_str(),jdir,qualifier.c_str(),acceptance.c_str());
-		fptr_read=fopen(oldfilename,"r");
+		oldfilename=dirprefix+"_"+to_string(jdir)+"/"+qualifier+"/"+acceptance+"/denom.dat";
+		fptr_read=fopen(oldfilename.c_str(),"r");
 		fscanf(fptr_read,"%s %lf %lf",dummy,&nplus,&nminus);
 		denom_pi+=nplus+nminus;
 		fscanf(fptr_read,"%s %lf %lf",dummy,&nplus,&nminus);
@@ -66,8 +66,8 @@ int main(int argc,char *argv[]){
 		denom_allcharges_phi90+=nplus+nminus;
 		fclose(fptr_read);		
 	}
-	sprintf(newfilename,"%s_sum/%s/%s/denom.dat",dirprefix.c_str(),qualifier.c_str(),acceptance.c_str());
-	fptr_write=fopen(newfilename,"w");
+	newfilename="default_sum/"+qualifier+"/"+acceptance+"/denom.dat";
+	fptr_write=fopen(newfilename.c_str(),"w");
 	fprintf(fptr_write,"denom_pi: %g\ndenom_K: %g\ndenom_p: %g\ndenom_allcharges: %g\ndenom_allcharges_phi0: %g\ndenom_allcharges_phi45: %g\ndenom_allcharges_phi90 %g\n",
 	denom_pi,denom_K,denom_p,denom_allcharges,denom_allcharges_phi0,denom_allcharges_phi45,denom_allcharges_phi90);
 	fclose(fptr_write);
@@ -89,25 +89,27 @@ int main(int argc,char *argv[]){
 				dx=0.1;
 			if(ifn==3)
 				dx=10.0;
-			sprintf(newfilename,"%s_sum/%s/%s/%s/%s",dirprefix.c_str(),qualifier.c_str(),acceptance.c_str(),dirname[itype].c_str(),
-			newdatafilename[ifn].c_str());
-			fptr_write=fopen(newfilename,"w");
+			newdirname="default_sum/"+qualifier+"/"+acceptance+"/"+dirname[itype];
+			command="mkdir -p "+newdirname;
+			system(command.c_str());
+			newfilename=newdirname+"/"+newdatafilename[ifn];
+			printf("writing to %s\n",newfilename.c_str());
+			fptr_write=fopen(newfilename.c_str(),"w");
 			xsum.clear();
 			ysum[0].clear();
 			ysum[1].clear();
 			ysum[2].clear();
 			ysum[3].clear();
 			for(jdir=0;jdir<NJDIR;jdir++){
-				sprintf(oldfilename,"%s_%d/%s/%s/%s/%s",dirprefix.c_str(),jdir,qualifier.c_str(),acceptance.c_str(),
-				dirname[itype].c_str(),olddatafilename[ifn].c_str());
-				fptr_read=fopen(oldfilename,"r");
+				oldfilename=dirprefix+"_"+to_string(jdir)+"/"+qualifier+"/"+acceptance+"/"+dirname[itype]+"/"+olddatafilename[ifn];
+				fptr_read=fopen(oldfilename.c_str(),"r");
 				ix=0;
 				fscanf(fptr_read,"%lf %lf",&x,&y[0]);
 				if(ifn>2)
 					fscanf(fptr_read,"%lf %lf %lf",&y[1],&y[2],&y[3]);
 				fgets(dummy,100,fptr_read);
 
-				while(!feof(fptr_read)){
+				while(!feof(fptr_read) && ix<30){
 					if(jdir==0){
 						xsum.push_back(x);
 						ysum[0].push_back(y[0]);

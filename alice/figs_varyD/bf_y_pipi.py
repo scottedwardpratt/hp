@@ -53,7 +53,7 @@ cascadedata = np.loadtxt('../fromcascade/model_output/default_sum/'+centrality+'
 xc=cascadedata[0]
 yc1=cascadedata[1]
 yc=efficiency*yc1
-3
+
 cfactor=1.0/(1.0-x_D4/1.6);
 ysum_D1=y_D1+yc
 ysum_D0_5=y_D0_5+yc
@@ -115,7 +115,7 @@ plt.ylabel('$B(\Delta y)$',fontsize=18)
 #fontsize=12, color='gray')
 #plt.subplots_adjust(top=0.85)
 plt.savefig('bf_y_pipi.pdf',format='pdf')
-os.system('open -a Preview bf_y_pipi.pdf')
-#os.system('evince bf_y_pipi.pdf&')
+#os.system('open -a Preview bf_y_pipi.pdf')
+os.system('okular bf_y_pipi.pdf&')
 #plt.show()
 quit()
