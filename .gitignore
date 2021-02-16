@@ -10,14 +10,13 @@ alice/makefile_defs.mk
 **/old**#
 *~
 **/*.diff
+**/model_ouput/**
 **.orig
 **.rej
 **/*.a
 **/.DS_Store
 **.vscode
 **/build
-**/model_output
-**/model_output/**
 .directory
 .push_default
 **/*.diff
