@@ -1,6 +1,4 @@
 #! /bin/bash
-cd /home/scott/git/hp/alice/D0.5
-make b3d_fromhydro
 nproc=24
 nruns=30
 for ((i=0;i<${nproc};i+=1))

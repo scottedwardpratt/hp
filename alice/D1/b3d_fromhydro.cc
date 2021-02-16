@@ -13,8 +13,7 @@ int main(int argc, char *argv[]){
 		exit(-1);
   }
 	CBalanceArrays *barray;
-	int nparts,nchargesample=1,isample;
-	long long int npartstot;
+	long long int npartstot,nparts;
 	long long int ncolls=0,nannihilate=0,nregen=0,nbaryons=0,norm;
 	int ievent,iqual,nevents;
 	string run_name=argv[1];
@@ -22,9 +21,10 @@ int main(int argc, char *argv[]){
 	nevents=1+ieventf-ievent0;
 	printf("ievent0=%d, ieventf=%d\n",ievent0,ieventf);
 	CB3D *b3d=new CB3D(run_name);
-	b3d->parmap.ReadParsFromFile("udsdata/udsparameters.dat");
 	b3d->InitCascade();
 	barray=b3d->balancearrays;
+	if(barray->FROM_UDS)
+		b3d->parmap.ReadParsFromFile("udsdata/udsparameters.dat");
 	CQualifiers qualifiers;
 	qualifiers.Read("qualifiers.dat");
 	for(iqual=0;iqual<qualifiers.nqualifiers;iqual++){
@@ -36,29 +36,26 @@ int main(int argc, char *argv[]){
 		b3d->sampler->ReadHyperElements2D_OSU();
 		for(ievent=ievent0;ievent<=ieventf;ievent++){
 			printf("------ beginning, ievent=%d --------\n",ievent);
-			for(isample=0;isample<nchargesample;isample++){
-				b3d->Reset();
-				b3d->randy->reset(-isample-ievent*nchargesample-10000000);
-				nparts=b3d->sampler->GenHadronsFromHyperSurface(); // Generates particles from hypersurface, each has bid=-1
-				printf("nparts=%d\n",nparts);
-				if(barray->FROM_UDS){
-					b3d->ReadCharges(ievent);
-					b3d->GenHadronsFromCharges(); // Generates inter-correlated parts, with bids = (0,1),(2,3)....
-					b3d->DeleteCharges();
-				}
-				b3d->PerformAllActions();
-				printf("nparts=%d=?%d\n",int(b3d->PartMap.size()),nparts);
-				printf("nscatter=%lld, nbscatter=%lld, nmerges=%lld, ndecays=%lld,  ncellexits=%lld, nregenerate=%lld\n",
-				b3d->nscatter,b3d->nbscatter,b3d->nmerge,b3d->ndecay,b3d->nexit,b3d->nregenerate);
-				ncolls+=b3d->nscatter+b3d->nmerge;
-				nbaryons+=b3d->nbaryons;
-				nannihilate+=b3d->nannihilate;
-				nregen+=b3d->nregenerate;
-				npartstot+=b3d->PartMap.size();
-				barray->ProcessPartMap();
-				if(barray->FROM_UDS)
-					barray->ProcessBFPartMap();
+			b3d->Reset();
+			b3d->randy->reset(ievent);
+			nparts=b3d->sampler->GenHadronsFromHyperSurface(); // Generates particles from hypersurface, each has bid=-1
+			if(barray->FROM_UDS){
+				b3d->ReadCharges(ievent);
+				b3d->GenHadronsFromCharges(); // Generates inter-correlated parts, with bids = (0,1),(2,3)....
+				b3d->DeleteCharges();
 			}
+			b3d->PerformAllActions();
+			printf("nparts=%d=?%d\n",int(b3d->PartMap.size()),nparts);
+			printf("nscatter=%lld, nbscatter=%lld, nmerges=%lld, ndecays=%lld,  ncellexits=%lld, nregenerate=%lld\n",
+			b3d->nscatter,b3d->nbscatter,b3d->nmerge,b3d->ndecay,b3d->nexit,b3d->nregenerate);
+			ncolls+=b3d->nscatter+b3d->nmerge;
+			nbaryons+=b3d->nbaryons;
+			nannihilate+=b3d->nannihilate;
+			nregen+=b3d->nregenerate;
+			npartstot+=b3d->PartMap.size();
+			barray->ProcessPartMap();
+			if(barray->FROM_UDS)
+				barray->ProcessBFPartMap();
 		}
 		norm=nevents*b3d->NSAMPLE;
 		printf("nparts=%g, <# collisions>=%g \n",double(npartstot)/norm,double(ncolls)/norm);

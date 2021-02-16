@@ -1,14 +1,14 @@
 #!/bin/bash
-NEVENTS=1000
 case $# in
-	0)
-		echo "Usage: runner_b3d.sh idefault // runs from idefault*1000 to idefault*1000 +999";
+	0|1)
+		echo "Usage: runner_b3d.sh ifirst ifinal  // runs from i=ifirst to <=ifinal";
   	exit 1 ;;
-	1)
-		idefault=$1
-		firsti=`expr ${idefault} \* ${NEVENTS}`
-		lasti=`expr ${firsti} + ${NEVENTS}`
-		echo idefault=${idefault}, firsti=${firsti}, lasti=${lasti}
-		./b3d_fromcascade default_${idefault} ${firsti} ${lasti}
+	2)
+		firsti=$1
+		lasti=$2
+		for ((ii=${firsti};ii<=${lasti};ii++))
+		do
+			echo "____________ b3d for run number " ${ii} ______________;
+			./b3d_fromhydro default_${ii} ${ii} ${ii};
+		done
 esac
-

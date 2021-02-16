@@ -1,16 +1,11 @@
-#!/bin/bash
-case $# in
-	0)
-		echo "Usage: runner_b3d.sh iproc0 // runs from idefault*1000 to idefault*1000 +999";
-  	exit 1 ;;
-	1)
-		iproc0=$1
-		nproc=24
-		iprocf=`expr ${iproc0} + ${nproc}`
-		make b3d_fromcascade
-		for((i=iproc0;i<iprocf;i++))
-		do
-			`./runner_b3d.sh ${i} > logfiles/b3d_${i}.txt &` ;
-		done
-		
-esac
+#! /bin/bash
+nproc=24
+nruns=30
+for ((i=0;i<${nproc};i+=1))
+do
+	firsti=`expr ${i} \* ${nruns}`;
+	lasti=`expr ${firsti} + ${nruns} - 1`;
+	rm -f logfiles/b3d_${firsti}_${lasti}.txt;
+	echo starting runs with firsti=${firsti}, lasti=${lasti};
+	`./runner_b3d.sh ${firsti} ${lasti} > logfiles/b3d_${firsti}_${lasti}.txt &` ;
+done

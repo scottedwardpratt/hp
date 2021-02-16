@@ -33,12 +33,12 @@ yy0=0.045
 ww0=1.0-xx0-0.03
 hh0=1.0-yy0-0.02
 xmin=0
-xmax=2.0
+xmax=1.6
 
 for ipanel in range (0,Npanels):
   ax = fig.add_axes([xx0,yy0+ipanel*hh0/Npanels,ww0,hh0/Npanels])
   plt.plot([0,5],[0,0],linestyle='dashed',color='grey')
-  xlim(0,2.0) 
+  xlim(0,xmax) 
     
   if ipanel == 0:
     ptype='pipi'
@@ -96,7 +96,7 @@ for ipanel in range (0,Npanels):
     ax.annotate('(a) $p|p$',xy=(1.9,ymax-0.18*(ymax-ymin)), family='serif', size=24,horizontalalignment='right')
     
   plt.ylim(ymin,ymax)
-  plt.xlim(0,2.0)
+  plt.xlim(0,xmax)
   
   
   #ipanel = 0(pipi), 1(piK), 2(pip), 3(KK), 4(Kp), 5(pp)  
@@ -118,8 +118,14 @@ for ipanel in range (0,Npanels):
       dely=data_fromcharges[0]
       B=data_fromcharges[1]+data_fromcascade[1]
       plt.plot(dely,B,linestyle=linestyles[1],linewidth=1,
-      color=colors[idata],markersize=6, marker=mstyle[idata],
-      markerfacecolor='none',markeredgewidth=2,markeredgecolor=colors[idata])
+      color='b',markersize=6, marker=mstyle[idata],
+      markerfacecolor='none',markeredgewidth=2,markeredgecolor='b')
+      plt.plot(dely,data_fromcharges[1],linestyle=linestyles[1],linewidth=1,
+      color='r',markersize=6, marker=mstyle[idata],
+      markerfacecolor='none',markeredgewidth=2,markeredgecolor='r')
+      plt.plot(dely,data_fromcascade[1],linestyle=linestyles[1],linewidth=1,
+      color='g',markersize=6, marker=mstyle[idata],
+      markerfacecolor='none',markeredgewidth=2,markeredgecolor='g')
     if idata == 0:
       if ipanel == 0:
         filename = 'alicedata/BF_dy_pipi_C0_5_ALICE.dat'
@@ -127,7 +133,7 @@ for ipanel in range (0,Npanels):
         expdely=expdata[0]
         expB=expdata[1]
         dB=expdata[2]
-        plt.errorbar(expdely,2.0*expB,yerr=dB,linestyle='None',linewidth=1,color=colors[0],markersize=8, marker='*',markerfacecolor='none',markeredgewidth=2,markeredgecolor=colors[0],label='ALICE-Preliminary')
+        plt.errorbar(expdely,2.0*expB,yerr=dB,linestyle='None',linewidth=1,color='k',markersize=8, marker='*',markerfacecolor='none',markeredgewidth=2,markeredgecolor='k',label='ALICE-Preliminary')
         plt.legend(loc='upper right',fontsize=20)
       if ipanel == 3:
         filename = 'alicedata/BF_dy_KK_C0_10_ALICE.dat'
@@ -135,8 +141,8 @@ for ipanel in range (0,Npanels):
         expdely=expdata[0]
         expB=expdata[1]
         dB=expdata[2]
-        plt.errorbar(expdely,2.0*expB,yerr=dB,linestyle='None',linewidth=1,color=colors[0],markersize=8, marker='*',
-        markerfacecolor='none',markeredgewidth=2,markeredgecolor=colors[0])
+        plt.errorbar(expdely,2.0*expB,yerr=dB,linestyle='None',linewidth=1,color='k',markersize=8, marker='*',
+        markerfacecolor='none',markeredgewidth=2,markeredgecolor='k')
 
     if ipanel == 0 and idata==1:
       plt.xlabel('$\Delta y$',fontsize=24, family='serif')
@@ -161,7 +167,7 @@ for ipanel in range (0,Npanels):
   if ipanel!=0:
     ax.set_xticklabels([])  
 
-filename='general_y.pdf'
+filename='general_y_hydrovscascade.pdf'
 plt.savefig(filename,format='pdf')
 os.system('open -a Preview '+filename)
 #plt.show()
