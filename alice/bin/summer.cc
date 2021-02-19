@@ -26,7 +26,7 @@ int main(int argc,char *argv[]){
 	
 	printf("Enter qualifier: ");
 	scanf("%s",qs);
-	printf("Enter NJDIR: (the number of default_xxx dirs)");
+	printf("Enter NJDIR: (the number of default_xxx dirs) ");
 	scanf("%d",&NJDIR);
 	
 	qualifier=qs;

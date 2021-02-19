@@ -9,7 +9,7 @@ case $# in
 		for ((ii=${firsti};ii<=${lasti};ii++))
 		do
 			echo "____________ hydro2uds/b3d for run number " ${ii} ______________;
-			./hydro2uds $ii;
-			./b3d_fromhydro default_${ii} ${ii} ${ii};
+			../bin/hydro2uds $ii;
+			../bin/b3d default_${ii} ${ii} ${ii};
 		done
 esac
