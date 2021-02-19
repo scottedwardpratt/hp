@@ -49,10 +49,10 @@ public:
 	void DecayGetResInfoPtr(int &nbodies,array<CResInfo *,5> &daughterresinfo);
 	void DecayGetResInfoPtr_minmass(int &nbodies,array<CResInfo *,5> &daughterresinfo);
 	bool CheckForDaughters(int code);
-	void FindFinalProducts();
+	void FindFinalProducts(double taumax);
 	void PrintFinalProducts();
-	bool FindContent(int codecheck,double weight0,double &weight);
-	bool FindContentPairs(int codecheck1,int codecheck2,double weight0,double &weight);
+	bool FindContent(int codecheck,double weight0,double taumax,double &weight);
+	bool FindContentPairs(int codecheck1,int codecheck2,double weight0,double taumax,double &weight);
 	bool CheckForNeutral();
 	double GenerateMass();
 	double GenerateThermalMass(double maxweight, double T);
@@ -76,13 +76,13 @@ public:
 	void CalcEoSandChi(double T,double &P,double &epsilon,double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &chi);
 	void CalcEoSandChiandQdens(double T,double &P,double &epsilon,
 double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &chi,double &udcontent,double &strangecontent);
-	double CalcBalanceNorm(int pid,int pidprime);
+	double CalcBalanceNorm(int pid,int pidprime,double taumax);
 	void CalcConductivity(double T,double &P,double &epsilon,double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &chi,Eigen::Matrix3d &sigma);
 	void freegascalc_onespecies(double m,double T,double &e,double &p,double &dens,double &sigma2,double &dedt);
 	void freegascalc_onespecies_finitewidth(double m, double m1, double m2, double T,double width,double &epsilon,double &P,double &dens,double &sigma2,double &dedt, double &maxweight);
 	double GetLambda(double T,double P,double epsilon);
 	void freegascalc_onespecies(double m,double T,double &e,double &p,double &dens,double &sigma2,double &dedt,double &Jtot);
-	void FindFinalProducts();
+	void FindFinalProducts(double taumax);
 	bool finalproductsfound;
 	CparameterMap *parmap;
 	CMerge ***MergeArray;

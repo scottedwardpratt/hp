@@ -628,7 +628,7 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 		}
 		found = resinfoptr->name.find("eta");
 		if(found!=std::string::npos){ 
-			printf("found eta or eta-prime: %s\n",resinfoptr->name.c_str());
+			//printf("found eta or eta-prime: %s\n",resinfoptr->name.c_str());
 			Nstrange=2.0/3.0;
 			Nud=4.0/3.0;
 			special=true;
@@ -801,7 +801,8 @@ void CResList::freegascalc_onespecies(double mass,double T,double &epsiloni,doub
 	
 }
 
-void CResInfo::FindFinalProducts(){
+void CResInfo::FindFinalProducts(double taumax){
+	// all decay products -- decaying stops if tau_decay > taumax
 	finalproductslist.clear();
 	CBranchList blist;
 	CBranchInfo *bptr,*fbptr;
@@ -811,8 +812,7 @@ void CResInfo::FindFinalProducts(){
 	double netbranching=0.0;
 	finalproductslist.clear();
 	bptr=new CBranchInfo();
-	if(decay){
-		//finalproductslist.Copy(branchlist);
+	if(decay && (HBARC/width)<taumax){
 		finalproductslist=branchlist;
 		ibranch=0;
 		foundsplit=true;
@@ -822,7 +822,7 @@ void CResInfo::FindFinalProducts(){
 			bptr=finalproductslist[ibranch];
 			iires=0;
 			do{
-				if(bptr->resinfoptr[iires]->decay){
+				if(bptr->resinfoptr[iires]->decay && (HBARC/bptr->resinfoptr[iires]->width)<taumax){
 					foundsplit=true;
 					resinfo=bptr->resinfoptr[iires];
 					//printf("%d: splitting branches\n",code);
@@ -886,14 +886,15 @@ void CResInfo::FindFinalProducts(){
 		}
 	}
 	//printf("%d: netbranching=%g, nbranches=%d\n",code,netbranching,int(finalproductslist.size()));
-	if(decay && fabs(netbranching-1.0)>1.0E-5){
+	if(decay && (HBARC/width)<taumax && fabs(netbranching-1.0)>1.0E-5){
 		printf("oops, netbranching for final states=%g, pid=%d\n",netbranching,code);
 		Print();
 		exit(1);
 	}
 }
 
-void CResList::FindFinalProducts(){
+void CResList::FindFinalProducts(double taumax){
+	// all decay products -- decaying stops if tau_decay > taumax
 	CResInfoMap::iterator rpos;
 	CMassMap::iterator mpos;
 	CResInfo *resinfo;
@@ -905,19 +906,19 @@ void CResList::FindFinalProducts(){
 	for(mpos=massmap.begin();mpos!=massmap.end();mpos++){
 		resinfo=mpos->second;
 		//printf("mass=%g, PID=%d\n",resinfo->mass,resinfo->code);
-		resinfo->FindFinalProducts();
+		resinfo->FindFinalProducts(taumax);
 	}
 	finalproductsfound=true;
 }
 
-bool CResInfo::FindContent(int codecheck,double weight0,double &weight){
+bool CResInfo::FindContent(int codecheck,double weight0,double taumax,double &weight){
 	// finds how many hadrons of type codecheck result from decays
 	bool foundpart=false;
 	CBranchInfo *bptr;
 	CResInfo *resinfo1;
 	unsigned long int ibranch,ibody1;
 	if(!reslist->finalproductsfound)
-		reslist->FindFinalProducts();
+		reslist->FindFinalProducts(taumax);
 	weight=0.0;
 	if(decay){
 		for(ibranch=0;ibranch<finalproductslist.size();ibranch++){
@@ -940,14 +941,14 @@ bool CResInfo::FindContent(int codecheck,double weight0,double &weight){
 	return foundpart;	
 }
 
-bool CResInfo::FindContentPairs(int codecheck1,int codecheck2,double weight0,double &weight){
+bool CResInfo::FindContentPairs(int codecheck1,int codecheck2,double weight0,double taumax,double &weight){
 	// finds how many hadrons of type codecheck result from decays
 	bool foundpair=false;
 	CBranchInfo *bptr;
 	CResInfo *resinfo1,*resinfo2;
 	unsigned long int ibranch,ibody1,ibody2;
 	if(!reslist->finalproductsfound)
-		reslist->FindFinalProducts();
+		reslist->FindFinalProducts(taumax);
 	weight=0.0;
 	for(ibranch=0;ibranch<finalproductslist.size();ibranch++){
 		bptr=finalproductslist[ibranch];
@@ -988,7 +989,7 @@ void CResInfo::PrintFinalProducts(){
 	printf("---- NET BRANCHING=%g =? 1.0 ----\n",netbranching);
 }
 
-double CResList::CalcBalanceNorm(int pid,int pidprime){
+double CResList::CalcBalanceNorm(int pid,int pidprime,double taumax){
 	// ideal norm of B_hh'
 	CResInfo *resinfo;
 	CResInfoMap::iterator rpos;
@@ -1041,37 +1042,38 @@ double CResList::CalcBalanceNorm(int pid,int pidprime){
 		for(iq=0;iq<3;iq++)
 			netq[iq]+=densityf[ires]*resinfo->q[iq];
 		
-		if(resinfo->FindContent(pid,1.0,weight)){
+		if(resinfo->FindContent(pid,1.0,taumax,weight)){
 			//printf("mother pid=%d, weight to make %d is %g\n",resinfo->code,pid,weight);
 			dens+=weight*densityf[ires];
 			for(a=0;a<3;a++)
 				rho(a)+=weight*densityf[ires]*resinfo->q[a];
 		}
-		if(resinfo->FindContent(pidprime,1.0,weight)){
+		if(resinfo->FindContent(pidprime,1.0,taumax,weight)){
 			densprime+=weight*densityf[ires];
 			for(a=0;a<3;a++)
 				rhoprime(a)+=weight*densityf[ires]*resinfo->q[a];
 		}
-		if(resinfo->FindContent(-pid,1.0,weight)){
+		if(resinfo->FindContent(-pid,1.0,taumax,weight)){
 			dens+=weight*densityf[ires];
 			for(a=0;a<3;a++)
 				rho(a)-=weight*densityf[ires]*resinfo->q[a];
 		}
-		if(resinfo->FindContent(-pidprime,1.0,weight)){
+		if(resinfo->FindContent(-pidprime,1.0,taumax,weight)){
 			densprime+=weight*densityf[ires];
 			for(a=0;a<3;a++)
 				rhoprime(a)-=weight*densityf[ires]*resinfo->q[a];
 		}
 		
-		if(resinfo->FindContentPairs(pid,pidprime,1.0,weight)){
+		if(resinfo->FindContentPairs(pid,pidprime,1.0,taumax,weight)){
 			//printf("%5d: pair weight=%g\n",resinfo->code,weight);
 			norm-=weight*densityf[ires];
 		}
 		
 	}
-	printf("density(%d)=%g, density(%d)=%g\n",pid,dens,pidprime,densprime);
+	//printf("density(%d)=%g, density(%d)=%g\n",pid,dens,pidprime,densprime);
 	norm+=double((rho.transpose())*(chiinvf*rhoprime));
 	norm=norm/densprime;
+	printf("pid=%d, pidprime=%d, norm=%g\n",pid,pidprime,norm);
 	
 	//printf("netu=%g, netd=%g, nets=%g\n",netq[0],netq[1],netq[2]);
 	
