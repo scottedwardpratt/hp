@@ -27,6 +27,7 @@ CBFNumer::CBFNumer(CparameterMap *parmapset){
 	Bqside.resize(Nqbins,0);
 	Bqlong.resize(Nqbins,0);
 	Beta.resize(Netabins,0);
+	Beta1.resize(Netabins,0);
 	By.resize(Nybins,0);
 	Betas.resize(Netabins,0);
 	Bphi.resize(Nphibins,0);
@@ -36,6 +37,7 @@ CBFNumer::CBFNumer(CparameterMap *parmapset){
 	Cqside.resize(Nqbins,0);
 	Cqlong.resize(Nqbins,0);
 	Ceta.resize(Netabins,0);
+	Ceta1.resize(Netabins,0);
 	Cy.resize(Nybins,0);
 	Cetas.resize(Netabins,0);
 	Cphi.resize(Nphibins,0);
@@ -54,6 +56,7 @@ void CBFNumer::Reset(){
 	Bqside.assign(Nqbins,0);
 	Bqlong.assign(Nqbins,0);
 	Beta.assign(Netabins,0);
+	Beta1.assign(Netabins,0);
 	By.assign(Nybins,0);
 	Bphi.assign(Nphibins,0);
 	Betas.assign(Netabins,0);
@@ -62,6 +65,7 @@ void CBFNumer::Reset(){
 	Cqside.assign(Nqbins,0);
 	Cqlong.assign(Nqbins,0);
 	Ceta.assign(Netabins,0);
+	Ceta1.assign(Netabins,0);
 	Cy.assign(Nybins,0);
 	Cphi.assign(Nphibins,0);
 	Cetas.assign(Netabins,0);
@@ -115,7 +119,9 @@ void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
 	ibin=floorl(deleta/Deta);
 	if(ibin>=0 && ibin<Netabins){
 		Beta[ibin]-=QaQb;
+		Beta1[ibin]-=QaQb*cos(delphi);
 		Ceta[ibin]+=CaCb;
+		Ceta1[ibin]+=CaCb*cos(delphi);
 	}
 	
 	ibin=floorl(dely/Dy);
@@ -200,6 +206,13 @@ void CBFNumer::WriteNumer(string dirname,string numertype,bool NoQ){
 	fptr=fopen(filename.c_str(),"w");
 	for(ibin=0;ibin<Netabins;ibin++){
 		fprintf(fptr,"%7.2f %10.3e %10.3e\n",(0.5+ibin)*Deta,Beta[ibin],Ceta[ibin]);
+	}
+	fclose(fptr);
+	
+	filename=dirname+"/"+name+"/"+numertype+"_eta1.dat";
+	fptr=fopen(filename.c_str(),"w");
+	for(ibin=0;ibin<Netabins;ibin++){
+		fprintf(fptr,"%7.2f %10.3e %10.3e\n",(0.5+ibin)*Deta,Beta1[ibin],Ceta1[ibin]);
 	}
 	fclose(fptr);
 	

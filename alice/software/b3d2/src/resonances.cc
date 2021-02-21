@@ -872,7 +872,7 @@ void CResInfo::FindFinalProducts(double taumax){
 		double netB=0.0,netQ=0.0;
 		netB=double(q[0]+q[1]+q[2])/3.0-double(netq[0]+netq[1]+netq[2])/3.0;
 		netQ=(double(2.0*q[0]-q[1]-q[2])/3.0)-double(2*netq[0]-netq[1]-netq[2])/3.0;
-		if(fabs(netB)>1.0E-5 || fabs(netQ)>1.0E-5){
+		if(fabs(netB)>1.0E-7 || fabs(netQ)>1.0E-7){
 			printf("charge not conserved for %5d: netQ=%g, netB=%g\n",code,netQ,netB);
 			Print();
 			printf("DAUGHTERS\n");
@@ -920,7 +920,7 @@ bool CResInfo::FindContent(int codecheck,double weight0,double taumax,double &we
 	if(!reslist->finalproductsfound)
 		reslist->FindFinalProducts(taumax);
 	weight=0.0;
-	if(decay){
+	if(decay && (HBARC/width)<taumax){
 		for(ibranch=0;ibranch<finalproductslist.size();ibranch++){
 			bptr=finalproductslist[ibranch];
 			for(ibody1=0;ibody1<bptr->resinfoptr.size();ibody1++){
@@ -959,7 +959,11 @@ bool CResInfo::FindContentPairs(int codecheck1,int codecheck2,double weight0,dou
 					if(ibody1!=ibody2){
 						resinfo2=bptr->resinfoptr[ibody2];
 						if(abs(resinfo2->code)==abs(codecheck2)){
-							weight+=weight0*bptr->branching*resinfo1->charge*resinfo2->charge;
+							//weight+=weight0*bptr->branching*resinfo1->charge*resinfo2->charge;
+							int sign=1;
+							if(resinfo1->code*resinfo2->code<0)
+								sign=-1;
+							weight+=weight0*bptr->branching*sign;
 							foundpair=true;
 						}
 					}
@@ -998,7 +1002,6 @@ double CResList::CalcBalanceNorm(int pid,int pidprime,double taumax){
 	Eigen::Matrix3d chitest,unity;
 	double dens,densprime,weight,norm;
 	int a,ires;
-	dens=densprime=0.0;
 	/*
 	printf("chi------------------\n");
 	cout << chif << endl;
@@ -1033,7 +1036,7 @@ double CResList::CalcBalanceNorm(int pid,int pidprime,double taumax){
 	cout << chiinvf << endl;
 	*/
 	
-	norm=0.0;
+	norm=dens=densprime=0.0;
 	double netq[3]={0.0};
 	int iq;
 	for(rpos=resmap.begin();rpos!=resmap.end();rpos++){
@@ -1073,7 +1076,13 @@ double CResList::CalcBalanceNorm(int pid,int pidprime,double taumax){
 	//printf("density(%d)=%g, density(%d)=%g\n",pid,dens,pidprime,densprime);
 	norm+=double((rho.transpose())*(chiinvf*rhoprime));
 	norm=norm/densprime;
-	printf("pid=%d, pidprime=%d, norm=%g\n",pid,pidprime,norm);
+	/*
+	if(pid==pidprime){
+		printf("pid=%d, pidprime=%d, dens=%g, densprime=%g, norm=%g\n",pid,pidprime,dens,densprime,norm);
+		printf("rho=(%g,%g,%g), rhoprime=(%g,%g,%g)\n",rho(0),rho(1),rho(2),rhoprime(0),rhoprime(1),rhoprime(2));
+		printf("--------------------\n");
+	}
+	*/
 	
 	//printf("netu=%g, netd=%g, nets=%g\n",netq[0],netq[1],netq[2]);
 	
