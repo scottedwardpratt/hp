@@ -178,6 +178,7 @@ void CBalanceArrays::ConstructBFs(){
 }
 
 void CBalanceArrays::ConstructBF(CBFNumer *numer,CBFDenom *denom,CBFNumer *bf,double doublecount,bool NoQ){
+	/*
 	bf->Bqinv=numer->Bqinv;
 	bf->Bqout=numer->Bqout;
 	bf->Bqside=numer->Bqside;
@@ -186,6 +187,7 @@ void CBalanceArrays::ConstructBF(CBFNumer *numer,CBFDenom *denom,CBFNumer *bf,do
 	bf->Beta1=numer->Beta1;
 	bf->By=numer->By;
 	bf->Bphi=numer->Bphi;
+	*/
 	bf->npairs=numer->npairs;
 	int ibin;
 	double norm;
