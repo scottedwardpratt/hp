@@ -119,9 +119,9 @@ void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
 	ibin=floorl(deleta/Deta);
 	if(ibin>=0 && ibin<Netabins){
 		Beta[ibin]-=QaQb;
-		Beta1[ibin]-=QaQb*cos(delphi);
+		Beta1[ibin]-=QaQb*cos(delphi*PI/180.0);
 		Ceta[ibin]+=CaCb;
-		Ceta1[ibin]+=CaCb*cos(delphi);
+		Ceta1[ibin]+=CaCb*cos(delphi*PI/180.0);
 	}
 	
 	ibin=floorl(dely/Dy);
@@ -267,7 +267,7 @@ void CBFNumer::Print(){
 	}
 	printf("----- Beta -----\n");
 	for(ibin=0;ibin<Netabins;ibin++){
-		printf("%6.1f %10.3e\n",(0.5+ibin)*Deta,Beta[ibin]);
+		printf("%6.1f %9.5f %9.5f\n",(0.5+ibin)*Deta,Beta[ibin],Beta1[ibin]);
 	}
 	printf("----- Bphi -----\n");
 	for(ibin=0;ibin<Nphibins;ibin++){
