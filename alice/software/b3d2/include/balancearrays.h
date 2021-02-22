@@ -9,8 +9,8 @@ class CBFNumer{
 public:
 	string name;
 	long long int npairs;
-	vector<double> Bqinv,Bqout,Bqlong,Bqside,By,Beta,Bphi,Betas,B1eta;  //q = 1/2 rel. momentum in CM frame
-	vector<double> Cqinv,Cqout,Cqlong,Cqside,Cy,Ceta,Cphi,Cetas,C1eta;
+	vector<double> Bqinv,Bqout,Bqlong,Bqside,By,Beta,Bphi,Betas,Beta1;  //q = 1/2 rel. momentum in CM frame
+	vector<double> Cqinv,Cqout,Cqlong,Cqside,Cy,Ceta,Cphi,Cetas,Ceta1;
 	vector<vector<double>> Byphi,Cyphi; // Array for opp. signs, binned by both y and phi
 	double Dy,Deta,Dqinv,Dphi;
 	int Netabins,Nybins,Nqbins,Nphibins;

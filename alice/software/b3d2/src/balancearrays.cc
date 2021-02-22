@@ -178,7 +178,7 @@ void CBalanceArrays::ConstructBFs(){
 }
 
 void CBalanceArrays::ConstructBF(CBFNumer *numer,CBFDenom *denom,CBFNumer *bf,double doublecount,bool NoQ){
-	/*
+	
 	bf->Bqinv=numer->Bqinv;
 	bf->Bqout=numer->Bqout;
 	bf->Bqside=numer->Bqside;
@@ -187,12 +187,11 @@ void CBalanceArrays::ConstructBF(CBFNumer *numer,CBFDenom *denom,CBFNumer *bf,do
 	bf->Beta1=numer->Beta1;
 	bf->By=numer->By;
 	bf->Bphi=numer->Bphi;
-	*/
+	
 	bf->npairs=numer->npairs;
 	int ibin;
 	double norm;
 	double N=denom->Nplus+denom->Nminus;
-	printf("NSAMPLE_HYDRO2UDS=%g, NSAMPLE_UDS2BAL=%d\n",NSAMPLE_HYDRO2UDS,NSAMPLE_UDS2BAL);
 	if(FROM_UDS){
 		N*=2.0*NSAMPLE_HYDRO2UDS*NSAMPLE_UDS2BAL*NSAMPLE_UDS2BAL;
 	}
@@ -382,7 +381,7 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 				netQ+=parta->resinfo->charge;
 			}
 			
-			if(parta->balanceID<0 && abs(parta->resinfo->code)==321){
+			if(parta->balanceID<0){
 				ya=atanh(parta->p[3]/parta->p[0]);
 				while(ya<-B3D_ETAMAX)
 					ya+=2.0*B3D_ETAMAX;
