@@ -9,6 +9,6 @@ case $# in
 		for ((ii=${firsti};ii<=${lasti};ii++))
 		do
 			echo "____________ b3d for run number " ${ii} ______________;
-			./b3d_fromhydro default_${ii} ${ii} ${ii};
+			../bin/b3d default_${ii} ${ii} ${ii};
 		done
 esac

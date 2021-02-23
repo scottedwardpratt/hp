@@ -1,7 +1,7 @@
 #! /bin/bash
 nproc=24
 nruns=30
-for ((i=0;i<${nproc};i+=1))
+for ((i=12;i<${nproc};i+=1))
 do
 	firsti=`expr ${i} \* ${nruns}`;
 	lasti=`expr ${firsti} + ${nruns} - 1`;
