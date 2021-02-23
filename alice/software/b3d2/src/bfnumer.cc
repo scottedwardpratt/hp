@@ -4,6 +4,7 @@
 #include "parametermap.h"
 #include "misc.h"
 #include "acceptance.h"
+#include "constants.h"
 
 using namespace std;
 
