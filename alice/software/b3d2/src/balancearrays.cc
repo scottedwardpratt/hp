@@ -186,6 +186,7 @@ void CBalanceArrays::ConstructBF(CBFNumer *numer,CBFDenom *denom,CBFNumer *bf,do
 	bf->Beta=numer->Beta;
 	bf->Beta1=numer->Beta1;
 	bf->By=numer->By;
+	bf->By1=numer->By1;
 	bf->Bphi=numer->Bphi;
 	
 	bf->npairs=numer->npairs;
@@ -219,6 +220,8 @@ void CBalanceArrays::ConstructBF(CBFNumer *numer,CBFDenom *denom,CBFNumer *bf,do
 	for(ibin=0;ibin<numer->Nybins;ibin++){
 		bf->By[ibin]=doublecount*numer->By[ibin]/(N*numer->Dy);
 		bf->Cy[ibin]=doublecount*numer->Cy[ibin]/(N*numer->Dy);
+		bf->By1[ibin]=doublecount*numer->By1[ibin]/(N*numer->Dy);
+		bf->Cy1[ibin]=doublecount*numer->Cy1[ibin]/(N*numer->Dy);
 	}
 	for(ibin=0;ibin<numer->Nphibins;ibin++){
 		bf->Bphi[ibin]=doublecount*numer->Bphi[ibin]/(N*numer->Dphi);
