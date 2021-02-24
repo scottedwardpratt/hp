@@ -32,7 +32,7 @@ void CBalanceArrays::InitArrays(){
 	CreateBFArrays();
 	acceptance_description=parmap->getS("BF_ACCEPTANCE","PERFECT");
 	NoKsNoPhi=parmap->getB("BF_NoKsNoPhi",false);
-	if(acceptance_description=="PERFECT"){
+	if(acceptance_description=="CHEAP"){
 		acceptance=new CAcceptance_CHEAP(parmap);
 	}
 	else if(acceptance_description=="STAR"){
