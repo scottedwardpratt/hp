@@ -31,8 +31,8 @@ int main(int argc,char *argv[]){
 	scanf("%d",&NJDIR);
 	
 	qualifier=qs;
-	string olddatafilename[5]={"bf_phi.dat","bf_eta.dat","bf_y.dat","bf_eta1.dat","bf_qinv.dat"};
-	string newdatafilename[5]={"bf_phi.dat","bf_eta.dat","bf_y.dat","bf_eta1.dat","bf_qinv.dat"};
+	string olddatafilename[6]={"bf_phi.dat","bf_eta.dat","bf_y.dat","bf_eta1.dat","bf_y1.dat","bf_qinv.dat"};
+	string newdatafilename[6]={"bf_phi.dat","bf_eta.dat","bf_y.dat","bf_eta1.dat","bf_y1.dat","bf_qinv.dat"};
 	string dirname[NTYPES]={"KK","Kp","piK","pip","pipi","pp","allcharges","allcharges_phi0","allcharges_phi45","allcharges_phi90"};
 	string command;
 	for(itype=0;itype<NTYPES;itype++){
@@ -76,9 +76,9 @@ int main(int argc,char *argv[]){
 	// Now average balance funtions
 	for(itype=0;itype<NTYPES;itype++){
 		if(itype<6)
-			Nqcut=5;
+			Nqcut=6;
 		else
-			Nqcut=4;
+			Nqcut=5;
 		for(ifn=0;ifn<Nqcut;ifn++){
 			dx=0.0;
 			if(ifn==0)
@@ -90,6 +90,8 @@ int main(int argc,char *argv[]){
 			if(ifn==3)
 				dx=0.1;
 			if(ifn==4)
+				dx=0.1;
+			if(ifn==5)
 				dx=10.0;
 			newdirname="default_sum/"+qualifier+"/"+acceptance+"/"+dirname[itype];
 			command="mkdir -p "+newdirname;
