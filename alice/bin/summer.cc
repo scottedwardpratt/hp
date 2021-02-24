@@ -12,7 +12,7 @@ using namespace std;
 
 int main(int argc,char *argv[]){
 	string qualifier="alice_cent0_10";
-	string acceptance="results_alice";
+	string acceptance="results_cheap";
 	string dirprefix="default";
 	char qs[200];
 	const int NTYPES=10;
@@ -49,6 +49,7 @@ int main(int argc,char *argv[]){
 	printf("NJDIR=%d\n",NJDIR);
 	for(jdir=0;jdir<NJDIR;jdir++){
 		oldfilename=dirprefix+"_"+to_string(jdir)+"/"+qualifier+"/"+acceptance+"/denom.dat";
+		printf("oldfilename=%s\n",oldfilename.c_str());
 		fptr_read=fopen(oldfilename.c_str(),"r");
 		fscanf(fptr_read,"%s %lf %lf",dummy,&nplus,&nminus);
 		denom_pi+=nplus+nminus;
@@ -64,7 +65,8 @@ int main(int argc,char *argv[]){
 		denom_allcharges_phi45+=nplus+nminus;
 		fscanf(fptr_read,"%s %lf %lf",dummy,&nplus,&nminus);
 		denom_allcharges_phi90+=nplus+nminus;
-		fclose(fptr_read);		
+		fclose(fptr_read);
+		printf("finished jdir=%d\n",jdir);
 	}
 	newfilename="default_sum/"+qualifier+"/"+acceptance+"/denom.dat";
 	fptr_write=fopen(newfilename.c_str(),"w");
