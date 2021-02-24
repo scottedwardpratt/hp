@@ -617,8 +617,8 @@ void CBalanceArrays::SetQualifier(string qualifier_set){
 	string command="mkdir -p model_output/"+b3d->run_name+"/"+qualifier;
 	system(command.c_str());
 	
-	if(acceptance_description=="PERFECT"){
-		bf_results_dirname="model_output/"+b3d->run_name+"/"+qualifier+"/results_perfect";
+	if(acceptance_description=="CHEAP"){
+		bf_results_dirname="model_output/"+b3d->run_name+"/"+qualifier+"/results_cheap";
 	}
 	else if(acceptance_description=="STAR"){
 		bf_results_dirname="model_output/"+b3d->run_name+"/"+qualifier+"/results_star";
