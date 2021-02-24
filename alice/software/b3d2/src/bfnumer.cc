@@ -30,6 +30,7 @@ CBFNumer::CBFNumer(CparameterMap *parmapset){
 	Beta.resize(Netabins,0);
 	Beta1.resize(Netabins,0);
 	By.resize(Nybins,0);
+	By1.resize(Nybins,0);
 	Betas.resize(Netabins,0);
 	Bphi.resize(Nphibins,0);
 	
@@ -40,6 +41,7 @@ CBFNumer::CBFNumer(CparameterMap *parmapset){
 	Ceta.resize(Netabins,0);
 	Ceta1.resize(Netabins,0);
 	Cy.resize(Nybins,0);
+	Cy1.resize(Nybins,0);
 	Cetas.resize(Netabins,0);
 	Cphi.resize(Nphibins,0);
 	
@@ -59,6 +61,7 @@ void CBFNumer::Reset(){
 	Beta.assign(Netabins,0);
 	Beta1.assign(Netabins,0);
 	By.assign(Nybins,0);
+	By1.assign(Nybins,0);
 	Bphi.assign(Nphibins,0);
 	Betas.assign(Netabins,0);
 	Cqinv.assign(Nqbins,0);
@@ -68,6 +71,7 @@ void CBFNumer::Reset(){
 	Ceta.assign(Netabins,0);
 	Ceta1.assign(Netabins,0);
 	Cy.assign(Nybins,0);
+	Cy1.assign(Nybins,0);
 	Cphi.assign(Nphibins,0);
 	Cetas.assign(Netabins,0);
 	for(int iy=0;iy<Nybins;iy++){
@@ -79,8 +83,9 @@ void CBFNumer::Reset(){
 void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
 	int ibin,iphi,iy,pida=parta->resinfo->code,pidb=partb->resinfo->code;
 	double qinv,qout,qside,qlong,deleta,dely,delphi,deletas;
-	double QaQb,CaCb;
+	double QaQb,CaCb,cphi;
 	Misc::outsidelong(parta->p,partb->p,qinv,qout,qside,qlong,deleta,dely,delphi);
+	cphi=cos(delphi*PI/180.0);
 	qout=fabs(qout); qside=fabs(qside); qlong=fabs(qlong);
 	QaQb=(parta->resinfo->charge*parta->bweight)*(partb->resinfo->charge*partb->bweight);
 	QaQb*=effa*effb;
@@ -120,15 +125,17 @@ void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
 	ibin=floorl(deleta/Deta);
 	if(ibin>=0 && ibin<Netabins){
 		Beta[ibin]-=QaQb;
-		Beta1[ibin]-=QaQb*cos(delphi*PI/180.0);
+		Beta1[ibin]-=QaQb*cphi;
 		Ceta[ibin]+=CaCb;
-		Ceta1[ibin]+=CaCb*cos(delphi*PI/180.0);
+		Ceta1[ibin]+=CaCb*cphi;
 	}
 	
 	ibin=floorl(dely/Dy);
 	if(ibin>=0 && ibin<Nybins){
 		By[ibin]-=QaQb;
+		By1[ibin]-=QaQb*cphi;
 		Cy[ibin]+=CaCb;
+		Cy1[ibin]+=CaCb*cphi;
 	}
 	iy=ibin;
 	
@@ -200,6 +207,13 @@ void CBFNumer::WriteNumer(string dirname,string numertype,bool NoQ){
 	fptr=fopen(filename.c_str(),"w");
 	for(ibin=0;ibin<Nybins;ibin++){
 		fprintf(fptr,"%7.2f %10.3e %10.3e\n",(0.5+ibin)*Dy,By[ibin],Cy[ibin]);
+	}
+	fclose(fptr);
+	
+	filename=dirname+"/"+name+"/"+numertype+"_y1.dat";
+	fptr=fopen(filename.c_str(),"w");
+	for(ibin=0;ibin<Nybins;ibin++){
+		fprintf(fptr,"%7.2f %10.3e %10.3e\n",(0.5+ibin)*Dy,By1[ibin],Cy1[ibin]);
 	}
 	fclose(fptr);
 	
