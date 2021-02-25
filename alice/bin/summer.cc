@@ -111,7 +111,7 @@ int main(int argc,char *argv[]){
 				fptr_read=fopen(oldfilename.c_str(),"r");
 				ix=0;
 				fscanf(fptr_read,"%lf %lf",&x,&y[0]);
-				if(ifn>3)
+				if(ifn==5)
 					fscanf(fptr_read,"%lf %lf %lf",&y[1],&y[2],&y[3]);
 				fgets(dummy,100,fptr_read);
 
@@ -135,7 +135,7 @@ int main(int argc,char *argv[]){
 					}
 					ix+=1;
 					fscanf(fptr_read,"%lf %lf",&x,&y[0]);
-					if(ifn>3)
+					if(ifn==5)
 						fscanf(fptr_read,"%lf %lf %lf",&y[1],&y[2],&y[3]);
 					fgets(dummy,100,fptr_read);
 				}
@@ -148,13 +148,13 @@ int main(int argc,char *argv[]){
 				if(ifn==0)
 					y[0]=0.5*(ysum[0][ix]+ysum[0][nx-ix-1]);
 				y[0]=y[0]/double(NJDIR);
-				if(ifn>3){
+				if(ifn==5){
 					y[1]=ysum[1][ix]/double(NJDIR);
 					y[2]=ysum[2][ix]/double(NJDIR);
 					y[3]=ysum[3][ix]/double(NJDIR);
 				}
 				fprintf(fptr_write,"%5.2f %10.3e",xsum[ix],y[0]);
-				if(ifn>3)
+				if(ifn==5)
 					fprintf(fptr_write," %10.3e %10.3e %10.3e",y[1],y[2],y[3]);
 				fprintf(fptr_write,"\n");
 				bfnorm+=y[0]*dx;
