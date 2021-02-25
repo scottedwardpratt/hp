@@ -19,7 +19,7 @@ CB3D* CResList::b3d=NULL;
 
 CResList::CResList(CparameterMap* parmap_in){
 	parmap=parmap_in;
-	RESWIDTH_ALPHA=parmap->getD("RESWIDTH_ALPHA",0.5);
+	RESWIDTH_ALPHA=parmap->getD("RESONANCE_ALPHA",0.5);
 	RESONANCE_DECAYS=parmap->getB("RESONANCE_DECAYS",true);
 	USEPOLEMASS=parmap->getB("USEPOLEMASS",false);
 	CResInfo::reslist=this;
