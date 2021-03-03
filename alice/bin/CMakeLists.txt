@@ -37,12 +37,13 @@ target_link_libraries(b3d b3d_alice hydro2uds_alice commonutils ${GSL_LIBRARY} $
 set(SOURCE_FILES ./hydro2udsmain.cc)
 SET_SOURCE_FILES_PROPERTIES(
       hydro2udsmain.cc PROPERTIES OBJECT_DEPENDS
-    ../software/b3d2/lib/libb3d_alice.a
- )
- SET_SOURCE_FILES_PROPERTIES(
-       hydro2udsmain.cc PROPERTIES OBJECT_DEPENDS
+    ../software/b3d2/lib/libb3d_alice.a OBJECT_DEPENDS
      ../software/hydrobalance/lib/libhydro2uds_alice.a
-  )
+ )
+# SET_SOURCE_FILES_PROPERTIES(
+#       hydro2udsmain.cc PROPERTIES OBJECT_DEPENDS
+#     ../software/hydrobalance/lib/libhydro2uds_alice.a
+#  )
 add_executable(hydro2uds ${SOURCE_FILES})
 add_dependencies(hydro2uds extern_b3d_alice extern_hydro2uds_alice extern_commonutils)
 target_link_libraries(hydro2uds hydro2uds_alice b3d_alice commonutils ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY} ${EIGEN3_LIBRARY})
