@@ -1,7 +1,7 @@
-denom_pi: 1.91478e+07
-denom_K: 4.14528e+06
-denom_p: 1.40735e+06
-denom_allcharges: 2.85933e+07
-denom_allcharges_phi0: 2.5499e+06
-denom_allcharges_phi45: 4.74048e+06
-denom_allcharges_phi90 2.23362e+06
+denom_pi: 5.43941e+06
+denom_K: 1.18239e+06
+denom_p: 401100
+denom_allcharges: 8.1238e+06
+denom_allcharges_phi0: 738534
+denom_allcharges_phi45: 1.34436e+06
+denom_allcharges_phi90 625606
