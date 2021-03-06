@@ -1,10 +1,10 @@
-denom_pi: 4889 5014
-denom_K: 1157 1104
-denom_p: 385 351
-denom_allcharges: 7438 7471
-denom_allcharges_phi0: 660 663
-denom_allcharges_phi45: 1235 1248
-denom_allcharges_phi90: 589 554
-dNdy_pi: 723.3
-dNdy_K: 123.3
-dNdy_p: 61.85
+denom_pi: 8725 8733
+denom_K: 1855 1846
+denom_p: 610 655
+denom_allcharges: 12981 13009
+denom_allcharges_phi0: 1176 1112
+denom_allcharges_phi45: 2135 2172
+denom_allcharges_phi90: 968 1084
+dNdy_pi: 1281
+dNdy_K: 202.35
+dNdy_p: 107.75
