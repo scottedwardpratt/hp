@@ -66,6 +66,7 @@ CHydroBalance::CHydroBalance(string parfilename,int ranseed){
 	source.resize(30);
 	for(int itau=0;itau<30;itau++)
 		source[itau].setZero();
+	ntraj=0;
 }
 
 void CHydroBalance::MakeMeshes(){
@@ -185,9 +186,11 @@ void CHydroBalance::MakeCharges(){
 							idmax+=1;
 							cmap.insert(pairic(idmax,charge2));
 							if(WRITE_TRAJ && tau0check){
-								if(randy->ran()<1.0E-1){
-									charge1->trajinfo=new CTrajInfo(idmax-1);
+								if(charge1->q[2]!=0 && charge2->q[2]!=0){ // write for ss CF
+									charge1->trajinfo=new CTrajInfo(ntraj);
+									ntraj+=1;
 									charge2->trajinfo=new CTrajInfo(idmax);
+									ntraj+=1;
 									charge1->addtraj();
 									charge2->addtraj();
 								}

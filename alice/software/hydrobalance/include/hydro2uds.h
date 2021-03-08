@@ -11,7 +11,7 @@ class CHydroBalance{
 public:
 	CEoS *eos;
 	double DELTAU,TAU0,XMIN,XMAX,YMIN,YMAX,DX,DY;
-	int NX,NY;
+	int NX,NY,ntraj;
 	double NSAMPLE_HYDRO2UDS;
 	double biggestomega;
 	string qualifier;
