@@ -124,6 +124,7 @@ void CHydroBalance::WriteCharges(){
 	CCharge *charge;
 	CHyperElement *hyper;
 	int balanceID,nstrange=0;
+	unsigned int icharge;
 	FILE *fptr=fopen(filename.c_str(),"w");
 	fprintf(fptr,"#  id   u  d  s      weight        tau           eta           x             y\n");
 	it=emap.begin();
@@ -147,12 +148,16 @@ void CHydroBalance::WriteCharges(){
 			//printf("charge->eta=%g\n",charge->eta);
 			etaspread+=charge->eta*charge->eta;
 		}
-		++it;
-		if(it!=emap.end()){
-			if(balanceID%2==1){
-				CCharge *newcharge=it->second;
+		if(WRITE_TRAJ){
+			if(charge->trajinfo!=NULL){
+				for(icharge=0;icharge<charge->trajinfo->x.size();icharge++){
+					fprintf(charge->trajinfo->fptr,"%8.5f %8.5f %8.5f %8.5f\n",
+					charge->trajinfo->x[icharge],charge->trajinfo->y[icharge],charge->trajinfo->eta[icharge],charge->trajinfo->tau[icharge]);
+				}
+				fclose(charge->trajinfo->fptr);
 			}
 		}
+		++it;
 	}
 	fclose(fptr);
 	printf("nstrange from final emap=%d\n",nstrange);

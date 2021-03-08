@@ -53,7 +53,7 @@ for ipanel in range (0,Npanels):
   if ipanel == 1:
     ptype='piK'
     ymin=-0.004
-    ymax=0.11
+    ymax=0.09
     ax.set_yticks(np.arange(-1,1,0.04), minor=False)
     ax.set_yticklabels(np.arange(-1,1,0.04), minor=False, family='serif', size=14)
     ax.set_yticks(np.arange(-1,1,0.02), minor=True)
@@ -62,16 +62,16 @@ for ipanel in range (0,Npanels):
   if ipanel == 2:
     ptype='pip'
     ymin=-0.002
-    ymax=0.05
-    ax.set_yticks(np.arange(0.0,.05,0.01), minor=False)
-    ax.set_yticklabels(np.arange(0.0,.05,0.01), minor=False, family='serif', size=14)
-    ax.set_yticks(np.arange(0.0,.05,0.005), minor=True)
+    ymax=0.045
+    ax.set_yticks(np.arange(0.0,.05,0.02), minor=False)
+    ax.set_yticklabels(np.arange(0.0,.05,0.02), minor=False, family='serif', size=14)
+    ax.set_yticks(np.arange(0.0,.05,0.01), minor=True)
     ax.annotate('(d) $\pi|p$',xy=(1.9,ymax-0.18*(ymax-ymin)), family='serif', size=24,horizontalalignment='right')
     
   if ipanel == 3:
     ptype='KK'
     ymin=-0.02
-    ymax=0.7
+    ymax=0.45
     ax.set_yticks(np.arange(-1,1,0.2), minor=False)
     ax.set_yticklabels(np.arange(-1,1,0.2), minor=False, family='serif', size=14)
     ax.set_yticks(np.arange(-1,1,0.1), minor=True)
@@ -89,7 +89,7 @@ for ipanel in range (0,Npanels):
   if ipanel == 5:
     ptype='pp'
     ymin=-0.025
-    ymax=0.5
+    ymax=0.25
     ax.set_yticks(np.arange(-0.999999,1,0.1), minor=False)
     ax.set_yticklabels(np.arange(-1,1,0.1), minor=False, family='serif', size=14)
     ax.set_yticks(np.arange(-1,1,0.05), minor=True)
@@ -111,15 +111,21 @@ for ipanel in range (0,Npanels):
         centrality='alice_cent0_10'
       if ipanel == 2 or ipanel == 4 or ipanel == 5:
         centrality='alice_cent0_20'
-      filename='../D1/model_output/default_sum/'+centrality+'/results_'+acceptance+'/'+ptype+'/bf_y.dat'
+      filename='../D1_sigma1/model_output/default_sum/'+centrality+'/results_'+acceptance+'/'+ptype+'/bf_y.dat'
       data_fromcharges = np.loadtxt(filename,skiprows=0,unpack=True)
       filename='../fromcascade/model_output/default_sum/'+centrality+'/results_'+acceptance+'/'+ptype+'/bf_y.dat'
       data_fromcascade = np.loadtxt(filename,skiprows=0,unpack=True)
       dely=data_fromcharges[0]
       B=data_fromcharges[1]+data_fromcascade[1]
-      plt.plot(dely,B,linestyle=linestyles[1],linewidth=1,
-      color=colors[idata],markersize=6, marker=mstyle[idata],
-      markerfacecolor='none',markeredgewidth=2,markeredgecolor=colors[idata])
+      plt.plot(dely,B,linestyle=linestyles[1],linewidth=3,
+      color='k',markersize=6, marker=mstyle[idata],
+      markerfacecolor='none',markeredgewidth=2,markeredgecolor='k')
+      plt.plot(dely,data_fromcharges[1],linestyle=linestyles[1],linewidth=1,
+      color='r',markersize=6, marker=mstyle[idata],
+      markerfacecolor='none',markeredgewidth=2,markeredgecolor='r')
+      plt.plot(dely,data_fromcascade[1],linestyle=linestyles[1],linewidth=1,
+      color='g',markersize=6, marker=mstyle[idata],
+      markerfacecolor='none',markeredgewidth=2,markeredgecolor='g')
     if idata == 0:
       if ipanel == 0:
         filename = 'alicedata/BF_dy_pipi_C0_5_ALICE.dat'

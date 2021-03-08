@@ -34,6 +34,7 @@ CHydroBalance::CHydroBalance(string parfilename,int ranseed){
 	CHydroMesh::DX=(CHydroMesh::XMAX-CHydroMesh::XMIN)/double(CHydroMesh::NX-1);
 	CHydroMesh::DY=(CHydroMesh::YMAX-CHydroMesh::YMIN)/double(CHydroMesh::NY-1);
 	CHydroMesh::GetDimensions(NX,NY,DX,DY,DELTAU,TAU0,XMIN,XMAX,YMIN,YMAX);
+	WRITE_TRAJ=parmap.getB("HB_WRITE_TRAJ","false");
 	
 	NSAMPLE_HYDRO2UDS=parmap.getD("NSAMPLE_HYDRO2UDS",4);
 	randy=new CRandy(ranseed);
@@ -159,9 +160,11 @@ void CHydroBalance::MakeCharges(){
 								randy->ran_gauss2(g1,g2);
 								charge1->eta=SIGMA0*g1;
 								charge2->eta=SIGMA0*g2;
+								/*
 								if(abs(charge1->q[2])==1 && (abs(charge2->q[2])==1)){
 									printf("tau=%g, eta=(%g,%g), q=(%d,%d)\n",mesh->tau,charge1->eta,charge2->eta,charge1->q[2],charge2->q[2]);
 								}
+								*/
 							}
 							charge1->active=charge2->active=true;
 							charge1->weight=charge2->weight=1.0;
@@ -181,6 +184,14 @@ void CHydroBalance::MakeCharges(){
 							cmap.insert(pairic(idmax,charge1));
 							idmax+=1;
 							cmap.insert(pairic(idmax,charge2));
+							if(WRITE_TRAJ && tau0check){
+								if(randy->ran()<1.0E-3){
+									charge1->trajinfo=new CTrajInfo(idmax-1);
+									charge2->trajinfo=new CTrajInfo(idmax);
+									charge1->addtraj();
+									charge2->addtraj();
+								}
+							}
 							idmax+=1;
 							itau=floorl(mesh->tau/0.5);
 							if(itau<30)
@@ -233,6 +244,8 @@ void CHydroBalance::PropagateCharges(){
 		if(!(charge->active) || (charge->active && newmesh->T[ix][iy]<Tf)){
 			emap.insert(pairic(id,charge));
 			hyper=&(charge->hyper);
+			if(WRITE_TRAJ)
+				charge->addtraj();
 			GetGradT(ix,iy,dTdt,dTdx,dTdy,GGTt,GGTx,GGTy);
 			GetUxyBar(ix,iy,hyper->ux,hyper->uy);
 			GetXYBar(ix,iy,hyper->x,hyper->y);
@@ -281,6 +294,8 @@ void CHydroBalance::ScatterCharges(){
 		while(ransum>ranthresh){
 			ranthresh+=randy->ran_exp();
 			charge->SetV(ux,uy);
+			if(WRITE_TRAJ)
+					charge->addtraj();
 			Ncollisions+=1;
 		}
 		++it;

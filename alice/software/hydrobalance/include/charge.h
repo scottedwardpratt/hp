@@ -6,9 +6,17 @@
 
 using namespace std;
 
+class CTrajInfo{
+public:
+	FILE *fptr;
+	int balanceID;
+	vector<double> x,y,eta,tau;
+	CTrajInfo(int balanceIDset);
+	void add(double x1,double y1,double eta1,double tau1);
+};
+
 class CCharge{
 public:
-	CCharge(){};
 	~CCharge(){};
 	bool active;
 	int q[3];
@@ -19,6 +27,15 @@ public:
 	void Print();
 	static CHydroBalance *hb;
 	static CB3D *b3d;
+	CTrajInfo *trajinfo;
+	CCharge(){
+		trajinfo=NULL;
+	};
+	void addtraj(){
+		if(trajinfo!=NULL){
+			trajinfo->add(x,y,eta,tau);
+		}
+	}
 };
 
 #endif
