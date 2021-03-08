@@ -185,7 +185,7 @@ void CHydroBalance::MakeCharges(){
 							idmax+=1;
 							cmap.insert(pairic(idmax,charge2));
 							if(WRITE_TRAJ && tau0check){
-								if(randy->ran()<1.0E-3){
+								if(randy->ran()<1.0E-1){
 									charge1->trajinfo=new CTrajInfo(idmax-1);
 									charge2->trajinfo=new CTrajInfo(idmax);
 									charge1->addtraj();

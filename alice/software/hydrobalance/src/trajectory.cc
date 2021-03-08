@@ -9,7 +9,7 @@ using namespace std;
 
 CTrajInfo::CTrajInfo(int balanceIDset){
 	balanceID=balanceIDset;
-	string filename="trajectory/traj"+to_string(balanceID)+".txt";
+	string filename="trajectories/traj"+to_string(balanceID)+".txt";
 	fptr=fopen(filename.c_str(),"w");
 }
 
