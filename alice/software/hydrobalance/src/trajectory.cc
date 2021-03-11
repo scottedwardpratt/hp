@@ -7,8 +7,8 @@
 
 using namespace std;
 
-CTrajInfo::CTrajInfo(int balanceIDset){
-	balanceID=balanceIDset;
+CTrajInfo::CTrajInfo(int IDset){
+	balanceID=IDset;
 	string filename="trajectories/traj"+to_string(balanceID)+".txt";
 	fptr=fopen(filename.c_str(),"w");
 }

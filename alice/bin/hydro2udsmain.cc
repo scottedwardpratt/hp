@@ -43,26 +43,10 @@ int main(int argc,char *argv[]){
 		hb.WriteCharges();
 		if(run_number==0)
 			hb.WriteHyper();
-		printf("---- ChiTot(ij)/ChiTotHyper(ij)\n");
-		Eigen::Matrix3d ctratio(3,3);
-		for(int i=0;i<3;i++)
-			for(int j=0;j<3;j++)
-				ctratio(i,j)=hb.chitot(i,j)/hb.chitothyper(i,j);
-		cout << ctratio << endl;
-	
-		printf("------ ChiTot from Volume -------\n");
-		cout << hb.chitot << endl;
-		hb.chitot=hb.chitot/hb.chitot(0,0);
-		cout << hb.chitot << endl;
-		printf("------ ChiTot from Hyper-Surf -------\n");
-		cout << hb.chitothyper << endl;
-		hb.chitothyper=hb.chitothyper/hb.chitothyper(0,0);
-		cout << hb.chitothyper << endl;
-
 		hb.ClearCharges();
 	}
 	
-  return 0;
+	return 0;
 }
 
 

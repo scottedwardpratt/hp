@@ -114,7 +114,6 @@ bool CHydroBalance::ReadOSCAR(CHydroMesh *hydromesh){
 }
 
 void CHydroBalance::WriteCharges(){
-	double etaspread=0.0;
 	string dirname="udsdata/"+qualifier;
 	string command="mkdir -p "+dirname;
 	system(command.c_str());
@@ -123,48 +122,34 @@ void CHydroBalance::WriteCharges(){
 	mapic::iterator it;
 	CCharge *charge;
 	CHyperElement *hyper;
-	int balanceID,nstrange=0;
+	int balanceID;
 	unsigned int icharge;
 	FILE *fptr=fopen(filename.c_str(),"w");
 	fprintf(fptr,"#  id   u  d  s      weight        tau           eta           x             y\n");
 	it=emap.begin();
-	while(it!=emap.end()){
+	for(it=emap.begin();it!=emap.end();++it){
 		balanceID=it->first;
 		//("writing, balanceID=%d\n",balanceID);
 		charge=it->second;
-		if(abs(charge->q[2])>0)
-			nstrange+=1;
 		hyper=&(charge->hyper);
-		/*
-		if(hyper->ux*hyper->dOmegaX<0 || hyper->uy*hyper->dOmegaY<0){
-			hyper->Print();
-			printf("writing: u=(%g,%g), dOmega=(%g,%g,%g)\n",hyper->ux,hyper->uy,hyper->dOmega0,hyper->dOmegaX,hyper->dOmegaY);
-		}
-		*/
 		fprintf(fptr,"%6d %2d %2d %2d %15.9f %15.9f %15.9f %15.9f %15.9f %15.9e %15.9e %15.9e %15.9e %15.9e %15.9e %15.9e %15.9e\n",
 		balanceID,charge->q[0],charge->q[1],charge->q[2],charge->weight,charge->tau,charge->eta,
 		charge->x,charge->y,hyper->ux,hyper->uy,hyper->dOmega0,hyper->dOmegaX,hyper->dOmegaY,hyper->pitildexx,hyper->pitildeyy,hyper->pitildexy);
-		if(abs(charge->q[2])>0){
-			//printf("charge->eta=%g\n",charge->eta);
-			etaspread+=charge->eta*charge->eta;
-		}
 		if(WRITE_TRAJ){
 			if(charge->trajinfo!=NULL){
 				for(icharge=0;icharge<charge->trajinfo->x.size();icharge++){
+					printf("writing trajectory, icharge=%d\n",icharge);
 					fprintf(charge->trajinfo->fptr,"%8.5f %8.5f %8.5f %8.5f\n",
 					charge->trajinfo->x[icharge],charge->trajinfo->y[icharge],charge->trajinfo->eta[icharge],charge->trajinfo->tau[icharge]);
 				}
 				fclose(charge->trajinfo->fptr);
 			}
 		}
-		++it;
 	}
 	fclose(fptr);
-	printf("nstrange from final emap=%d\n",nstrange);
-	etaspread=sqrt(etaspread/double(nstrange));
-	printf("for s-quarks: sigma_eta=%g\n",etaspread);
 	printf("Ncolls/charge=%g\n",2.0*double(Ncollisions)/emap.size());
 	
+	/*
 	// for testing
 	Eigen::Matrix3d chitotcharges;
 	chitotcharges.setZero();
@@ -183,7 +168,7 @@ void CHydroBalance::WriteCharges(){
 		++it;
 	}
 	printf("ChiTot From Charges in Final State\n");
-	cout << chitotcharges << endl;
+	cout << chitotcharges << endl;*/
 }
 
 void CHydroBalance::ClearCharges(){

@@ -11,7 +11,7 @@ public:
 	FILE *fptr;
 	int balanceID;
 	vector<double> x,y,eta,tau;
-	CTrajInfo(int balanceIDset);
+	CTrajInfo(int IDset);
 	void add(double x1,double y1,double eta1,double tau1);
 };
 

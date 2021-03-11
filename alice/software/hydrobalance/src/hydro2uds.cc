@@ -34,7 +34,7 @@ CHydroBalance::CHydroBalance(string parfilename,int ranseed){
 	CHydroMesh::DX=(CHydroMesh::XMAX-CHydroMesh::XMIN)/double(CHydroMesh::NX-1);
 	CHydroMesh::DY=(CHydroMesh::YMAX-CHydroMesh::YMIN)/double(CHydroMesh::NY-1);
 	CHydroMesh::GetDimensions(NX,NY,DX,DY,DELTAU,TAU0,XMIN,XMAX,YMIN,YMAX);
-	WRITE_TRAJ=parmap.getB("HB_WRITE_TRAJ","false");
+	WRITE_TRAJ=parmap.getB("HB_WRITE_TRAJ",false);
 	
 	NSAMPLE_HYDRO2UDS=parmap.getD("NSAMPLE_HYDRO2UDS",4);
 	randy=new CRandy(ranseed);
@@ -185,11 +185,11 @@ void CHydroBalance::MakeCharges(){
 							cmap.insert(pairic(idmax,charge1));
 							idmax+=1;
 							cmap.insert(pairic(idmax,charge2));
-							if(WRITE_TRAJ && tau0check){
+							if(WRITE_TRAJ && tau0check && randy->ran()<0.2){
 								if(charge1->q[2]!=0 && charge2->q[2]!=0){ // write for ss CF
 									charge1->trajinfo=new CTrajInfo(ntraj);
 									ntraj+=1;
-									charge2->trajinfo=new CTrajInfo(idmax);
+									charge2->trajinfo=new CTrajInfo(ntraj);
 									ntraj+=1;
 									charge1->addtraj();
 									charge2->addtraj();
@@ -200,12 +200,6 @@ void CHydroBalance::MakeCharges(){
 							if(itau<30)
 								source[itau](a,b)-=charge1->q[a]*charge2->q[b];
 
-							
-							/*
-							if(abs(charge1->q[2])==1 && (abs(charge2->q[2])==1)){
-								printf("%8lu: tau=%5.2f, eta=(%6.3f,%6.3f), q1*q2=%d\n",cmap.size()+emap.size(),
-								mesh->tau,charge1->eta,charge2->eta,charge1->q[2]*charge2->q[2]);
-							}*/
 						}
 					}
 				}
