@@ -12,7 +12,7 @@ using namespace std;
 
 int main(int argc,char *argv[]){
 	string qualifier="alice_cent0_10";
-	string acceptance="results_alice";
+	string acceptance="results_cheap";
 	string dirprefix="default";
 	char qs[200];
 	const int NTYPES=10;
