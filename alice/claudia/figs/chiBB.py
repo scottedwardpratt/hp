@@ -55,7 +55,7 @@ plt.plot(T,chiQQ,linestyle='-',color='r')
 plt.plot(T_l,chiQQ_l,linestyle="None",color='r',markersize=6, marker='o',markevery=2)
 plt.plot(T_h,chiQQ_h,linestyle="None",color='r',markersize=6, marker='s',markevery=2)
 
-xTc=[150.0,150.0]
+xTc=[155.0,155.0]
 yTc=[-0.2,0.2]
 plt.plot(xTc,yTc,linestyle='--',linewidth=2,color='k')
 
@@ -99,7 +99,7 @@ plt.ylabel('$\chi_{BB}/s$, $\chi_{QQ}/s$',fontsize=18,labelpad=1)
 
 text(70,0.005,"$\chi_{BB}$",fontsize=18,color='g')
 text(70,0.1,"$\chi_{QQ}$",fontsize=18,color='r')
-text(153,0.005,"$T_{\\rm interface}$",fontsize=18,color='k')
+text(158,0.005,"$T_{\\rm interface}$",fontsize=18,color='k')
 text(300,0.03,"parton gas",fontsize=18,color='k')
 text(370,0.115,"(b)",fontsize=18,color='k')
 

@@ -29,11 +29,11 @@ sratio=mydata[2]
 
 plt.plot(T,0.5*udratio,linestyle='-',linewidth=3,color='r')
 plt.plot(T,sratio,linestyle='-',linewidth=3,color='g')
-Tqgp=[150.0,250]
+Tqgp=[155.0,250]
 sratio_qgas=[0.0816021,0.0816021]
 sratio_qgp=[0.0590912,0.0590912]
 
-xTc=[150.0,150.0]
+xTc=[155.0,155.0]
 yTc=[-0.2,0.2]
 plt.plot(xTc,yTc,linestyle='--',linewidth=2,color='k')
 
@@ -76,7 +76,7 @@ text(90,0.135,"$n_{\\rm u}=n_{\\rm d}$",fontsize=20,color='r')
 text(180,0.065,"$n_{\\rm s}=n_{\\rm u}=n_{\\rm d}$",fontsize=20,color='b')
 text(55,0.095,"hadron gas",fontsize=20,color='k')
 text(185,0.045,"parton gas",fontsize=20,color='k')
-text(152,0.005,"$T_{\\rm interface}$",fontsize=18,color='k')
+text(157,0.005,"$T_{\\rm interface}$",fontsize=18,color='k')
 
 #plt.title('MathText Number $\sum_{n=1}^\infty({-e^{i\pi}}/{2^n})$!',
 #fontsize=12, color='gray')

@@ -18,7 +18,7 @@ plt.rc('font', **font)
 plt.rc('text', usetex=False)
 plt.figure(figsize=(6,4.8))
 fig = plt.figure(1)
-ax = fig.add_axes([0.13,0.12,0.85,0.84])
+ax = fig.add_axes([0.13,0.125,0.85,0.84])
 
 mydata = np.loadtxt('bfnorm.dat',skiprows=1,unpack=True)
 T=mydata[0]
@@ -37,7 +37,7 @@ plt.plot(T,pKnorm,linestyle='-',linewidth=3,color='orange')
 plt.plot(T,ppnorm,linestyle='-',linewidth=3,color='b')
 
 
-xTc=[150.0,150.0]
+xTc=[155.0,155.0]
 yTc=[-0.2,1.0]
 plt.plot(xTc,yTc,linestyle='--',linewidth=2,color='k')
 
@@ -62,12 +62,12 @@ plt.xlabel('$T$ (MeV)', fontsize=18, weight='normal')
 plt.ylabel('$Z_{h|h^\prime}$',fontsize=18)
 
 text(172,0.9,"$\pi\pi$",fontsize=20,color='r',ha='right')
-text(155,0.56,"$pp$",fontsize=20,color='b',ha='right')
+text(160,0.56,"$pp$",fontsize=20,color='b',ha='right')
 text(174.5,0.462,"$KK$",fontsize=20,color='g',ha='right')
 text(129,0.39,"$\pi K$",fontsize=20,color='purple',ha='left')
-text(146,0.39,"$\pi p$",fontsize=20,color='cyan',ha='right')
+text(151,0.39,"$\pi p$",fontsize=20,color='cyan',ha='right')
 text(172,0.04,"$Kp$",fontsize=20,color='orange',ha='right')
-text(151,0.25,"$T_{\\rm interface}$",fontsize=18,color='k')
+text(156,0.25,"$T_{\\rm interface}$",fontsize=18,color='k')
 
 plt.arrow(128, 0.41, 0, 0.05, head_width=1, head_length=0.02, fc='purple', ec='purple', width=0.3,zorder=50)
 #plt.arrow(173, 0.11, 0, -0.07, head_width=1, head_length=0.02, fc='orange', ec='orange', width=0.3, zorder=100)

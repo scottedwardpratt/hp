@@ -14,7 +14,7 @@ int main(){
 
 	Parray.resize(401); sarray.resize(401); epsilonarray.resize(401);
 	chiarray.resize(401); chiharray.resize(401);
-	double T,chi,error,Ph,epsilonh,sh,nh,TH=150,TQGP=160.0,delT,w;
+	double T,chi,error,Ph,epsilonh,sh,nh,TH=155,TQGP=165.0,delT,w;
 	delT=TQGP-TH;
 	int iT,a,b,iupper,ilower;
 	for(iT=0;iT<401;iT+=5){

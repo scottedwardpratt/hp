@@ -1002,39 +1002,11 @@ double CResList::CalcBalanceNorm(int pid,int pidprime,double taumax){
 	Eigen::Matrix3d chitest,unity;
 	double dens,densprime,weight,norm;
 	int a,ires;
-	/*
-	printf("chi------------------\n");
-	cout << chif << endl;
+
 	chiinvf=chif.inverse();
-	printf("chiinvf------------------\n");
-	cout << chiinvf << endl;
-	unity=chiinvf*chif;
-	printf("unity test??? ------------\n");
-	cout.precision(5);
-	cout << unity << endl;
-	*/
 	for(a=0;a<3;a++){
 		rho(a)=rhoprime(a)=0.0;
-		//for(int b=0;b<3;b++)
-		//	chitest(a,b)=0.0;
 	}
-	/*
-	for(rpos=resmap.begin();rpos!=resmap.end();rpos++){
-	resinfo=rpos->second;
-	//printf("density[%d]=%g\n",ires,densityf[ires]);
-	for(a=0;a<3;a++)
-	for(int b=0;b<3;b++)
-	chitest(a,b)+=densityf[resinfo->ires]*resinfo->q[a]*resinfo->q[b];
-	}
-	printf("chitest-----------------\n");
-	cout << chitest << endl;
-	*/
-	/*
-	printf("chi=\n");
-	cout << chif << endl;
-	printf("chiinv=\n");
-	cout << chiinvf << endl;
-	*/
 	
 	norm=dens=densprime=0.0;
 	double netq[3]={0.0};

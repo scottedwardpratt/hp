@@ -59,7 +59,7 @@ plt.plot(T_l,chiss_l,linestyle='None',linewidth=2,color='g',markersize=6, marker
 
 #plt.plot(T,chiBB*3.0,linestyle='-',color='k')
 
-xTc=[150.0,150.0]
+xTc=[155.0,155.0]
 yTc=[-0.2,0.2]
 plt.plot(xTc,yTc,linestyle='--',linewidth=2,color='k')
 
@@ -106,7 +106,7 @@ text(55,-0.105,"$\chi_{ud}$",fontsize=18,color='cyan')
 text(70,-0.02,"$\chi_{us}$",fontsize=18,color='b')
 text(70,0.028,"$\chi_{ss}$",fontsize=18,color='green')
 text(55,0.1,"$\chi_{uu}$",fontsize=18,color='red')
-text(153,-0.125,"$T_{\\rm interface}$",fontsize=18,color='k')
+text(158,-0.125,"$T_{\\rm interface}$",fontsize=18,color='k')
 text(300,0.042,"parton gas",fontsize=18,color='k')
 text(375,0.13,"(a)",fontsize=18,color='k')
 
