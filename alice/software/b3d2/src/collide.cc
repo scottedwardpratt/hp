@@ -192,7 +192,12 @@ int CB3D::Collide(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &prod
 						InelasticScatter(part1,part2,part3,part4,*inel);
 						if(bjtranslate){
 							part1->BjorkenUnTranslate();
-							part3->BjorkenUnTranslate();
+							if(part3!=NULL)
+								part3->BjorkenUnTranslate();
+							else{
+								printf("part3 pointer is NULL in collide.cc\n");
+								exit(1);
+							}
 						}
 						if(netb!=0 || netq!=0 || nets!=0){
 							printf("charge not conserved in inel collision, netb=%d, netq=%d, nets=%d\n",netb,netq,nets);
