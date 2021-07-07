@@ -13,12 +13,12 @@ sformatter.set_powerlimits((-2,3))
 
 font = {'family' : 'serif',
         'weight' : 'normal',
-        'size'   : 14}
+        'size'   : 18}
 plt.rc('font', **font)
 plt.rc('text', usetex=False)
 plt.figure(figsize=(6,5))
 fig = plt.figure(1)
-ax = fig.add_axes([0.15,0.12,0.82,0.84])
+ax = fig.add_axes([0.17,0.14,0.8,0.82])
 
 mydata = np.loadtxt('chi.dat',skiprows=1,unpack=True)
 T=mydata[0]
@@ -77,31 +77,31 @@ plt.plot(Tqgp,sratio_qgp,linestyle='--',linewidth=2,color='k')
 
 #plt.semilogy(x,y)
 
-ax.tick_params(axis='both', which='major', labelsize=14)
+ax.tick_params(axis='both', which='major', labelsize=18)
 
 ax.set_xticks(np.arange(0,500,50), minor=False)
-ax.set_xticklabels(np.arange(0,500,50), minor=False, family='serif')
+ax.set_xticklabels(np.arange(0,500,50), minor=False, family='serif',size=18)
 ax.set_xticks(np.arange(0,500,25), minor=True)
 ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%d'))
 ax.xaxis.set_major_formatter(sformatter)
 plt.xlim(50,405)
 
 ax.set_yticks(np.arange(-1,1,0.03), minor=False)
-ax.set_yticklabels(np.arange(-1,1,0.03), minor=False, family='serif')
+ax.set_yticklabels(np.arange(-1,1,0.03), minor=False, family='serif',size=18)
 ax.set_yticks(np.arange(-1,1,0.01), minor=True)
 plt.ylim(0.0,0.125)
 #ax.set_yticks(0.1:1.0:10.0:100.0, minor=True)
 ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%3.2f'))
 #ax.yaxis.set_major_formatter(sformatter)
 
-plt.xlabel('$T$ (MeV)', fontsize=18, weight='normal')
-plt.ylabel('$\chi_{BB}/s$, $\chi_{QQ}/s$',fontsize=18,labelpad=1)
+plt.xlabel('$T$ (MeV)', fontsize=22, weight='normal')
+plt.ylabel('$\chi_{BB}/s$, $\chi_{QQ}/s$',fontsize=22,labelpad=1)
 
-text(70,0.005,"$\chi_{BB}$",fontsize=18,color='g')
-text(70,0.1,"$\chi_{QQ}$",fontsize=18,color='r')
-text(158,0.005,"$T_{\\rm interface}$",fontsize=18,color='k')
-text(300,0.03,"parton gas",fontsize=18,color='k')
-text(370,0.115,"(b)",fontsize=18,color='k')
+text(70,0.007,"$\chi_{BB}$",fontsize=22,color='g')
+text(70,0.1,"$\chi_{QQ}$",fontsize=22,color='r')
+text(158,0.005,"$T_{\\rm interface}$",fontsize=24,color='k')
+text(280,0.03,"parton gas",fontsize=22,color='k')
+text(370,0.115,"(b)",fontsize=22,color='k')
 
 #plt.title('MathText Number $\sum_{n=1}^\infty({-e^{i\pi}}/{2^n})$!',
 #fontsize=12, color='gray')

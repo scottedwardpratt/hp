@@ -28,10 +28,10 @@ colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k')
 plt.figure(figsize=(6,15))
 fig = plt.figure(1)
 Npanels=6
-xx0=0.17
-yy0=0.045
+xx0=0.19
+yy0=0.05
 ww0=1.0-xx0-0.03
-hh0=1.0-yy0-0.02
+hh0=1.0-yy0-0.01
 xmin=0
 xmax=2.0
 
@@ -45,9 +45,9 @@ for ipanel in range (0,Npanels):
     ymin=-0.04
     ymax=0.9
     ax.set_yticks(np.arange(-1,1,0.2), minor=False)
-    ax.set_yticklabels(np.arange(-1,1,0.2), minor=False, family='serif', size=14)
+    ax.set_yticklabels(np.arange(-1,1,0.2), minor=False, family='serif', size=18)
     ax.set_yticks(np.arange(-1,1,0.1), minor=True)
-    ax.annotate('(f) $\pi|\pi$',xy=(1.9,ymax-0.4*(ymax-ymin)), family='serif', size=24,horizontalalignment='right')
+    ax.annotate('(f) $\pi|\pi$',xy=(1.9,ymax-0.48*(ymax-ymin)), family='serif', size=24,horizontalalignment='right')
 
   
   if ipanel == 1:
@@ -55,7 +55,7 @@ for ipanel in range (0,Npanels):
     ymin=-0.004
     ymax=0.09
     ax.set_yticks(np.arange(-1,1,0.04), minor=False)
-    ax.set_yticklabels(np.arange(-1,1,0.04), minor=False, family='serif', size=14)
+    ax.set_yticklabels(np.arange(-1,1,0.04), minor=False, family='serif', size=18)
     ax.set_yticks(np.arange(-1,1,0.02), minor=True)
     ax.annotate('(e) $\pi|K$',xy=(1.9,ymax-0.18*(ymax-ymin)), family='serif', size=24,horizontalalignment='right')
 
@@ -64,7 +64,7 @@ for ipanel in range (0,Npanels):
     ymin=-0.002
     ymax=0.045
     ax.set_yticks(np.arange(0.0,.05,0.02), minor=False)
-    ax.set_yticklabels(np.arange(0.0,.05,0.02), minor=False, family='serif', size=14)
+    ax.set_yticklabels(np.arange(0.0,.05,0.02), minor=False, family='serif', size=18)
     ax.set_yticks(np.arange(0.0,.05,0.01), minor=True)
     ax.annotate('(d) $\pi|p$',xy=(1.9,ymax-0.18*(ymax-ymin)), family='serif', size=24,horizontalalignment='right')
     
@@ -73,7 +73,7 @@ for ipanel in range (0,Npanels):
     ymin=-0.02
     ymax=0.45
     ax.set_yticks(np.arange(-1,1,0.2), minor=False)
-    ax.set_yticklabels(np.arange(-1,1,0.2), minor=False, family='serif', size=14)
+    ax.set_yticklabels(np.arange(-1,1,0.2), minor=False, family='serif', size=18)
     ax.set_yticks(np.arange(-1,1,0.1), minor=True)
     ax.annotate('(c) $K|K$',xy=(1.9,ymax-0.18*(ymax-ymin)), family='serif', size=24,horizontalalignment='right')
 
@@ -82,7 +82,7 @@ for ipanel in range (0,Npanels):
     ymin=-0.005
     ymax=0.11
     ax.set_yticks(np.arange(-0.04,1,0.04), minor=False)
-    ax.set_yticklabels(np.arange(-0.04,1,0.04), minor=False, family='serif', size=14)
+    ax.set_yticklabels(np.arange(-0.04,1,0.04), minor=False, family='serif', size=18)
     ax.set_yticks(np.arange(-0.04,1,0.02), minor=True)
     ax.annotate('(b) $K|p$',xy=(1.9,ymax-0.18*(ymax-ymin)), family='serif', size=24,horizontalalignment='right')
 
@@ -91,7 +91,7 @@ for ipanel in range (0,Npanels):
     ymin=-0.025
     ymax=0.25
     ax.set_yticks(np.arange(-0.999999,1,0.1), minor=False)
-    ax.set_yticklabels(np.arange(-1,1,0.1), minor=False, family='serif', size=14)
+    ax.set_yticklabels(np.arange(-1,1,0.1), minor=False, family='serif', size=18)
     ax.set_yticks(np.arange(-1,1,0.05), minor=True)
     ax.annotate('(a) $p|p$',xy=(1.9,ymax-0.18*(ymax-ymin)), family='serif', size=24,horizontalalignment='right')
     
@@ -134,7 +134,7 @@ for ipanel in range (0,Npanels):
         expB=expdata[1]
         dB=expdata[2]
         plt.errorbar(expdely,2.0*expB,yerr=dB,linestyle='None',linewidth=1,color=colors[0],markersize=8, marker='*',markerfacecolor='none',markeredgewidth=2,markeredgecolor=colors[0],label='ALICE-Preliminary')
-        plt.legend(loc='upper right',fontsize=20)
+        plt.legend(loc='upper right',fontsize=24)
       if ipanel == 3:
         filename = 'alicedata/BF_dy_KK_C0_10_ALICE.dat'
         expdata = np.loadtxt(filename,skiprows=0,unpack=True)
@@ -156,7 +156,7 @@ for ipanel in range (0,Npanels):
       ax.set_xticks(np.arange(0,4,0.1), minor=True)
     
     if idata==1 and ipanel==0:
-      ax.set_xticklabels(np.arange(0,4,0.5),minor=False,size=14, family='serif')
+      ax.set_xticklabels(np.arange(0,4,0.5),minor=False,size=18, family='serif')
     else:
       ax.set_xticklabels([])
     

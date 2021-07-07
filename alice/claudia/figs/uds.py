@@ -13,12 +13,12 @@ sformatter.set_powerlimits((-2,3))
 
 font = {'family' : 'serif',
         'weight' : 'normal',
-        'size'   : 14}
+        'size'   : 18}
 plt.rc('font', **font)
 plt.rc('text', usetex=False)
 plt.figure(figsize=(6,5))
 fig = plt.figure(1)
-ax = fig.add_axes([0.17,0.12,0.8,0.8])
+ax = fig.add_axes([0.18,0.14,0.77,0.8])
 
 mydata = np.loadtxt('udsdens.dat',skiprows=1,unpack=True)
 T=mydata[0]
@@ -54,29 +54,29 @@ plt.plot(Tqgp,sratio_qgp,color='b',linestyle="--",linewidth=3)
 ax.tick_params(axis='both', which='major', labelsize=14)
 
 ax.set_xticks(np.arange(0,500,50), minor=False)
-ax.set_xticklabels(np.arange(0,500,50), minor=False, family='serif')
+ax.set_xticklabels(np.arange(0,500,50), minor=False, family='serif',size=18)
 ax.set_xticks(np.arange(0,500,25), minor=True)
 ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%d'))
 ax.xaxis.set_major_formatter(sformatter)
 plt.xlim(50,250)
 
 ax.set_yticks(np.arange(-1,1,0.05), minor=False)
-ax.set_yticklabels(np.arange(-1,1,0.05), minor=False, family='serif')
+ax.set_yticklabels(np.arange(-1,1,0.05), minor=False, family='serif',size=18)
 ax.set_yticks(np.arange(-1,1,0.01), minor=True)
 plt.ylim(0.0,0.2)
 #ax.set_yticks(0.1:1.0:10.0:100.0, minor=True)
 ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%2f'))
 ax.yaxis.set_major_formatter(sformatter)
 
-plt.xlabel('$T$ (MeV)', fontsize=18, weight='normal')
-plt.ylabel('$density/s$',fontsize=18)
+plt.xlabel('$T$ (MeV)', fontsize=22, weight='normal')
+plt.ylabel('$density/s$',fontsize=22)
 
-text(100,0.035,"$n_{\\rm s}$",fontsize=20,color='g')
-text(90,0.135,"$n_{\\rm u}=n_{\\rm d}$",fontsize=20,color='r')
-text(180,0.065,"$n_{\\rm s}=n_{\\rm u}=n_{\\rm d}$",fontsize=20,color='b')
-text(55,0.095,"hadron gas",fontsize=20,color='k')
-text(185,0.045,"parton gas",fontsize=20,color='k')
-text(157,0.005,"$T_{\\rm interface}$",fontsize=18,color='k')
+text(96,0.035,"$n_{\\rm s}$",fontsize=22,color='g')
+text(82,0.135,"$n_{\\rm u}=n_{\\rm d}$",fontsize=22,color='r')
+text(172,0.065,"$n_{\\rm s}=n_{\\rm u}=n_{\\rm d}$",fontsize=22,color='b')
+text(55,0.095,"hadron gas",fontsize=22,color='k')
+text(176,0.145,"parton gas",fontsize=22,color='k')
+text(157,0.005,"$T_{\\rm interface}$",fontsize=24,color='k')
 
 #plt.title('MathText Number $\sum_{n=1}^\infty({-e^{i\pi}}/{2^n})$!',
 #fontsize=12, color='gray')

@@ -13,12 +13,12 @@ sformatter.set_powerlimits((-2,3))
 
 font = {'family' : 'serif',
         'weight' : 'normal',
-        'size'   : 14}
+        'size'   : 18}
 plt.rc('font', **font)
 plt.rc('text', usetex=False)
 plt.figure(figsize=(6,4.8))
 fig = plt.figure(1)
-ax = fig.add_axes([0.13,0.125,0.85,0.84])
+ax = fig.add_axes([0.15,0.145,0.83,0.82])
 
 mydata = np.loadtxt('bfnorm.dat',skiprows=1,unpack=True)
 T=mydata[0]
@@ -44,30 +44,30 @@ plt.plot(xTc,yTc,linestyle='--',linewidth=2,color='k')
 ax.tick_params(axis='both', which='major', labelsize=14)
 
 ax.set_xticks(np.arange(0,200,10), minor=False)
-ax.set_xticklabels(np.arange(0,200,10), minor=False, family='serif')
+ax.set_xticklabels(np.arange(0,200,10), minor=False, family='serif',size=18)
 ax.set_xticks(np.arange(0,200,5), minor=True)
 ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%d'))
 ax.xaxis.set_major_formatter(sformatter)
 plt.xlim(125,175)
 
 ax.set_yticks(np.arange(-1,1.1,0.2), minor=False)
-ax.set_yticklabels(np.arange(-1,1.1,0.2), minor=False, family='serif')
+ax.set_yticklabels(np.arange(-1,1.1,0.2), minor=False, family='serif',size=18)
 ax.set_yticks(np.arange(-1,1.1,0.05), minor=True)
 plt.ylim(0.0,1.0)
 #ax.set_yticks(0.1:1.0:10.0:100.0, minor=True)
 ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%2f'))
 ax.yaxis.set_major_formatter(sformatter)
 
-plt.xlabel('$T$ (MeV)', fontsize=18, weight='normal')
-plt.ylabel('$Z_{h|h^\prime}$',fontsize=18)
+plt.xlabel('$T$ (MeV)', fontsize=22, weight='normal')
+plt.ylabel('$Z_{h|h^\prime}$',fontsize=22,labelpad=-2)
 
-text(172,0.9,"$\pi\pi$",fontsize=20,color='r',ha='right')
-text(160,0.56,"$pp$",fontsize=20,color='b',ha='right')
-text(174.5,0.462,"$KK$",fontsize=20,color='g',ha='right')
-text(129,0.39,"$\pi K$",fontsize=20,color='purple',ha='left')
-text(151,0.39,"$\pi p$",fontsize=20,color='cyan',ha='right')
-text(172,0.04,"$Kp$",fontsize=20,color='orange',ha='right')
-text(156,0.25,"$T_{\\rm interface}$",fontsize=18,color='k')
+text(172,0.9,"$\pi\pi$",fontsize=22,color='r',ha='right')
+text(160,0.56,"$pp$",fontsize=22,color='b',ha='right')
+text(174.5,0.462,"$KK$",fontsize=22,color='g',ha='right')
+text(129,0.39,"$\pi K$",fontsize=22,color='purple',ha='left')
+text(151,0.39,"$\pi p$",fontsize=22,color='cyan',ha='right')
+text(172,0.04,"$Kp$",fontsize=22,color='orange',ha='right')
+text(156,0.25,"$T_{\\rm interface}$",fontsize=24,color='k')
 
 plt.arrow(128, 0.41, 0, 0.05, head_width=1, head_length=0.02, fc='purple', ec='purple', width=0.3,zorder=50)
 #plt.arrow(173, 0.11, 0, -0.07, head_width=1, head_length=0.02, fc='orange', ec='orange', width=0.3, zorder=100)

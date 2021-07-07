@@ -326,7 +326,7 @@ void CResList::ReadResInfo(){
 	FILE * decayinfofile;
 	char dummy[200],cname[200];
 	filename=parmap->getS("RESONANCE_INFO_FILE",string("../resinfo/resonances_standardhadrons.dat"));
-	printf("will read res info from %s\n",filename.c_str());
+	//printf("will read res info from %s\n",filename.c_str());
 	resinfofile=fopen(filename.c_str(),"r");
 	fgets(dummy,200,resinfofile);
 	fgets(dummy,200,resinfofile);
@@ -367,7 +367,7 @@ void CResList::ReadResInfo(){
 	fclose(resinfofile);
 
 	filename=parmap->getS("RESONANCE_DECAYS_FILE",string("../resinfo/decays_pdg_weak.dat"));
-	printf("will read decay info from %s\n",filename.c_str());
+	//printf("will read decay info from %s\n",filename.c_str());
 	decayinfofile=fopen(filename.c_str(),"r");
 	while(fscanf(decayinfofile,"%d %lf",&mothercode,&mothermass) && !feof(decayinfofile)){
 		fgets(dummy,200,decayinfofile);
@@ -694,10 +694,6 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 	}
 	strangecontent=strangecontent/s;
 	udcontent=udcontent/s;
-	printf("-----   chi/s -------\n");
-	cout << chi/s << endl;
-	printf("entropy density=%g, hadron density=%g, entropy/hadron=%g\n",s,nh,s/nh);
-	printf("---------------------\n");
 }
 
 double CResList::triangle(double m0,double m1,double m2){
