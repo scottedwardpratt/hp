@@ -4,7 +4,6 @@
 #include "qualifier.h"
 #include "randy.h"
 #include "misc.h"
-// here we go
 
 using namespace std;
 
