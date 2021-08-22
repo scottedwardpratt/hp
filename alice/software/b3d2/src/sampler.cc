@@ -323,7 +323,7 @@ void CSampler::ReadHyperElements2D_OSU(){
 	hyper.clear();
 	nelements=0;
 	b3d->TotalVolume=0.0;
-	filename="../hyperdata/"+b3d->qualifier+"/hyper.dat";
+	filename="hyperdata/"+b3d->qualifier+"/hyper.dat";
 	printf("opening %s\n",filename.c_str());
 	FILE *fptr=fopen(filename.c_str(),"r");
 	fgets(dummy,200,fptr);	fgets(dummy,200,fptr);
