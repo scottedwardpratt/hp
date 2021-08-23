@@ -47,6 +47,7 @@ public:
 
 class CSampler{
 public:
+	CparameterMap *parmap;
 	CRandy *randy;
 	CResList *reslist;
 	//vector<CvolumeElement2D> volume_element;

@@ -1,11 +1,3 @@
-qualifier alice_cent0_5
-BEAM_INFO ALICE_PBPB
-#B3D_NEVENTSMAX 5
-#
-#qualifier alice_cent0_10
-#BEAM_INFO ALICE_PBPB
-#B3D_NEVENTSMAX 5
-#
-#qualifier alice_cent0_20
-#BEAM_INFO ALICE_PBPB
+qualifier rhic_cent0_5
+BEAM_INFO RHIC_AUAU_200GeV
 #B3D_NEVENTSMAX 5

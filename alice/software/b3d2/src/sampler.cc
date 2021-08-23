@@ -10,6 +10,7 @@ using namespace std;
 
 CSampler::CSampler(CB3D *b3dset){
 	b3d=b3dset;
+	parmap=&(b3d->parmap);
 	xyfptr=NULL;
 #ifdef __SAMPLER_WRITE_XY__
 	xyfptr=fopen("xy.dat","w");
@@ -317,13 +318,15 @@ void CSampler::ReadHyperElements2D_OSU(){
 	string filename;
 	CHyperElement *elem;
 	//double PIbulk,dOmegaMax;
-	double u0,ux,uy,x,y,udotdOmega,dOmega0,dOmegaX,dOmegaY,pitildexx,pitildeyy,pitildexy,tau;
+	double u0,ux,uy,x,y,udotdOmega,dOmega0,dOmegaX,dOmegaY,pitildexx,pitildeyy,pitildexy,tau,dummy1,dummy2;
 	int ielement,initarraysize=1000;
 	char dummy[300];
 	hyper.clear();
 	nelements=0;
 	b3d->TotalVolume=0.0;
-	filename="hyperdata/"+b3d->qualifier+"/hyper.dat";
+	bool oldhyperformat=parmap->getB("B3D_OLDHYPERFORMAT",false);
+	string hyperdata_home=parmap->getS("B3D_HYPERDATA_HOME","hyperdata");
+	filename=hyperdata_home+"/"+b3d->qualifier+"/hyper.dat";
 	printf("opening %s\n",filename.c_str());
 	FILE *fptr=fopen(filename.c_str(),"r");
 	fgets(dummy,200,fptr);	fgets(dummy,200,fptr);
@@ -333,9 +336,15 @@ void CSampler::ReadHyperElements2D_OSU(){
 			hyper.resize(hyper.size()+initarraysize);
 		elem=&hyper[ielement];
 		elem->T=b3d->parmap.getD("FREEZEOUT_TEMP",155);
-		fscanf(fptr,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&tau,&x,&y,&ux,&uy,&dOmega0,&dOmegaX,&dOmegaY,&pitildexx,&pitildeyy,&pitildexy);
-		//dOmegaX=-dOmegaX; dOmegaY=-dOmegaY;
+		if(oldhyperformat){
+			fscanf(fptr,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+			&tau,&x,&y,&ux,&uy,&dOmega0,&dOmegaX,&dOmegaY,&dummy1,&dummy2,&pitildexx,&pitildeyy,&pitildexy);
+			dOmegaX=-dOmegaX; dOmegaY=-dOmegaY;
+		}
+		else{
+			fscanf(fptr,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+			&tau,&x,&y,&ux,&uy,&dOmega0,&dOmegaX,&dOmegaY,&pitildexx,&pitildeyy,&pitildexy);
+		}
 		if(!feof(fptr)){
 			u0=sqrt(1.0+ux*ux+uy*uy);
 			udotdOmega=u0*dOmega0-ux*dOmegaX-uy*dOmegaY;
