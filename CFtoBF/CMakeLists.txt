@@ -19,11 +19,9 @@ message("Includes: ${GSL_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${GITHOME_MSU}/hp/al
 link_directories(${GITHOME_MSU}/hp/alice/software/b3d2/lib ${GITHOME_MSU}/hp/alice/software/hydrobalance/lib ${GITHOME_MSU}/commonutils/software/lib)
 message("Libraries: b3d_alice ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY}" )
 
-
 find_library(${GITHOME_MSU}/hp/alice/software/b3d2/lib b3d_alice)
 find_library(${GITHOME_MSU}/hp/alice/software/hydrobalance/lib hydro2uds_alice)
 find_library(${GITHOME_MSU}/commonutils/software/lib commonutils)
-
 
 set(SOURCE_FILES ./b3dmain.cc)
 SET_SOURCE_FILES_PROPERTIES(
@@ -33,3 +31,12 @@ SET_SOURCE_FILES_PROPERTIES(
 add_executable(b3d ${SOURCE_FILES})
 add_dependencies(b3d extern_b3d_alice extern_commonutils)
 target_link_libraries(b3d b3d_alice hydro2uds_alice commonutils ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY} ${EIGEN3_LIBRARY})
+
+set(SOURCE_FILES ./cftobf.cc)
+SET_SOURCE_FILES_PROPERTIES(
+      cftobf.cc PROPERTIES OBJECT_DEPENDS
+    ${GITHOME_MSU}/hp/alice/software/b3d2/lib/libb3d_alice.a
+ )
+add_executable(cftobf ${SOURCE_FILES})
+add_dependencies(cftobf extern_b3d_alice extern_commonutils)
+target_link_libraries(cftobf b3d_alice hydro2uds_alice commonutils ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY} ${EIGEN3_LIBRARY})

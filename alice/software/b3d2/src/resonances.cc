@@ -325,7 +325,7 @@ void CResList::ReadResInfo(){
 	FILE *resinfofile;
 	FILE * decayinfofile;
 	char dummy[200],cname[200];
-	filename=parmap->getS("RESONANCE_INFO_FILE",string("../resinfo/resonances_standardhadrons.dat"));
+	filename=parmap->getS("B3D_RESONANCES_INFO_FILE",string("../resinfo/resonances_standardhadrons.dat"));
 	//printf("will read res info from %s\n",filename.c_str());
 	resinfofile=fopen(filename.c_str(),"r");
 	fgets(dummy,200,resinfofile);
@@ -366,7 +366,7 @@ void CResList::ReadResInfo(){
 	} 
 	fclose(resinfofile);
 
-	filename=parmap->getS("RESONANCE_DECAYS_FILE",string("../resinfo/decays_pdg_weak.dat"));
+	filename=parmap->getS("B3D_RESONANCES_DECAYS_FILE",string("../resinfo/decays_pdg_weak.dat"));
 	//printf("will read decay info from %s\n",filename.c_str());
 	decayinfofile=fopen(filename.c_str(),"r");
 	while(fscanf(decayinfofile,"%d %lf",&mothercode,&mothermass) && !feof(decayinfofile)){
@@ -821,8 +821,6 @@ void CResInfo::FindFinalProducts(double taumax){
 				if(bptr->resinfoptr[iires]->decay && (HBARC/bptr->resinfoptr[iires]->width)<taumax){
 					foundsplit=true;
 					resinfo=bptr->resinfoptr[iires];
-					//printf("%d: splitting branches\n",code);
-					//double bcheck=0.0;
 					for(iibranch=1;iibranch<resinfo->finalproductslist.size();iibranch++){
 						fbptr=new CBranchInfo();
 						fbptr->Copy(bptr);
