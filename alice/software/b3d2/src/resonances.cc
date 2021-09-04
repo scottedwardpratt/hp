@@ -612,6 +612,7 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 	P=epsilon=s=nh=0.0;
 	density.resize(nres);
 	maxweight.resize(nres);
+	
 	for(ires=0;ires<nres;ires++){
 		density[ires]=0.0;
 	}
