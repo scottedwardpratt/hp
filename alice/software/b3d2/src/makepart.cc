@@ -14,10 +14,12 @@ void CHyperElement::GetP(CResInfo *resinfo,FourVector &p,double &mass,double mw)
 	bool reflect;
 	CRandy *randy=(reslist->b3d)->randy;
 	double pdotdOmega,nhatnorm,nhatdotp,wreflect;
-	double pitilde[4][4],dOmegaprime[4],dOmega[4];
+	double pitilde[4][4];
+	FourVector dOmegaprime,dOmega;
 	int alpha,beta;
 	FourVector pnoviscous,u;
-	double m,nhat[4]={0.0};
+	double m;
+	FourVector nhat={0.0,0.0,0.0,0.0};
 	pitilde[1][1]=pitildexx;
 	pitilde[1][2]=pitilde[2][1]=pitildexy;
 	pitilde[1][3]=pitilde[3][1]=0.0;

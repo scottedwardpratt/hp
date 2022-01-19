@@ -25,12 +25,12 @@ CAcceptance_ALICE_Perfect::CAcceptance_ALICE_Perfect(CparameterMap *parmapin) : 
 }
 
 void CAcceptance_ALICE::CalcAcceptance(bool &accept,double &efficiency,CPart *part){
-	double pt,*p=part->p;
+	double pt;
 	double dca[4],dcaxy;
 	int pid=part->resinfo->code;
 	
 	efficiency=0.0;
-	pt=sqrt(p[1]*p[1]+p[2]*p[2]);
+	pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
 	accept=false;
 	efficiency=0.0;
 	if(pt>PTMIN && pt<PTMAX && part->resinfo->charge!=0){
@@ -57,12 +57,12 @@ void CAcceptance_ALICE::CalcAcceptance(bool &accept,double &efficiency,CPart *pa
 }
 
 void CAcceptance_ALICE_Perfect::CalcAcceptance(bool &accept,double &efficiency,CPart *part){
-	double pt,*p=part->p;
+	double pt;
 	double dca[4],dcaxy;
 	int pid=part->resinfo->code;
 	
 	efficiency=0.0;
-	pt=sqrt(p[1]*p[1]+p[2]*p[2]);
+	pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
 	accept=false;
 	efficiency=0.0;
 	if(pt>PTMIN && pt<PTMAX && part->resinfo->charge!=0){
@@ -89,16 +89,16 @@ void CAcceptance_ALICE_Perfect::CalcAcceptance(bool &accept,double &efficiency,C
 }
 
 void CAcceptance_ALICE::CalcAcceptance_Realistic(bool &accept,double &efficiency,CPart *part){
-	double pt,*p=part->p,y=part->y;
+	double pt,y=part->y;
 	double dca[4],dcaxy;
 	int pid=part->resinfo->code;
 	printf("this is dead code in acceptance_ALICE.cc, shouldn't be here\n");
 	exit(1);
 	
 	efficiency=0.0;
-	pt=sqrt(p[1]*p[1]+p[2]*p[2]);
-	//pmag=sqrt(pt*pt+p[3]*p[3]);
-	//eta=atanh(p[3]/pmag);
+	pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
+	//pmag=sqrt(pt*pt+part->p[3]*part->p[3]);
+	//eta=atanh(part->p[3]/pmag);
 	accept=false;
 	efficiency=0.0;
 	if(pt>PTMIN && pt<PTMAX && part->resinfo->charge!=0){
@@ -125,16 +125,16 @@ void CAcceptance_ALICE::CalcAcceptance_Realistic(bool &accept,double &efficiency
 }
 
 void CAcceptance_ALICE_Perfect::CalcAcceptance_Realistic(bool &accept,double &efficiency,CPart *part){
-	double pt,*p=part->p,y=part->y;
+	double pt,y=part->y;
 	double dca[4],dcaxy;
 	int pid=part->resinfo->code;
 	printf("this is dead code in acceptance_ALICE.cc, shouldn't be here\n");
 	exit(1);
 	
 	efficiency=0.0;
-	pt=sqrt(p[1]*p[1]+p[2]*p[2]);
-	//pmag=sqrt(pt*pt+p[3]*p[3]);
-	//eta=atanh(p[3]/pmag);
+	pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
+	//pmag=sqrt(pt*pt+part->p[3]*part->p[3]);
+	//eta=atanh(part->p[3]/pmag);
 	accept=false;
 	efficiency=0.0;
 	if(pt>PTMIN && pt<PTMAX && part->resinfo->charge!=0){
@@ -161,11 +161,11 @@ void CAcceptance_ALICE_Perfect::CalcAcceptance_Realistic(bool &accept,double &ef
 }
 
 void CAcceptance_ALICE::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part){
-	double pt,*p=part->p;
+	double pt;
 	//double dca[4],dcaxy;
 	//int pid=part->resinfo->code;
 	efficiency=0.0;
-	pt=sqrt(p[1]*p[1]+p[2]*p[2]);
+	pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
 	accept=false;
 	efficiency=0.0;
 	if(pt>PTMIN && pt<PTMAX && part->resinfo->charge!=0){
@@ -174,11 +174,11 @@ void CAcceptance_ALICE::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart
 }
 
 void CAcceptance_ALICE_Perfect::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part){
-	double pt,*p=part->p;
+	double pt;
 	//double dca[4],dcaxy;
 	//int pid=part->resinfo->code;
 	efficiency=0.0;
-	pt=sqrt(p[1]*p[1]+p[2]*p[2]);
+	pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
 	accept=false;
 	efficiency=0.0;
 	if(pt>PTMIN && pt<PTMAX && part->resinfo->charge!=0){

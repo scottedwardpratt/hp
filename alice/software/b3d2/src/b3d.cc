@@ -57,6 +57,7 @@ CB3D::CB3D(string run_name_set){
 	oscarfile=NULL;
 	reslist=new CResList(&parmap);
 	sampler=new CSampler(this);
+	decay_nbody=new CDecay_NBody(randy);
 }
 
 void CB3D::CopyParMapPars(){

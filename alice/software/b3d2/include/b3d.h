@@ -5,6 +5,7 @@
 #include "parametermap.h"
 #include "inelastic.h"
 #include "mutinfo.h"
+#include "decay_nbody.h"
 
 using namespace std;
 
@@ -44,10 +45,13 @@ public:
 	vector<vector<CMuTInfo *> > muTinfo;
 	vector<double> annihilation_array;
 	CSEInfo *SEinfo;
+	CDecay_NBody *decay_nbody;
+	
 	void ReadCharges(int ichargefile);
 	void GenHadronsFromCharges();
 	void GenHadronsFromCharge(int balanceID,CCharge *charge);
 	void TestChargeConservation(int pid);
+	
 	
 	void ReadHydroInput();
 	CPart *GetDeadPart();

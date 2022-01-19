@@ -156,7 +156,7 @@ bool CResInfo::CheckForNeutral(){
 }
 
 double CResInfo::GenerateMass(){
-	double m;
+	double m,r,weight=0.0,rho,k,lor,gamma;
 	double alpha=reslist->RESWIDTH_ALPHA;;
 	if(decay){
 		double m1=branchlist[0]->resinfoptr[0]->mass;
@@ -165,21 +165,20 @@ double CResInfo::GenerateMass(){
 			m2+=branchlist[0]->resinfoptr[n]->mass;
 		}
 		double kr=sqrt(pow((mass*mass-m1*m1-m2*m2),2.0)-pow((2.0*m1*m2),2.0))/(2.0*mass);
-		int i = 0;
-		while (i == 0) {
-			double r = randy->ran();
+		do{
+			r = randy->ran();
 			m = ((width/2)*tan(PI*(r - .5))) + mass;
 			if ((m < (m1+m2))||(m>2.0*mass)) continue;
-			double k=sqrt(pow((m*m-m1*m1-m2*m2),2.0)-pow((2.0*m1*m2),2.0))/(2.0*m);
-			double gamma=width*pow((2.0*k*k)/(k*k+kr*kr),alpha);
-			double rho=(2.0/(width*PI))*(0.25*gamma*gamma)/((0.25*gamma*gamma)+(mass-m)*(mass-m));
-			double lor = (width/(2*PI))/(pow(width/2,2.0) + pow(mass-m,2.0));
-			double weight = rho/(lor*8.0);
-			r = randy->ran();
-			if (r < weight) i = 1; 
-		}
+			k=sqrt(pow((m*m-m1*m1-m2*m2),2.0)-pow((2.0*m1*m2),2.0))/(2.0*m);
+			gamma=width*pow((2.0*k*k)/(k*k+kr*kr),alpha);
+			rho=(2.0/(width*PI))*(0.25*gamma*gamma)/((0.25*gamma*gamma)+(mass-m)*(mass-m));
+			lor = (width/(2*PI))/(pow(width/2,2.0) + pow(mass-m,2.0));
+			weight = rho/(lor*8.0);
+			r=randy->ran();
+		}while(r>weight || m<minmass);
 	}
-	else m=mass;
+	else
+		m=mass;
 	return m;
 }
 
@@ -773,7 +772,7 @@ void CResList::freegascalc_onespecies(double mass,double T,double &epsiloni,doub
 	double eta=mass/T;
 	double J[100]={0.0};
 	double expeta=exp(-eta),kappa;
-	J[1]=-std::expint(-eta)/expeta;
+	J[1]=-gsl_sf_expint_Ei(-eta)/expeta;
 	for(n=2;n<100;n++){
 		J[n]=(-eta*J[n-1]+1.0)/double(n-1);
 	}

@@ -59,7 +59,7 @@ CAcceptance_STAR::CAcceptance_STAR(CparameterMap *parmapin) : CAcceptance(){
 }
 
 void CAcceptance_STAR::CalcAcceptance(bool &accept,double &efficiency,CPart *part){
-	double eta,pt,pmag,*p=part->p;
+	double eta,pt,pmag;
 	double dca[4];
 	int pid=part->resinfo->code,starpid;
 	if(abs(pid)==211) starpid=1;
@@ -78,9 +78,9 @@ void CAcceptance_STAR::CalcAcceptance(bool &accept,double &efficiency,CPart *par
 	part->CalcDCA(dca);
 	accept=false;
 	efficiency=0.0;
-	pt=sqrt(p[1]*p[1]+p[2]*p[2]);
-	pmag=sqrt(pt*pt+p[3]*p[3]);
-	eta=atanh(p[3]/pmag);
+	pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
+	pmag=sqrt(pt*pt+part->p[3]*part->p[3]);
+	eta=atanh(part->p[3]/pmag);
 	if(eta>ETAMIN && eta<ETAMAX && dca[0]<2.0){
 		if(pt>PTMIN && pt<PTMAX){
 			accept=true;
@@ -90,7 +90,7 @@ void CAcceptance_STAR::CalcAcceptance(bool &accept,double &efficiency,CPart *par
 }
 
 void CAcceptance_STAR::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part){
-	double eta,pt,pmag,*p=part->p;
+	double eta,pt,pmag;
 	double dca[4];
 	int pid=part->resinfo->code;
 	if(abs(pid)!=2112 && abs(pid)!=311 && abs(pid)!=111 && abs(pid)!=22){
@@ -100,9 +100,9 @@ void CAcceptance_STAR::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart 
 	part->CalcDCA(dca);
 	accept=false;
 	efficiency=0.0;
-	pt=sqrt(p[1]*p[1]+p[2]*p[2]);
-	pmag=sqrt(pt*pt+p[3]*p[3]);
-	eta=atanh(p[3]/pmag);
+	pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
+	pmag=sqrt(pt*pt+part->p[3]*part->p[3]);
+	eta=atanh(part->p[3]/pmag);
 	if(eta>ETAMIN && eta<ETAMAX && pt>PTMIN && pt<PTMAX){
 		accept=true;
 	}
